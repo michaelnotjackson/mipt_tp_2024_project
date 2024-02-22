@@ -13,4 +13,6 @@ add_executable(tp_course_spring24_project
         include/room.h
         src/main.cpp
         include/types.h
-        include/player.h)
+        include/player.h
+        src/entity.cpp
+        src/player.cpp)

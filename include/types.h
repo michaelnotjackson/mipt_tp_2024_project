@@ -1,29 +1,13 @@
 #pragma once
 
+#include <utility>
 class SpriteType {};
 
-enum SizeType {
-  TINY,
-  SMALL,
-  MEDIUM,
-  LARGE,
-  HUGE
-};
+enum SizeType { TINY, SMALL, MEDIUM, LARGE, HUGE };
 
-enum ObstacleType {
-  NO_OBSTACLES,
-  HALF_SPEED,
-  WALL
-};
+enum ObstacleType { NO_OBSTACLES, HALF_SPEED, WALL };
 
-enum CharacteristicType {
-  STR,
-  DEX,
-  CON,
-  INT,
-  WIS,
-  CHR
-};
+enum CharacteristicType { STR, DEX, CON, INT, WIS, CHR };
 
 enum RaceType {
 
