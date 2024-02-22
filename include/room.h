@@ -1,8 +1,13 @@
-//
-// Created by michael on 2/21/24.
-//
+#pragma once
 
-#ifndef TP_COURSE_SPRING24_PROJECT_ROOM_H
-#define TP_COURSE_SPRING24_PROJECT_ROOM_H
+#include <vector>
 
-#endif //TP_COURSE_SPRING24_PROJECT_ROOM_H
+class Room {
+ private:
+  int width;
+  int height;
+  std::vector<std::vector<BaseEntity>> field(height, std::vector<BaseEntity>(width));
+
+ public:
+  Room();
+};
