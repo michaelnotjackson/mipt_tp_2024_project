@@ -2,9 +2,9 @@
 
 #include <types.h>
 
+#include <string>
 #include <utility>
 #include <vector>
-#include <string>
 
 class BaseEntity {
  private:
@@ -18,7 +18,7 @@ class BaseEntity {
   BaseEntity();
 
   int GetHp();
-  void ChangeHp(int new_hp);
+  void SetHp(int new_hp);
 
   PosType GetPos();
 };
