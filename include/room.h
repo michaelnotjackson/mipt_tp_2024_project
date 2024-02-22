@@ -9,5 +9,8 @@ class Room {
   std::vector<std::vector<BaseEntity>> field(height, std::vector<BaseEntity>(width));
 
  public:
-  Room();
+  Room(int width,
+       int height,
+       std::vector<std::vector<BaseEntity>>
+       field(height, std::vector<BaseEntity>(width)));
 };
