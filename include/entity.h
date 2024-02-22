@@ -1,6 +1,6 @@
 #pragma once
 
-#include "types.h"
+#include <types.h>
 
 #include <utility>
 #include <vector>
@@ -20,7 +20,7 @@ class BaseEntity {
   int GetHp();
   void ChangeHp(int new_hp);
 
-  std::pair<int, int> GetPos();
+  PosType GetPos();
 };
 
 class Combatable {

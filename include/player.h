@@ -1,8 +1,8 @@
 #pragma once
 
-#include "entity.h"
-#include "equipment.h"
-#include "types.h"
+#include <entity.h>
+#include <equipment.h>
+#include <types.h>
 
 class Player: public BaseEntity, public Movable, public Combatable {
  private:
