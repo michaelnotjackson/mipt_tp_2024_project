@@ -2,41 +2,7 @@
 
 #include <string>
 #include <utility>
-
-enum Properties {
-  FINESSE = 1 << 0,
-  HEAVY = 1 << 1,
-  LIGHT = 1 << 2,
-  LOADING = 1 << 3,
-  REACH = 1 << 4,
-  RANGE = 1 << 5,
-  SPECIAL = 1 << 6,
-  TWO_HANDED = 1 << 7,
-  VERSATILE = 1 << 8;
-};
-
-enum Equip {
-  BASEWEAPON,
-  RANGEWEAPON,
-  BASEARMOR,
-  POTION;
-};
-
-enum Damage {
-  SLASHING,
-  PIERCING,
-  BLUDGEONING,
-  POISON,
-  ACID,
-  FIRE,
-  COLD,
-  RADIANT,
-  NECROTIC,
-  LIGHTNING,
-  THUNDER,
-  FORCE,
-  PSYCHIC;
-};
+#include <types.h>
 
 class BaseEquipment {
  private:
@@ -60,7 +26,7 @@ class BaseWeapon: BaseEquipment {
   BaseWeapon();
 };
 
-class RangedWeapon {
+class RangedWeapon: BaseWeapon {
  private:
   int range;
   std::string ammo_type;
@@ -70,7 +36,7 @@ class RangedWeapon {
   RangedWeapon();
 };
 
-class BaseArmor {
+class BaseArmor: BaseEquipment {
  private:
   int minimum_strength;
   std::pair<CharacteristicType, int> modifier;
@@ -80,7 +46,7 @@ class BaseArmor {
   BaseArmor();
 };
 
-class Potion {
+class Potion: BaseEquipment {
  private:
   int hp;
   std::string true_name;
