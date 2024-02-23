@@ -14,7 +14,7 @@ class BaseEquipment {
 
  public:
   BaseEquipment(std::string name,
-                Equip type,
+                EquipType type,
                 int cost,
                 double weight,
                 int count);

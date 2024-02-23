@@ -1,16 +1,23 @@
 #pragma once
 
 #include <vector>
+#include <types.h>
+#include <entity.h>
 
 class Room {
  private:
   int width;
   int height;
-  std::vector<std::vector<BaseEntity>> field(height, std::vector<BaseEntity>(width));
+  FieldType field;
 
  public:
   Room(int width,
        int height,
-       std::vector<std::vector<BaseEntity>>
-       field(height, std::vector<BaseEntity>(width)));
+       FieldType field);
+
+  int GetWidth();
+
+  int GetHeight();
+
+  FieldType& GetField();
 };
