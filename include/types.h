@@ -1,6 +1,8 @@
 #pragma once
 
 #include <utility>
+#include <vector>
+
 class SpriteType {};
 
 enum SizeType { TINY, SMALL, MEDIUM, LARGE, HUGE };
@@ -55,6 +57,10 @@ enum DamageType {
   FORCE,
   PSYCHIC
 };
+
+
+class BaseEntity;
+typedef std::vector<std::vector<BaseEntity*>> FieldType;
 
 struct PosType {
   int x;
