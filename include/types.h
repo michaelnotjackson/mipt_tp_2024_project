@@ -56,7 +56,14 @@ enum DamageType {
   PSYCHIC
 };
 
+<<<<<<< HEAD
 class BaseEntity;
 typedef std::vector<std::vector<BaseEntity&>> FieldType;
 
 typedef std::pair<int, int> PosType;
+=======
+struct PosType {
+  int x;
+  int y;
+};
+>>>>>>> 8743bf258d95e4956ac5f4b682218df3f7948164
