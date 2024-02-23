@@ -2,8 +2,10 @@
 
 #include <SDL.h>
 
-class {
+class AppClass{
  public:
   SDL_Renderer* renderer;
   SDL_Window* window;
-} app;
+};
+
+extern AppClass app;

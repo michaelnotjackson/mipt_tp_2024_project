@@ -8,7 +8,7 @@ void DoInput() {
 
   while (SDL_PollEvent(&event)) {
     switch (event.type) {
-      case SDL_EVENT_QUIT:
+      case SDL_QUIT:
         exit(0);
         break;
       default:

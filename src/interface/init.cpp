@@ -8,6 +8,8 @@
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
 
+AppClass app;
+
 void InitSDL() {
   int rendererFlags, windowFlags;
 
@@ -22,8 +24,9 @@ void InitSDL() {
     throw std::runtime_error(msg);
   }
 
-  app.window =
-      SDL_CreateWindow("Test window", SCREEN_WIDTH, SCREEN_HEIGHT, windowFlags);
+  app.window = SDL_CreateWindow("Test window", SDL_WINDOWPOS_UNDEFINED,
+                                SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
+                                SCREEN_HEIGHT, windowFlags);
 
   if (!app.window) {
     std::string msg = "Failed to open window: ";
@@ -31,8 +34,9 @@ void InitSDL() {
     throw std::runtime_error(msg);
   }
 
-  app.renderer = SDL_CreateRenderer(app.window, SDL_GetWindowTitle(app.window),
-                                    rendererFlags);
+  SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+
+  app.renderer = SDL_CreateRenderer(app.window, -1, rendererFlags);
 
   if (!app.renderer) {
     std::string msg = "Failed to create renderer: ";

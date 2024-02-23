@@ -9,7 +9,7 @@ int main(int argc, char* argv[]) {
 
     DoInput();
 
-    PrepareScene();
+    PresentScene();
 
     SDL_Delay(16);
   }
