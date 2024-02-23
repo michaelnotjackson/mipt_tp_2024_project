@@ -16,8 +16,6 @@ class Room {
        FieldType field);
 
   int GetWidth();
-
   int GetHeight();
-
   FieldType& GetField();
 };
