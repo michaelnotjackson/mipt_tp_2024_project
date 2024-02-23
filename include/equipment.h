@@ -7,23 +7,42 @@
 class BaseEquipment {
  private:
   std::string name;
-  Equip type;
+  EquipType type;
   int cost;
   double weight;
   int count;
 
  public:
-  BaseEquipment();
+  BaseEquipment(std::string name,
+                Equip type,
+                int cost,
+                double weight,
+                int count);
+
+  std::string GetName();
+
+  EquipType GetEquipType();
+
+  int GetCost();
+
+  double GetWeight();
+
+  int GetCount();
+  void ChangeCount(int count);
 };
 
 class BaseWeapon: BaseEquipment {
  private:
   int damage;
   Properties properties;
-  Damage type;
+  DamageType type;
 
  public:
   BaseWeapon();
+
+  Properties GetProperties();
+
+  DamageType GetDamageType();
 };
 
 class RangedWeapon: BaseWeapon {
@@ -34,6 +53,10 @@ class RangedWeapon: BaseWeapon {
 
  public:
   RangedWeapon();
+
+  int GetRange();
+
+  std::string GetAmmoType();
 };
 
 class BaseArmor: BaseEquipment {
@@ -44,6 +67,12 @@ class BaseArmor: BaseEquipment {
 
  public:
   BaseArmor();
+
+  int GetMinStrength();
+
+  std::pair<CharacteristicType, int> GetModifier();
+
+  int GetArmorPoints;
 };
 
 class Potion: BaseEquipment {
@@ -53,4 +82,9 @@ class Potion: BaseEquipment {
 
  public:
   Potion();
+
+  int GetHP();
+
+  std::string GetTrueName();
+  void ChangeTrueName(std::string);
 };

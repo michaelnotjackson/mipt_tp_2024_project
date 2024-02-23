@@ -33,14 +33,14 @@ enum Properties {
   VERSATILE = 1 << 8;
 };
 
-enum Equip {
+enum EquipType {
   BASEWEAPON,
   RANGEWEAPON,
   BASEARMOR,
   POTION;
 };
 
-enum Damage {
+enum DamageType {
   SLASHING,
   PIERCING,
   BLUDGEONING,
