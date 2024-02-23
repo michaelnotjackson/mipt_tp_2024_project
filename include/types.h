@@ -59,4 +59,8 @@ enum DamageType {
 struct PosType {
   int x;
   int y;
+
+  PosType(int x, int y): x(x), y(y) {}
 };
+
+class SpellType {};

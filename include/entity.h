@@ -32,8 +32,6 @@ class Combatable {
  public:
   virtual void Hit() = 0;
   virtual void Cast() = 0;
-
-  Combatable() = delete;
 };
 
 class Movable {
@@ -43,6 +41,4 @@ class Movable {
 
  public:
   virtual void MoveTo(PosType new_pos) = 0;
-
-  Movable() = delete;
 };

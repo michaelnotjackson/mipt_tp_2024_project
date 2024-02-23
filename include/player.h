@@ -11,8 +11,8 @@ class Player : public BaseEntity, public Movable, public Combatable {
   RaceType race;
   ClassType ply_class;
   int mp;
-  std::vector<> spell_list;
-  std::vector<BaseEquipment&> inventory;
+  std::vector<SpellType> spell_list;
+  std::vector<BaseEquipment*> inventory;
   double max_carry_weight;
   int lvl;
   int xp;
@@ -20,8 +20,8 @@ class Player : public BaseEntity, public Movable, public Combatable {
   int team_id;
 
  public:
-  Player(RaceType race, ClassType ply_class, std::vector<> spell_list,
-         std::vector<BaseEquipment&> inventory, std::string name, int team_id);
+  Player(RaceType race, ClassType ply_class, std::vector<SpellType> spell_list,
+         std::vector<BaseEquipment*> inventory, std::string name, int team_id);
 
   RaceType GetRace();
   ClassType GetClass();
@@ -49,5 +49,5 @@ class Monster : public BaseEntity, public Movable, public Combatable {
   std::string type;
   int xp;
   int team_id;
-  std::vector<BaseEquipment&> loot;
+  std::vector<BaseEquipment*> loot;
 };

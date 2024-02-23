@@ -9,7 +9,7 @@ include_directories(.)
 include_directories(include)
 include_directories(src)
 
-option(SYSTEM_SDL "Use SDL installed in your system" ON)
+option(SYSTEM_SDL "Use SDL installed in your system" OFF)
 
 if (SYSTEM_SDL)
   find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-shared)
@@ -25,6 +25,14 @@ add_executable(${PROJECT_NAME}
     include/types.h
     include/player.h
     src/entity.cpp
-    src/player.cpp)
+    src/player.cpp
+    include/interface/shared_vars.h
+    include/interface/init.h
+    include/interface/input.h
+    src/interface/init.cpp
+    src/interface/input.cpp
+    include/interface/draw.h
+    src/interface/draw.cpp
+    include/interface/interface.h)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE SDL3::SDL3)
