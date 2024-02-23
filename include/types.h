@@ -30,14 +30,14 @@ enum Properties {
   RANGE = 1 << 5,
   SPECIAL = 1 << 6,
   TWO_HANDED = 1 << 7,
-  VERSATILE = 1 << 8;
+  VERSATILE = 1 << 8
 };
 
 enum EquipType {
   BASEWEAPON,
   RANGEWEAPON,
   BASEARMOR,
-  POTION;
+  POTION
 };
 
 enum DamageType {
@@ -53,7 +53,10 @@ enum DamageType {
   LIGHTNING,
   THUNDER,
   FORCE,
-  PSYCHIC;
+  PSYCHIC
 };
 
-typedef std::pair<int, int> PosType;
+struct PosType {
+  int x;
+  int y;
+};
