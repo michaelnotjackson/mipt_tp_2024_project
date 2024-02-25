@@ -6,7 +6,7 @@ void CBasePlayer::ChangeName(std::string name) { this->name = name; }
 void CBasePlayer::SetLvl(int lvl) { this->lvl = lvl; }
 void CBasePlayer::SetMana(int mana) { this->mp = mana; }
 void CBasePlayer::SetMaxCarryWeight(double weight) {
-  this->max_carry_weight = max_carry_weight;
+  this->max_carry_weight = weight;
 }
 void CBasePlayer::SetTeam(int team_id) { this->team_id = team_id; }
 void CBasePlayer::SetXp(int xp) { this->xp = xp; }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <SDL.h>
 #include <types.h>
 
 #include <string>
@@ -9,13 +10,15 @@ class CBaseEquipment {
  private:
   std::string name;
   EquipType type;
+  SDL_Texture* texture;
+
   int cost;
   double weight;
   int count;
 
  public:
   CBaseEquipment(std::string name, EquipType type, int cost, double weight,
-                int count);
+                 int count);
 
   std::string GetName();
   EquipType GetEquipType();
@@ -34,8 +37,8 @@ class CBaseWeapon : CBaseEquipment {
 
  public:
   CBaseWeapon(std::string name, EquipType equip_type, int cost, double weight,
-             int count, int damage, Properties properties,
-             DamageType damage_type);
+              int count, int damage, Properties properties,
+              DamageType damage_type);
 
   Properties GetProperties();
   DamageType GetDamageType();
@@ -49,7 +52,7 @@ class CRangedWeapon : CBaseWeapon {
 
  public:
   CRangedWeapon(int damage, Properties properties, DamageType type, int range,
-               std::string ammo_type);
+                std::string ammo_type);
 
   int GetRange();
   std::string GetAmmoType();
@@ -63,8 +66,8 @@ class CBaseArmor : CBaseEquipment {
 
  public:
   CBaseArmor(std::string name, EquipType type, int cost, double weight,
-            int count, int minimum_strength,
-            std::pair<CharacteristicType, int> modifier, int armor_points);
+             int count, int minimum_strength,
+             std::pair<CharacteristicType, int> modifier, int armor_points);
 
   int GetMinStrength();
   std::pair<CharacteristicType, int> GetModifier();

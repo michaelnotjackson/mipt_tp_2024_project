@@ -4,7 +4,7 @@ CBaseEntity::CBaseEntity()
     : hp(0),
       pos(0, 0),
       size(SizeType::MEDIUM),
-      sprite(),
+      texture(nullptr),
       obstacle_degree(ObstacleType::HALF_SPEED) {}
 
 int CBaseEntity::GetHp() { return this->hp; }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <SDL.h>
 #include <types.h>
 
 #include <string>
@@ -11,7 +12,7 @@ class CBaseEntity {
   int hp;
   PosType pos;
   SizeType size;
-  SpriteType sprite;
+  SDL_Texture* texture;
   ObstacleType obstacle_degree;
 
  public:

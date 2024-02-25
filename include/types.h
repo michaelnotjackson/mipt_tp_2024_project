@@ -3,8 +3,6 @@
 #include <utility>
 #include <vector>
 
-class SpriteType {};
-
 enum SizeType { TINY, SMALL, MEDIUM, LARGE, HUGE };
 
 enum ObstacleType { NO_OBSTACLES, HALF_SPEED, WALL };
@@ -58,9 +56,12 @@ enum DamageType {
   PSYCHIC
 };
 
+enum TileFlagsType {
+  VISIBLE = 1 << 0
+};
 
-class CBaseEntity;
-typedef std::vector<std::vector<CBaseEntity*>> FieldType;
+class CTile;
+typedef std::vector<std::vector<CTile>> FieldType;
 
 struct PosType {
   int x;

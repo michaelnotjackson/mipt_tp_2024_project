@@ -9,13 +9,12 @@ include_directories(.)
 include_directories(include)
 include_directories(src)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} include/SDL_image/cmake/FindSDL2_image.cmake)
-set(SDL2_image_DIR include/SDL_image)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 
-include_directories(${SDL2_INCLUDE_DIRS} include/SDL_image/include)
+include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIR})
 
 add_executable(${PROJECT_NAME}
         include/entity.h
@@ -33,4 +32,4 @@ add_executable(${PROJECT_NAME}
     include/interface/renderer.h
     src/interface/renderer.cpp)
 
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRARIES})
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${SDL2_LIBRARIES} SDL2::Image)
