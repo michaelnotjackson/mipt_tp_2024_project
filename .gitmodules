@@ -2,3 +2,7 @@
 	path = include/SDL
 	url = https://github.com/libsdl-org/SDL
 	branch = SDL2
+[submodule "include/SDL_image"]
+	path = include/SDL_image
+	url = https://github.com/libsdl-org/SDL_image.git
+	branch = SDL2

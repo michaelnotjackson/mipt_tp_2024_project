@@ -9,14 +9,13 @@ include_directories(.)
 include_directories(include)
 include_directories(src)
 
-option(SYSTEM_SDL "Use SDL installed in your system" OFF)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} include/SDL_image/cmake/FindSDL2_image.cmake)
+set(SDL2_image_DIR include/SDL_image)
 
-if (SYSTEM_SDL)
-    find_package(SDL2 REQUIRED CONFIG REQUIRED COMPONENTS SDL2)
-    find_package(SDL2 REQUIRED CONFIG COMPONENTS SDL2main)
-else ()
-    add_subdirectory(include/SDL EXCLUDE_FROM_ALL)
-endif ()
+find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
+
+include_directories(${SDL2_INCLUDE_DIRS} include/SDL_image/include)
 
 add_executable(${PROJECT_NAME}
         include/entity.h
@@ -30,13 +29,8 @@ add_executable(${PROJECT_NAME}
         include/interface/CApp.h
         src/room.cpp
         src/equipment.cpp
-        src/interface/CApp.cpp)
+        src/interface/CApp.cpp
+    include/interface/renderer.h
+    src/interface/renderer.cpp)
 
-# SDL2::SDL2main may or may not be available. It is e.g. required by Windows GUI applications
-if(TARGET SDL2::SDL2main)
-    # It has an implicit dependency on SDL2 functions, so it MUST be added before SDL2::SDL2 (or SDL2::SDL2-static)
-    target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2main)
-endif()
-
-# Link to the actual SDL2 library. SDL2::SDL2 is the shared SDL library, SDL2::SDL2-static is the static SDL libarary.
-target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2)
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRARIES})
