@@ -1,18 +1,7 @@
-#include <SDL.h>
-#include <interface/interface.h>
+#include <interface/CApp.h>
 
 int main(int argc, char* argv[]) {
-  InitSDL();
+  CApp app;
 
-  while (true) {
-    PrepareScene();
-
-    DoInput();
-
-    PresentScene();
-
-    SDL_Delay(16);
-  }
-
-  return 0;
+  return app.OnExecute();
 }

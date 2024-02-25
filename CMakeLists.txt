@@ -27,16 +27,10 @@ add_executable(${PROJECT_NAME}
         include/player.h
         src/entity.cpp
         src/player.cpp
-    include/interface/CApp.h
-        include/interface/init.h
-        include/interface/input.h
-        src/interface/init.cpp
-        src/interface/input.cpp
-        include/interface/draw.h
-        src/interface/draw.cpp
-        include/interface/interface.h
+        include/interface/CApp.h
         src/room.cpp
-        src/equipment.cpp)
+        src/equipment.cpp
+        src/interface/CApp.cpp)
 
 # SDL2::SDL2main may or may not be available. It is e.g. required by Windows GUI applications
 if(TARGET SDL2::SDL2main)

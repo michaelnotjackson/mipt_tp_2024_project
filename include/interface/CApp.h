@@ -4,7 +4,10 @@
 
 class CApp {
  private:
-  bool IsRunning;
+  bool is_running;
+
+  SDL_Window* window;
+  SDL_Renderer* renderer;
 
  public:
   CApp();
