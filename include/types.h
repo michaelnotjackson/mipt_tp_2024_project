@@ -3,11 +3,21 @@
 #include <utility>
 #include <vector>
 
-enum SizeType { TINY, SMALL, MEDIUM, LARGE, HUGE };
+#ifdef HUGE
+ #undef HUGE
+#endif
 
-enum ObstacleType { NO_OBSTACLES, HALF_SPEED, WALL };
+enum SizeType {
+  TINY, SMALL, MEDIUM, LARGE, HUGE
+};
 
-enum CharacteristicType { STR, DEX, CON, INT, WIS, CHR };
+enum ObstacleType {
+  NO_OBSTACLES, HALF_SPEED, WALL
+};
+
+enum CharacteristicType {
+  STR, DEX, CON, INT, WIS, CHR
+};
 
 enum RaceType {
 
@@ -61,13 +71,15 @@ enum TileFlagsType {
 };
 
 class CTile;
+
 typedef std::vector<std::vector<CTile>> FieldType;
 
 struct PosType {
   int x;
   int y;
 
-  PosType(int x, int y): x(x), y(y) {}
+  PosType(int x, int y) : x(x), y(y) {}
 };
 
-class SpellType {};
+class SpellType {
+};
