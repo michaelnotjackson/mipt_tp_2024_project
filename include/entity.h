@@ -6,7 +6,7 @@
 #include <utility>
 #include <vector>
 
-class BaseEntity {
+class CBaseEntity {
  private:
   int hp;
   PosType pos;
@@ -15,7 +15,7 @@ class BaseEntity {
   ObstacleType obstacle_degree;
 
  public:
-  BaseEntity();
+  CBaseEntity();
 
   int GetHp();
   void SetHp(int new_hp);

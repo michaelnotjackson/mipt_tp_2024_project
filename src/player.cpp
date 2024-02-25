@@ -2,25 +2,25 @@
 
 #include <utility>
 
-void Player::ChangeName(std::string name) { this->name = name; }
-void Player::SetLvl(int lvl) { this->lvl = lvl; }
-void Player::SetMana(int mana) { this->mp = mana; }
-void Player::SetMaxCarryWeight(double weight) {
+void CBasePlayer::ChangeName(std::string name) { this->name = name; }
+void CBasePlayer::SetLvl(int lvl) { this->lvl = lvl; }
+void CBasePlayer::SetMana(int mana) { this->mp = mana; }
+void CBasePlayer::SetMaxCarryWeight(double weight) {
   this->max_carry_weight = max_carry_weight;
 }
-void Player::SetTeam(int team_id) { this->team_id = team_id; }
-void Player::SetXp(int xp) { this->xp = xp; }
+void CBasePlayer::SetTeam(int team_id) { this->team_id = team_id; }
+void CBasePlayer::SetXp(int xp) { this->xp = xp; }
 
-ClassType Player::GetClass() { return this->ply_class; }
-int Player::GetLvl() { return this->lvl; }
-int Player::GetMana() { return this->mp; }
-double Player::GetMaxCarryWeight() { return this->max_carry_weight; }
-std::string Player::GetName() { return this->name; }
-RaceType Player::GetRace() { return this->race; }
-int Player::GetTeam() { return this->team_id; }
-int Player::GetXp() { return this->xp; }
+ClassType CBasePlayer::GetClass() { return this->ply_class; }
+int CBasePlayer::GetLvl() { return this->lvl; }
+int CBasePlayer::GetMana() { return this->mp; }
+double CBasePlayer::GetMaxCarryWeight() { return this->max_carry_weight; }
+std::string CBasePlayer::GetName() { return this->name; }
+RaceType CBasePlayer::GetRace() { return this->race; }
+int CBasePlayer::GetTeam() { return this->team_id; }
+int CBasePlayer::GetXp() { return this->xp; }
 
-Player::Player(RaceType race, ClassType ply_class, int spell_list,
+CBasePlayer::CBasePlayer(RaceType race, ClassType ply_class, int spell_list,
                int inventory, std::string name, int team_id)
     : race(race),
       ply_class(ply_class),

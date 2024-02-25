@@ -5,7 +5,7 @@
 #include <string>
 #include <utility>
 
-class BaseEquipment {
+class CBaseEquipment {
  private:
   std::string name;
   EquipType type;
@@ -14,7 +14,7 @@ class BaseEquipment {
   int count;
 
  public:
-  BaseEquipment(std::string name, EquipType type, int cost, double weight,
+  CBaseEquipment(std::string name, EquipType type, int cost, double weight,
                 int count);
 
   std::string GetName();
@@ -26,14 +26,14 @@ class BaseEquipment {
   void ChangeCount(int count);
 };
 
-class BaseWeapon : BaseEquipment {
+class CBaseWeapon : CBaseEquipment {
  private:
   int damage;
   Properties properties;
   DamageType type;
 
  public:
-  BaseWeapon(std::string name, EquipType equip_type, int cost, double weight,
+  CBaseWeapon(std::string name, EquipType equip_type, int cost, double weight,
              int count, int damage, Properties properties,
              DamageType damage_type);
 
@@ -41,28 +41,28 @@ class BaseWeapon : BaseEquipment {
   DamageType GetDamageType();
 };
 
-class RangedWeapon : BaseWeapon {
+class CRangedWeapon : CBaseWeapon {
  private:
   int range;
   std::string ammo_type;
   // not string, but enum Ammo
 
  public:
-  RangedWeapon(int damage, Properties properties, DamageType type, int range,
+  CRangedWeapon(int damage, Properties properties, DamageType type, int range,
                std::string ammo_type);
 
   int GetRange();
   std::string GetAmmoType();
 };
 
-class BaseArmor : BaseEquipment {
+class CBaseArmor : CBaseEquipment {
  private:
   int minimum_strength;
   std::pair<CharacteristicType, int> modifier;
   int armor_points;
 
  public:
-  BaseArmor(std::string name, EquipType type, int cost, double weight,
+  CBaseArmor(std::string name, EquipType type, int cost, double weight,
             int count, int minimum_strength,
             std::pair<CharacteristicType, int> modifier, int armor_points);
 
@@ -71,13 +71,13 @@ class BaseArmor : BaseEquipment {
   int GetArmorPoints();
 };
 
-class Potion : BaseEquipment {
+class CBasePotion : CBaseEquipment {
  private:
   int hp;
   std::string true_name;
 
  public:
-  Potion(int hp, std::string true_name);
+  CBasePotion(int hp, std::string true_name);
 
   int GetHP();
   std::string GetTrueName();

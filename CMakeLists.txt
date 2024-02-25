@@ -27,7 +27,7 @@ add_executable(${PROJECT_NAME}
         include/player.h
         src/entity.cpp
         src/player.cpp
-        include/interface/shared_vars.h
+    include/interface/CApp.h
         include/interface/init.h
         include/interface/input.h
         src/interface/init.cpp

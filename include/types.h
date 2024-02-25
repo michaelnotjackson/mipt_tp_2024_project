@@ -59,8 +59,8 @@ enum DamageType {
 };
 
 
-class BaseEntity;
-typedef std::vector<std::vector<BaseEntity*>> FieldType;
+class CBaseEntity;
+typedef std::vector<std::vector<CBaseEntity*>> FieldType;
 
 struct PosType {
   int x;

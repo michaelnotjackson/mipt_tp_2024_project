@@ -4,15 +4,15 @@
 #include <equipment.h>
 #include <types.h>
 
-class Player : public BaseEntity, public Movable, public Combatable {
+class CBasePlayer : public CBaseEntity, public Movable, public Combatable {
  private:
-  Player(RaceType race, ClassType ply_class, int spell_list, int inventory,
+  CBasePlayer(RaceType race, ClassType ply_class, int spell_list, int inventory,
          std::string name, int team_id);
   RaceType race;
   ClassType ply_class;
   int mp;
   std::vector<SpellType> spell_list;
-  std::vector<BaseEquipment*> inventory;
+  std::vector<CBaseEquipment*> inventory;
   double max_carry_weight;
   int lvl;
   int xp;
@@ -20,8 +20,8 @@ class Player : public BaseEntity, public Movable, public Combatable {
   int team_id;
 
  public:
-  Player(RaceType race, ClassType ply_class, std::vector<SpellType> spell_list,
-         std::vector<BaseEquipment*> inventory, std::string name, int team_id);
+  CBasePlayer(RaceType race, ClassType ply_class, std::vector<SpellType> spell_list,
+         std::vector<CBaseEquipment*> inventory, std::string name, int team_id);
 
   RaceType GetRace();
   ClassType GetClass();
@@ -45,9 +45,9 @@ class Player : public BaseEntity, public Movable, public Combatable {
   void SetTeam(int team_id);
 };
 
-class Monster : public BaseEntity, public Movable, public Combatable {
+class CBaseMonster : public CBaseEntity, public Movable, public Combatable {
   std::string type;
   int xp;
   int team_id;
-  std::vector<BaseEquipment*> loot;
+  std::vector<CBaseEquipment*> loot;
 };
