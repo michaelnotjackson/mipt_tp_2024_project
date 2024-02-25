@@ -6,6 +6,7 @@ class CApp {
  private:
   bool is_running;
 
+ public:
   SDL_Window* window;
   SDL_Renderer* renderer;
 
@@ -25,3 +26,5 @@ class CApp {
 
   void OnCleanup();
 };
+
+extern CApp app;

@@ -1,6 +1,8 @@
 #include <SDL.h>
 #include <interface/CApp.h>
 
+CApp app;
+
 CApp::CApp() : is_running(true), window(nullptr) {}
 
 bool CApp::OnInit() {
@@ -63,4 +65,6 @@ int CApp::OnExecute() {
   }
 
   OnCleanup();
+
+  return 0;
 }
