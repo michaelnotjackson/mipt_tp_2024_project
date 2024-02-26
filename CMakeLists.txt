@@ -9,6 +9,8 @@ include_directories(.)
 include_directories(include)
 include_directories(src)
 
+file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
+
 #list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 add_subdirectory(include/SDL)
@@ -35,6 +37,8 @@ add_executable(${PROJECT_NAME}
         src/interface/CApp.cpp
     include/interface/renderer.h
     src/interface/renderer.cpp)
+
+#add_executable(${PROJECT_NAME} src/main.cpp)
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2_image)

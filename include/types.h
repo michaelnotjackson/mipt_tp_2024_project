@@ -78,6 +78,7 @@ struct PosType {
   int x;
   int y;
 
+  PosType() {}
   PosType(int x, int y) : x(x), y(y) {}
 };
 

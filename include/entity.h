@@ -16,6 +16,12 @@ class CBaseEntity {
   ObstacleType obstacle_degree;
 
  public:
+  CBaseEntity(int hp,
+              PosType pos,
+              SizeType size,
+              SDL_Texture* texture,
+              ObstacleType obstacle_degree);
+
   CBaseEntity();
 
   int GetHp();
