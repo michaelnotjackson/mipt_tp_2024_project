@@ -27,7 +27,7 @@ bool CApp::OnInit() {
 
   SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 
-  renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
+  renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
   if (renderer == nullptr) {
     return false;
@@ -52,10 +52,10 @@ SDL_Texture* knight = nullptr;
 
 
 void CApp::OnRender() {
+  SDL_RenderClear(renderer);
   SDL_SetRenderDrawColor(renderer, 96, 128, 255, 255);
   PosType pos(100, 100);
   Blit(knight, pos.x, pos.y);
-  SDL_RenderClear(renderer);
   SDL_RenderPresent(renderer);
 }
 
