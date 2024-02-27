@@ -1,51 +1,26 @@
 #pragma once
 
 #include <SDL.h>
+#include <animation.h>
+#include <properties.h>
 #include <types.h>
 
+#include <map>
+#include <memory>
 #include <string>
 #include <utility>
-#include <vector>
 
-class CBaseEntity {
+class IBaseEntity {
  private:
-  int hp;
+  CObjProperties props;
   PosType pos;
-  SizeType size;
-  SDL_Texture* texture;
-  ObstacleType obstacle_degree;
 
  public:
-  CBaseEntity(int hp,
-              PosType pos,
-              SizeType size,
-              SDL_Texture* texture,
-              ObstacleType obstacle_degree);
-
-  CBaseEntity();
-
-  int GetHp();
-  void SetHp(int new_hp);
-
-  PosType GetPos();
-};
-
-class Combatable {
- private:
-  int armor_points;
-  int mastery_bonus;
-  int characteristics[6] = {0};
+  CBaseAnimation animation;
 
  public:
-  virtual void Hit() = 0;
-  virtual void Cast() = 0;
-};
+  virtual CObjProperties* GetProperties();
+  virtual PosType* GetPos();
 
-class Movable {
- private:
-  int speed;
-  int state;
-
- public:
-  virtual void MoveTo(PosType new_pos) = 0;
+  virtual ~IBaseEntity() = default;
 };

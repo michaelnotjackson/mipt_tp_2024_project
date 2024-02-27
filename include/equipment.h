@@ -32,15 +32,15 @@ class CBaseEquipment {
 class CBaseWeapon : CBaseEquipment {
  private:
   int damage;
-  Properties properties;
+  WeaponProperties properties;
   DamageType type;
 
  public:
   CBaseWeapon(std::string name, EquipType equip_type, int cost, double weight,
-              int count, int damage, Properties properties,
+              int count, int damage, WeaponProperties properties,
               DamageType damage_type);
 
-  Properties GetProperties();
+  WeaponProperties GetProperties();
   DamageType GetDamageType();
 };
 
@@ -51,7 +51,7 @@ class CRangedWeapon : CBaseWeapon {
   // not string, but enum Ammo
 
  public:
-  CRangedWeapon(int damage, Properties properties, DamageType type, int range,
+  CRangedWeapon(int damage, WeaponProperties properties, DamageType type, int range,
                 std::string ammo_type);
 
   int GetRange();
