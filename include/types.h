@@ -7,31 +7,31 @@
  #undef HUGE
 #endif
 
-enum SizeType {
+enum class SizeType {
   TINY, SMALL, MEDIUM, LARGE, HUGE
 };
 
-enum ObstacleType {
+enum class ObstacleType {
   NO_OBSTACLES, HALF_SPEED, WALL
 };
 
-enum CharacteristicType {
+enum class CharacteristicType {
   STR, DEX, CON, INT, WIS, CHR
 };
 
-enum RaceType {
+enum class RaceType {
 
 };
 
-enum ClassType {
+enum class ClassType {
 
 };
 
-enum EntityState {
+enum class EntityState {
 
 };
 
-enum Properties {
+enum class WeaponProperties {
   FINESSE = 1 << 0,
   HEAVY = 1 << 1,
   LIGHT = 1 << 2,
@@ -43,14 +43,14 @@ enum Properties {
   VERSATILE = 1 << 8
 };
 
-enum EquipType {
+enum class EquipType {
   BASEWEAPON,
   RANGEWEAPON,
   BASEARMOR,
   POTION
 };
 
-enum DamageType {
+enum class DamageType {
   SLASHING,
   PIERCING,
   BLUDGEONING,
@@ -66,7 +66,7 @@ enum DamageType {
   PSYCHIC
 };
 
-enum TileFlagsType {
+enum class TileFlagsType {
   VISIBLE = 1 << 0
 };
 
@@ -82,5 +82,5 @@ struct PosType {
   PosType(int x, int y) : x(x), y(y) {}
 };
 
-class SpellType {
+class CSpell {
 };

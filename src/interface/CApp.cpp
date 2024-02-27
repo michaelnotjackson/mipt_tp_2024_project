@@ -1,8 +1,8 @@
 #include <SDL.h>
-#include <interface/CApp.h>
-#include <entity.h>
-#include <interface/renderer.h>
 #include <SDL_image.h>
+#include <entity.h>
+#include <interface/CApp.h>
+#include <interface/renderer.h>
 
 #include <iostream>
 
@@ -13,10 +13,9 @@ bool CApp::OnInit() {
     return false;
   }
 
-  IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
-//  if (IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) < 0) {
-//    return false;
-//  }
+  if (IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) < 0) {
+    return false;
+  }
 
   window = SDL_CreateWindow("Test", SDL_WINDOWPOS_UNDEFINED,
                             SDL_WINDOWPOS_UNDEFINED, 1280, 720, 0);
@@ -27,7 +26,7 @@ bool CApp::OnInit() {
 
   SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 
-  renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
+  renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
   if (renderer == nullptr) {
     return false;
@@ -42,20 +41,13 @@ void CApp::OnEvent(SDL_Event* event) {
   }
 }
 
-void CApp::OnCleanup() {
-  SDL_Quit();
-}
+void CApp::OnCleanup() { SDL_Quit(); }
 
 void CApp::OnLoop() {}
 
-SDL_Texture* knight = nullptr;
-
-
 void CApp::OnRender() {
-  SDL_SetRenderDrawColor(renderer, 96, 128, 255, 255);
-  PosType pos(100, 100);
-  Blit(knight, pos.x, pos.y);
   SDL_RenderClear(renderer);
+  SDL_SetRenderDrawColor(renderer, 96, 128, 255, 255);
   SDL_RenderPresent(renderer);
 }
 
@@ -64,18 +56,12 @@ int CApp::OnExecute() {
     return -1;
   }
 
-  //SDL_Init(SDL_INIT_VIDEO);
   SDL_Event event;
-  knight = LoadTexture("assets/knight.png");
-  if (knight == nullptr) {
-    std::cout << "adsfbnvgdesrwavb ncfd";
-  }
 
   while (is_running) {
     while (SDL_PollEvent(&event)) {
       OnEvent(&event);
     }
-
 
     OnLoop();
     OnRender();

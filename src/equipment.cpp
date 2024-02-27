@@ -14,12 +14,12 @@ CBaseEquipment::CBaseEquipment(std::string name, EquipType type, int cost,
                              double weight, int count)
     : name(name), type(type), cost(cost), weight(weight), count(count){};
 
-Properties CBaseWeapon::GetProperties() { return this->properties; }
+WeaponProperties CBaseWeapon::GetProperties() { return this->properties; }
 DamageType CBaseWeapon::GetDamageType() { return this->type; }
 
 CBaseWeapon::CBaseWeapon(std::string name, EquipType equip_type, int cost,
                        double weight, int count, int damage,
-                       Properties properties, DamageType damage_type)
+                         WeaponProperties properties, DamageType damage_type)
     : CBaseEquipment(name, equip_type, cost, weight, count),
       damage(damage),
       properties(properties),
@@ -28,7 +28,7 @@ CBaseWeapon::CBaseWeapon(std::string name, EquipType equip_type, int cost,
 int CRangedWeapon::GetRange() { return this->range; }
 std::string CRangedWeapon::GetAmmoType() { return this->ammo_type; }
 
-CRangedWeapon::CRangedWeapon(int damage, Properties properties, DamageType type,
+CRangedWeapon::CRangedWeapon(int damage, WeaponProperties properties, DamageType type,
                            int range, std::string ammo_type)
     : CBaseWeapon(std::string(), BASEARMOR, 0, 0, 0, damage, properties, type),
       range(range),
