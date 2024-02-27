@@ -25,13 +25,19 @@ add_executable(${PROJECT_NAME}
     include/types.h
     include/player.h
     src/entity.cpp
-    src/player.cpp
     include/interface/CApp.h
     src/room.cpp
     src/equipment.cpp
     src/interface/CApp.cpp
     include/interface/renderer.h
-    src/interface/renderer.cpp)
+    src/interface/renderer.cpp
+    include/animation.h
+    src/animation.cpp
+    include/properties.h
+    include/entitylist.h
+    src/entitylist.cpp)
+
+#add_executable(${PROJECT_NAME} src/main.cpp)
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2_image)
