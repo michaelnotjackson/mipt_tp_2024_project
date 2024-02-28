@@ -3,10 +3,7 @@
 #include <map>
 #include <string>
 
-enum PropValueType {
-  INT,
-  STRING,
-};
+enum class PropValueType { INT, STRING };
 
 struct CProp {
   PropValueType value_type;

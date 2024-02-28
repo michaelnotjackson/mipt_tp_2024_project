@@ -51,8 +51,8 @@ class CRangedWeapon : CBaseWeapon {
   // not string, but enum Ammo
 
  public:
-  CRangedWeapon(int damage, WeaponProperties properties, DamageType type, int range,
-                std::string ammo_type);
+  CRangedWeapon(int damage, WeaponProperties properties, DamageType type,
+                int range, std::string ammo_type);
 
   int GetRange();
   std::string GetAmmoType();

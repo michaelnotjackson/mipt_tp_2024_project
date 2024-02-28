@@ -53,3 +53,7 @@ void CEntityList::RemoveByIndex(int idx) {
 
   delete cur;
 }
+
+int CEntityList::EntityCount() { return ent_count; }
+
+CEntityList entity_list;

@@ -1,8 +1,9 @@
 #pragma once
 
-#include <vector>
-#include <types.h>
 #include <entity.h>
+#include <types.h>
+
+#include <vector>
 
 class CTile {
  private:
@@ -21,9 +22,7 @@ class Room {
   FieldType field;
 
  public:
-  Room(int width,
-       int height,
-       FieldType field);
+  Room(int width, int height, FieldType field);
 
   int GetWidth();
   int GetHeight();
