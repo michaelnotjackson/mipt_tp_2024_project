@@ -26,18 +26,15 @@ void Blit(CBaseAnimation& anim, int x, int y) {
   dest.x = x;
   dest.y = y;
 
-  dest.w = anim.frame.w;
-  dest.h = anim.frame.h;
+  dest.w = anim.frame.w * anim.scale;
+  dest.h = anim.frame.h * anim.scale;
 
   SDL_Rect src = anim.frame;
-  src.x += src.w *
-           ((SDL_GetTicks64() - anim.start_tick) / anim.ticks_per_frame) %
-           anim.nFrames;
-  src.y += src.h *
-           ((SDL_GetTicks64() - anim.start_tick) / anim.ticks_per_frame) %
-           anim.nFrames;
+  src.x +=
+      src.w * (((SDL_GetTicks64() - anim.start_tick) / anim.ticks_per_frame) %
+               anim.nFrames);
 
-  if (SDL_RenderCopy(app.renderer, anim.texture, &anim.frame, &dest) < 0) {
+  if (SDL_RenderCopy(app.renderer, anim.texture, &src, &dest) < 0) {
     SDL_Log("%s", SDL_GetError());
   }
 }

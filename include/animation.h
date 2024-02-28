@@ -8,13 +8,15 @@ struct CBaseAnimation {
   int nFrames;
   uint64_t start_tick;
   int ticks_per_frame;
+  double scale;
 
   CBaseAnimation(SDL_Texture* texture);
   CBaseAnimation(SDL_Texture* texture,
                  SDL_Rect frame,
                  int nFrames,
                  uint64_t start_tick,
-                 int time_per_frame);
+                 int time_per_frame,
+                 double scale = 1.0);
 
   CBaseAnimation();
 };

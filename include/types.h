@@ -67,7 +67,7 @@ struct PosType {
   int x;
   int y;
 
-  PosType() {}
+  PosType(): x(0), y(0) {}
   PosType(int x, int y) : x(x), y(y) {}
 };
 

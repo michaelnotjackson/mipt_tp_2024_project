@@ -19,9 +19,13 @@ IBaseEntity* CEntityList::GetByIndex(int idx) {
 }
 
 void CEntityList::Insert(IBaseEntity* ent) {
-  last->next = new CEntityNode();
-  last->next->prev = last;
-  last = last->next;
+  if (!last) {
+    head = last = new CEntityNode();
+  } else {
+    last->next = new CEntityNode();
+    last->next->prev = last;
+    last = last->next;
+  }
 
   last->entity = ent;
   last->idx = ++highest_ent;

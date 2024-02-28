@@ -16,6 +16,8 @@ class CEntityList {
  private:
   CEntityNode* head = nullptr;
   CEntityNode* last = nullptr;
+
+ public:
   int highest_ent;  // Index of the last entity
   int ent_count;    // Count of existing entities
 

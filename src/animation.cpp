@@ -10,12 +10,13 @@ CBaseAnimation::CBaseAnimation(SDL_Texture* texture)
 
 CBaseAnimation::CBaseAnimation(SDL_Texture* texture, SDL_Rect frame,
                                int nFrames, uint64_t start_tick,
-                               int time_per_frame)
+                               int time_per_frame, double scale)
     : texture(texture),
       frame(frame),
       nFrames(nFrames),
       start_tick(start_tick),
-      ticks_per_frame(time_per_frame) {}
+      ticks_per_frame(time_per_frame),
+      scale(scale) {}
 
 CBaseAnimation::CBaseAnimation()
     : texture(nullptr),

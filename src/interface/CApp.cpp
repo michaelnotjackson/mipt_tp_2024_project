@@ -59,7 +59,6 @@ void DrawEntities() {
 void CApp::OnRender() {
   SDL_RenderClear(renderer);
   DrawEntities();
-  SDL_RenderClear(renderer);
   SDL_RenderPresent(renderer);
 }
 
@@ -70,9 +69,16 @@ int CApp::OnExecute() {
 
   SDL_Event event;
 
-  entity_list.Insert(new CBasePlayer());
+  SDL_Texture* texture = LoadTexture(
+      "assets/Tiny "
+      "Swords/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png");
 
-
+  for (int i = 0; i < 8; ++i) {
+    entity_list.Insert(new CBasePlayer(CBaseAnimation(
+        texture, {0, 192 * i, 192, 192}, 6, SDL_GetTicks64(), 100, 0.4)));
+    entity_list.GetByIndex(entity_list.highest_ent)->GetPos()->y =
+        192 * 0.4 * i;
+  }
 
   while (is_running) {
     while (SDL_PollEvent(&event)) {

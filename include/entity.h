@@ -23,4 +23,7 @@ class IBaseEntity {
   virtual PosType* GetPos();
 
   virtual ~IBaseEntity() = default;
+
+ public:
+  IBaseEntity(const CBaseAnimation& animation);
 };
