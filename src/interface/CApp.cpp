@@ -8,6 +8,8 @@
 
 CApp::CApp() : is_running(true), window(nullptr), renderer(nullptr) {}
 
+Room room(720, 720);
+
 bool CApp::OnInit() {
   if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
     return false;
@@ -57,7 +59,7 @@ void DrawEntities() {
 void CApp::OnRender() {
   SDL_RenderClear(renderer);
   DrawEntities();
-
+  SDL_RenderClear(renderer);
   SDL_RenderPresent(renderer);
 }
 
@@ -68,9 +70,11 @@ int CApp::OnExecute() {
 
   SDL_Event event;
 
-  entity_list.Insert(new CBasePlayer);
+  entity_list.Insert(new CBasePlayer());
 
-      while (is_running) {
+
+
+  while (is_running) {
     while (SDL_PollEvent(&event)) {
       OnEvent(&event);
     }

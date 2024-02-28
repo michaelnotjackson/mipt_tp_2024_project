@@ -15,4 +15,6 @@ struct CBaseAnimation {
                  int nFrames,
                  uint64_t start_tick,
                  int time_per_frame);
+
+  CBaseAnimation();
 };

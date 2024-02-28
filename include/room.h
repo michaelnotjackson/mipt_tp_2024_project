@@ -7,12 +7,18 @@
 
 class CTile {
  private:
-  SDL_Texture* texture;
+  CBaseAnimation animation;
   TileFlagsType flags;
 
  public:
-  void SetTexture(SDL_Texture* texture);
+  void SetTexture(CBaseAnimation texture);
   void SetFlags(TileFlagsType flags);
+
+  CBaseAnimation GetTexture();
+
+  CTile(CBaseAnimation texture);
+
+  CTile();
 };
 
 class Room {
@@ -31,4 +37,5 @@ class Room {
   int GetHeight();
   FieldType& GetField();
   void SetField (SDL_Texture* texture);
+  void DrawField ();
 };

@@ -4,13 +4,13 @@
 #include <equipment.h>
 #include <types.h>
 
-class CBasePlayer : IBaseEntity {
+class CBasePlayer : public IBaseEntity {
  public:
   std::vector<CSpell*> spell_list;
   std::vector<CBaseEquipment*> inventory;
 };
 
-class CBaseMonster : IBaseEntity {
+class CBaseMonster : public IBaseEntity {
  public:
   std::vector<CBaseEquipment*> loot;
 };
