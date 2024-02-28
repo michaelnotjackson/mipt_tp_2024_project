@@ -13,4 +13,6 @@ struct CBaseAnimation {
                  SDL_Rect frame,
                  int nFrames,
                  int show_time);
+
+  CBaseAnimation();
 };

@@ -9,7 +9,6 @@
 
 CApp::CApp() : is_running(true), window(nullptr), renderer(nullptr) {}
 
-SDL_Texture* grass = nullptr;
 Room room(720, 720);
 
 bool CApp::OnInit() {
@@ -36,8 +35,6 @@ bool CApp::OnInit() {
     return false;
   }
 
-  room.SetField();
-
   return true;
 }
 
@@ -58,7 +55,7 @@ void CApp::OnRender() {
   //SDL_SetRenderDrawColor(renderer, 96, 128, 255, 255);
   //PosType pos(100, 100);
   //Blit(knight, pos.x, pos.y);
-  room.DrawField(grass);
+  room.DrawField();
   SDL_RenderPresent(renderer);
 }
 
@@ -68,7 +65,9 @@ int CApp::OnExecute() {
   }
 
   SDL_Event event;
-  grass = LoadTexture("assets/Tiny Swords/Terrain/Ground/Tilemap_Flat.png");
+
+  SDL_Texture* grass = LoadTexture("assets/Tiny Swords/Terrain/Ground/Tilemap_Flat.png");
+  room.SetField(grass);
 
   while (is_running) {
     while (SDL_PollEvent(&event)) {

@@ -11,4 +11,6 @@ CBaseAnimation::CBaseAnimation(SDL_Texture *texture,
                                : texture(texture),
                                  frame(frame),
                                  nFrames(nFrames),
-                                 show_time(show_time){}
+                                 show_time(show_time){};
+
+CBaseAnimation::CBaseAnimation(): texture(), frame(), nFrames(0), show_time(0) {};

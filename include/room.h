@@ -7,12 +7,18 @@
 
 class CTile {
  private:
-  SDL_Texture* texture;
+  CBaseAnimation animation;
   TileFlagsType flags;
 
  public:
-  void SetTexture(SDL_Texture* texture);
+  void SetTexture(CBaseAnimation texture);
   void SetFlags(TileFlagsType flags);
+
+  CBaseAnimation GetTexture();
+
+  CTile(CBaseAnimation texture);
+
+  CTile();
 };
 
 class Room {
@@ -20,7 +26,6 @@ class Room {
   int width;
   int height;
   FieldType field;
-  Arr field_0;
 
  public:
   Room(int width, int height, FieldType field);
@@ -31,6 +36,6 @@ class Room {
   int GetWidth();
   int GetHeight();
   FieldType& GetField();
-  void SetField ();
-  void DrawField (SDL_Texture* texture);
+  void SetField (SDL_Texture* texture);
+  void DrawField ();
 };
