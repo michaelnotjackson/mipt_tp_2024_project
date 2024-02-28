@@ -3,6 +3,7 @@
 #include <entity.h>
 #include <interface/CApp.h>
 #include <interface/renderer.h>
+#include <entitylist.h>
 
 #include <iostream>
 
@@ -45,9 +46,18 @@ void CApp::OnCleanup() { SDL_Quit(); }
 
 void CApp::OnLoop() {}
 
+void DrawEntities() {
+  CEntityNode* cur = entity_list.GetHead();
+
+  while (cur != nullptr) {
+    Blit(cur->entity->animation, cur->entity->GetPos());
+    cur = cur->next;
+  }
+}
+
 void CApp::OnRender() {
   SDL_RenderClear(renderer);
-  SDL_SetRenderDrawColor(renderer, 96, 128, 255, 255);
+  DrawEntities();
   SDL_RenderPresent(renderer);
 }
 

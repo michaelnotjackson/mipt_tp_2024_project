@@ -56,4 +56,6 @@ void CEntityList::RemoveByIndex(int idx) {
 
 int CEntityList::EntityCount() { return ent_count; }
 
+CEntityNode* CEntityList::GetHead() { return this->head; }
+
 CEntityList entity_list;

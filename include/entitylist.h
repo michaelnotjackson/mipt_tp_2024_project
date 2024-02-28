@@ -22,7 +22,10 @@ class CEntityList {
  public:
   void Insert(IBaseEntity* ent);
   void RemoveByIndex(int idx);
+
   IBaseEntity* GetByIndex(int idx);
+
+  CEntityNode* GetHead();
 
   int EntityCount();
 };

@@ -34,3 +34,7 @@ void Blit(CBaseAnimation& anim, int x, int y) {
     SDL_Log("%s", SDL_GetError());
   }
 }
+
+void Blit(CBaseAnimation& anim, PosType* pos) {
+  Blit(anim, pos->x, pos->y);
+}
