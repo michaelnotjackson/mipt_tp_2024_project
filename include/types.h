@@ -61,6 +61,8 @@ class CTile;
 
 typedef std::vector<std::vector<CTile>> FieldType;
 
+typedef std::vector<std::vector<int>> Arr;
+
 struct PosType {
   int x;
   int y;

@@ -9,6 +9,9 @@
 
 CApp::CApp() : is_running(true), window(nullptr), renderer(nullptr) {}
 
+SDL_Texture* grass = nullptr;
+Room room(720, 720);
+
 bool CApp::OnInit() {
   if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
     return false;
@@ -27,13 +30,13 @@ bool CApp::OnInit() {
 
   SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 
-
-
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
   if (renderer == nullptr) {
     return false;
   }
+
+  room.SetField();
 
   return true;
 }
@@ -49,15 +52,13 @@ void CApp::OnCleanup() { SDL_Quit(); }
 void CApp::OnLoop() {}
 
 SDL_Texture* knight = nullptr;
-SDL_Texture* grass = nullptr;
 
 void CApp::OnRender() {
   SDL_RenderClear(renderer);
   //SDL_SetRenderDrawColor(renderer, 96, 128, 255, 255);
   //PosType pos(100, 100);
-  Room room(720, 720);
-  room.SetField(grass);
   //Blit(knight, pos.x, pos.y);
+  room.DrawField(grass);
   SDL_RenderPresent(renderer);
 }
 

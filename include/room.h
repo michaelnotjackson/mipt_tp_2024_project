@@ -20,6 +20,7 @@ class Room {
   int width;
   int height;
   FieldType field;
+  Arr field_0;
 
  public:
   Room(int width, int height, FieldType field);
@@ -30,5 +31,6 @@ class Room {
   int GetWidth();
   int GetHeight();
   FieldType& GetField();
-  void SetField (SDL_Texture* texture);
+  void SetField ();
+  void DrawField (SDL_Texture* texture);
 };

@@ -1,17 +1,10 @@
 #include <room.h>
 
-<<<<<<< HEAD
-
 #include <SDL.h>
 #include <interface/renderer.h>
 #include <cstdlib>
-=======
-
 #include <utility>
-
->>>>>>>
-
-fb0f1f293b0bd2d528b43ae075d691fc636bb8c1
+#include <vector>
 
 int Room::GetWidth() { return this->width; }
 
@@ -24,10 +17,18 @@ Room::Room(int width, int height, FieldType field)
     : width(width), height(height), field(std::move(field)) {}
 
 Room::Room(int width, int height)
-    : width(width), height(height) {}
+    : width(width), height(height), field_0(width / 40, std::vector<int> (height / 40)) {}
 
-void Room::SetField(SDL_Texture *texture) {
+void Room::SetField() {
   std::srand(std::time(nullptr));
+  for (int i = 0; i <= 680; i += 40) {
+    for (int j = 0; j <= 680; j += 40) {
+      field_0[i / 40][j / 40] = std::rand() % 2;
+    }
+  }
+}
+
+void Room::DrawField(SDL_Texture *texture) {
   SDL_Rect frame;
   frame.x = 40;
   frame.y = 40;
@@ -38,8 +39,7 @@ void Room::SetField(SDL_Texture *texture) {
   CBaseAnimation grass_w(texture, frame, 0, 0);
   for (int i = 0; i <= 680; i += 40) {
     for (int j = 0; j <= 680; j += 40) {
-      int random = std::rand() % 2 + 0;
-      if (random == 0) {
+      if (field_0[i / 40][j / 40] == 0) {
         Blit(grass_g, i, j);
       } else {
         Blit(grass_w, i, j);
