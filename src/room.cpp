@@ -23,9 +23,9 @@ void Room::SetField(SDL_Texture* texture) {
   frame.y = 40;
   frame.w = 40;
   frame.h = 40;
-  CBaseAnimation grass_g(texture, frame, 0, 0);
+  CBaseAnimation grass_g(texture, frame, 0, SDL_GetTicks64(), 1);
   frame.x = 400;
-  CBaseAnimation grass_w(texture, frame, 0, 0);
+  CBaseAnimation grass_w(texture, frame, 0, SDL_GetTicks64(), 1);
   for (int i = 0; i <= 680; i += 40) {
     for (int j = 0; j <= 680; j += 40) {
       int random = std::rand() % 2 + 0;
