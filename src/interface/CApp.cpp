@@ -1,12 +1,10 @@
 #include <SDL.h>
 #include <SDL_image.h>
-#include <entity.h>
 #include <entitylist.h>
 #include <interface/CApp.h>
 #include <interface/renderer.h>
+#include <player.h>
 #include <room.h>
-
-#include <iostream>
 
 CApp::CApp() : is_running(true), window(nullptr), renderer(nullptr) {}
 
@@ -56,15 +54,10 @@ void DrawEntities() {
   }
 }
 
-SDL_Texture* knight = nullptr;
-SDL_Texture* grass = nullptr;
-
 void CApp::OnRender() {
   SDL_RenderClear(renderer);
   DrawEntities();
-  Room room(720, 720);
-  room.SetField(grass);
-  // Blit(knight, pos.x, pos.y);
+
   SDL_RenderPresent(renderer);
 }
 
@@ -74,9 +67,10 @@ int CApp::OnExecute() {
   }
 
   SDL_Event event;
-  grass = LoadTexture("assets/Tiny Swords/Terrain/Ground/Tilemap_Flat.png");
 
-  while (is_running) {
+  entity_list.Insert(new CBasePlayer);
+
+      while (is_running) {
     while (SDL_PollEvent(&event)) {
       OnEvent(&event);
     }
