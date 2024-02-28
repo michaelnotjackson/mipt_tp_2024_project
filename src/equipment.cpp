@@ -1,4 +1,5 @@
 #include <equipment.h>
+#include <types.h>
 
 #include <utility>
 
@@ -30,7 +31,7 @@ std::string CRangedWeapon::GetAmmoType() { return this->ammo_type; }
 
 CRangedWeapon::CRangedWeapon(int damage, WeaponProperties properties, DamageType type,
                            int range, std::string ammo_type)
-    : CBaseWeapon(std::string(), BASEARMOR, 0, 0, 0, damage, properties, type),
+    : CBaseWeapon(std::string(), EquipType::BASEARMOR, 0, 0, 0, damage, properties, type),
       range(range),
       ammo_type(ammo_type){};
 

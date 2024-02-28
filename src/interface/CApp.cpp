@@ -3,6 +3,7 @@
 #include <entity.h>
 #include <interface/CApp.h>
 #include <interface/renderer.h>
+#include <room.h>
 
 #include <iostream>
 
@@ -18,13 +19,15 @@ bool CApp::OnInit() {
   }
 
   window = SDL_CreateWindow("Test", SDL_WINDOWPOS_UNDEFINED,
-                            SDL_WINDOWPOS_UNDEFINED, 1280, 720, 0);
+                            SDL_WINDOWPOS_UNDEFINED, 720, 720, 0);
 
   if (window == nullptr) {
     return false;
   }
 
   SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+
+
 
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
@@ -45,9 +48,16 @@ void CApp::OnCleanup() { SDL_Quit(); }
 
 void CApp::OnLoop() {}
 
+SDL_Texture* knight = nullptr;
+SDL_Texture* grass = nullptr;
+
 void CApp::OnRender() {
   SDL_RenderClear(renderer);
-  SDL_SetRenderDrawColor(renderer, 96, 128, 255, 255);
+  //SDL_SetRenderDrawColor(renderer, 96, 128, 255, 255);
+  //PosType pos(100, 100);
+  Room room(720, 720);
+  room.SetField(grass);
+  //Blit(knight, pos.x, pos.y);
   SDL_RenderPresent(renderer);
 }
 
@@ -57,6 +67,7 @@ int CApp::OnExecute() {
   }
 
   SDL_Event event;
+  grass = LoadTexture("assets/Tiny Swords/Terrain/Ground/Tilemap_Flat.png");
 
   while (is_running) {
     while (SDL_PollEvent(&event)) {
