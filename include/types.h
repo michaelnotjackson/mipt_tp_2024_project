@@ -4,20 +4,14 @@
 #include <vector>
 
 #ifdef HUGE
- #undef HUGE
+#undef HUGE
 #endif
 
-enum class SizeType {
-  TINY, SMALL, MEDIUM, LARGE, HUGE
-};
+enum class SizeType { TINY, SMALL, MEDIUM, LARGE, HUGE };
 
-enum class ObstacleType {
-  NO_OBSTACLES, HALF_SPEED, WALL
-};
+enum class ObstacleType { NO_OBSTACLES, HALF_SPEED, WALL };
 
-enum class CharacteristicType {
-  STR, DEX, CON, INT, WIS, CHR
-};
+enum class CharacteristicType { STR, DEX, CON, INT, WIS, CHR };
 
 enum class RaceType {
 
@@ -43,12 +37,7 @@ enum class WeaponProperties {
   VERSATILE = 1 << 8
 };
 
-enum class EquipType {
-  BASEWEAPON,
-  RANGEWEAPON,
-  BASEARMOR,
-  POTION
-};
+enum class EquipType { BASEWEAPON, RANGEWEAPON, BASEARMOR, POTION };
 
 enum class DamageType {
   SLASHING,
@@ -66,9 +55,7 @@ enum class DamageType {
   PSYCHIC
 };
 
-enum class TileFlagsType {
-  VISIBLE = 1 << 0
-};
+enum class TileFlagsType { VISIBLE = 1 << 0 };
 
 class CTile;
 
@@ -82,5 +69,4 @@ struct PosType {
   PosType(int x, int y) : x(x), y(y) {}
 };
 
-class CSpell {
-};
+class CSpell {};

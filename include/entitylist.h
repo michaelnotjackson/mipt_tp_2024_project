@@ -16,13 +16,15 @@ class CEntityList {
  private:
   CEntityNode* head = nullptr;
   CEntityNode* last = nullptr;
-  int highest_ent; // Index of the last entity
-  int ent_count; // Count of existing entities
+  int highest_ent;  // Index of the last entity
+  int ent_count;    // Count of existing entities
 
  public:
   void Insert(IBaseEntity* ent);
   void RemoveByIndex(int idx);
   IBaseEntity* GetByIndex(int idx);
+
+  int EntityCount();
 };
 
 extern CEntityList entity_list;

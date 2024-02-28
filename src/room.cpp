@@ -1,20 +1,32 @@
 #include <room.h>
 
+<<<<<<< HEAD
+
 #include <SDL.h>
 #include <interface/renderer.h>
 #include <cstdlib>
+=======
+
+#include <utility>
+
+>>>>>>>
+
+fb0f1f293b0bd2d528b43ae075d691fc636bb8c1
 
 int Room::GetWidth() { return this->width; }
+
 int Room::GetHeight() { return this->height; }
-FieldType& Room::GetField() { return this->field; }
+
+FieldType &Room::GetField() { return this->field; }
 
 Room::Room(int width, int height, FieldType field)
-    : width(width), height(height), field(field){}
+
+    : width(width), height(height), field(std::move(field)) {}
 
 Room::Room(int width, int height)
-    : width(width), height(height){}
+    : width(width), height(height) {}
 
-void Room::SetField(SDL_Texture* texture) {
+void Room::SetField(SDL_Texture *texture) {
   std::srand(std::time(nullptr));
   SDL_Rect frame;
   frame.x = 40;
@@ -29,10 +41,10 @@ void Room::SetField(SDL_Texture* texture) {
       int random = std::rand() % 2 + 0;
       if (random == 0) {
         Blit(grass_g, i, j);
-      }
-      else {
+      } else {
         Blit(grass_w, i, j);
       }
     }
   }
 }
+
