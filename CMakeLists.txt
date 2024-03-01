@@ -35,7 +35,9 @@ add_executable(${PROJECT_NAME}
     src/animation.cpp
     include/properties.h
     include/entitylist.h
-    src/entitylist.cpp)
+    src/entitylist.cpp
+    include/assets_manager.h
+    src/assets_manager.cpp)
 
 #add_executable(${PROJECT_NAME} src/main.cpp)
 
