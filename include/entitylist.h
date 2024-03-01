@@ -10,6 +10,9 @@ class CEntityNode {
   CEntityNode* next = nullptr;
   CEntityNode* prev = nullptr;
   int idx;
+
+ public:
+  ~CEntityNode();
 };
 
 class CEntityList {
@@ -30,6 +33,8 @@ class CEntityList {
   CEntityNode* GetHead();
 
   int EntityCount();
+
+  ~CEntityList();
 };
 
 extern CEntityList entity_list;

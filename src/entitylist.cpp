@@ -1,5 +1,10 @@
 #include <entitylist.h>
 
+CEntityNode::~CEntityNode() {
+  delete entity;
+  delete next;
+}
+
 IBaseEntity* CEntityList::GetByIndex(int idx) {
   if (idx > highest_ent) {
     return nullptr;
@@ -55,11 +60,18 @@ void CEntityList::RemoveByIndex(int idx) {
   cur->prev->next = cur->next;
   cur->next->prev = cur->prev;
 
+  cur->prev = nullptr;
+  cur->next = nullptr;
+
   delete cur;
 }
 
 int CEntityList::EntityCount() { return ent_count; }
 
 CEntityNode* CEntityList::GetHead() { return this->head; }
+
+CEntityList::~CEntityList() {
+  delete head;
+}
 
 CEntityList entity_list;
