@@ -1,14 +1,84 @@
 #include <SDL.h>
 #include <SDL_image.h>
+#include <assets_manager.h>
 #include <entitylist.h>
 #include <interface/CApp.h>
 #include <interface/renderer.h>
 #include <player.h>
-#include <room.h>
 
 CApp::CApp() : is_running(true), window(nullptr), renderer(nullptr) {}
 
-Room room(720, 720);
+bool CApp::LoadTextures() {
+  if (!assets_manager.LoadTexture(
+          "assets/Tiny "
+          "Swords/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png",
+          "textures/warriors/warrior_blue")) {
+    return false;
+  }
+
+  return true;
+}
+
+bool CApp::RegisterAnimations() {
+  if (!assets_manager.RegisterAnimation(
+          CBaseAnimation(
+              assets_manager.GetTexture("textures/warriors/warrior_blue"),
+              SDL_Rect{0, 0, 192, 192}, 6, SDL_GetTicks64(), 100, 0.4),
+          "animations/warriors/warrior_blue/idle")) {
+    return false;
+  }
+  if (!assets_manager.RegisterAnimation(
+          CBaseAnimation(
+              assets_manager.GetTexture("textures/warriors/warrior_blue"),
+              SDL_Rect{0, 192, 192, 192}, 6, SDL_GetTicks64(), 100, 0.4),
+          "animations/warriors/warrior_blue/move")) {
+    return false;
+  }
+  if (!assets_manager.RegisterAnimation(
+          CBaseAnimation(
+              assets_manager.GetTexture("textures/warriors/warrior_blue"),
+              SDL_Rect{0, 192 * 2, 192, 192}, 6, SDL_GetTicks64(), 100, 0.4),
+          "animations/warriors/warrior_blue/attack1_right")) {
+    return false;
+  }
+  if (!assets_manager.RegisterAnimation(
+          CBaseAnimation(
+              assets_manager.GetTexture("textures/warriors/warrior_blue"),
+              SDL_Rect{0, 192 * 3, 192, 192}, 6, SDL_GetTicks64(), 100, 0.4),
+          "animations/warriors/warrior_blue/attack2_right")) {
+    return false;
+  }
+  if (!assets_manager.RegisterAnimation(
+          CBaseAnimation(
+              assets_manager.GetTexture("textures/warriors/warrior_blue"),
+              SDL_Rect{0, 192 * 4, 192, 192}, 6, SDL_GetTicks64(), 100, 0.4),
+          "animations/warriors/warrior_blue/attack1_down")) {
+    return false;
+  }
+  if (!assets_manager.RegisterAnimation(
+          CBaseAnimation(
+              assets_manager.GetTexture("textures/warriors/warrior_blue"),
+              SDL_Rect{0, 192 * 5, 192, 192}, 6, SDL_GetTicks64(), 100, 0.4),
+          "animations/warriors/warrior_blue/attack2_down")) {
+    return false;
+  }
+  if (!assets_manager.RegisterAnimation(
+          CBaseAnimation(
+              assets_manager.GetTexture("textures/warriors/warrior_blue"),
+              SDL_Rect{0, 192 * 6, 192, 192}, 6, SDL_GetTicks64(), 100, 0.4),
+          "animations/warriors/warrior_blue/attack1_up")) {
+    return false;
+  }
+  if (!assets_manager.RegisterAnimation(
+          CBaseAnimation(
+              assets_manager.GetTexture("textures/warriors/warrior_blue"),
+              SDL_Rect{0, 0, 192, 192}, 6, SDL_GetTicks64(), 100, 0.4),
+          "animations/warriors/warrior_blue/attack2_up")) {
+    return false;
+  }
+
+  return true;
+}
 
 bool CApp::OnInit() {
   if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
@@ -34,6 +104,9 @@ bool CApp::OnInit() {
     return false;
   }
 
+  CApp::LoadTextures();
+  CApp::RegisterAnimations();
+
   return true;
 }
 
@@ -51,7 +124,7 @@ void DrawEntities() {
   CEntityNode* cur = entity_list.GetHead();
 
   while (cur != nullptr) {
-    Blit(cur->entity->animation, cur->entity->GetPos());
+    Blit(&cur->entity->animation, cur->entity->GetPos());
     cur = cur->next;
   }
 }
@@ -69,16 +142,7 @@ int CApp::OnExecute() {
 
   SDL_Event event;
 
-  SDL_Texture* texture = LoadTexture(
-      "assets/Tiny "
-      "Swords/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png");
-
-  for (int i = 0; i < 8; ++i) {
-    entity_list.Insert(new CBasePlayer(CBaseAnimation(
-        texture, {0, 192 * i, 192, 192}, 6, SDL_GetTicks64(), 100, 0.4)));
-    entity_list.GetByIndex(entity_list.highest_ent)->GetPos()->y =
-        192 * 0.4 * i;
-  }
+  entity_list.Insert(new CBasePlayer(assets_manager.GetAnimation("animations/warriors/warrior_blue/idle")));
 
   while (is_running) {
     while (SDL_PollEvent(&event)) {
@@ -95,3 +159,5 @@ int CApp::OnExecute() {
 
   return 0;
 }
+
+CApp app;

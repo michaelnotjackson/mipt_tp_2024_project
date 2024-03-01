@@ -39,7 +39,5 @@ add_executable(${PROJECT_NAME}
     include/assets_manager.h
     src/assets_manager.cpp)
 
-#add_executable(${PROJECT_NAME} src/main.cpp)
-
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2_image)

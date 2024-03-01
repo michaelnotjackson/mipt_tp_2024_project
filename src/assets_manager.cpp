@@ -28,7 +28,7 @@ SDL_Texture* CAssetsManager::GetTexture(const std::string& name) {
   return textures[name];
 }
 
-bool CAssetsManager::RegisterAnimation(CBaseAnimation* animation,
+bool CAssetsManager::RegisterAnimation(CBaseAnimation animation,
                                        const std::string& name) {
   if (animations.find(name) != animations.end()) {
     SDL_LogError(1, "%s",
@@ -37,19 +37,13 @@ bool CAssetsManager::RegisterAnimation(CBaseAnimation* animation,
     return false;
   }
 
-  animations[name] = animation;
+  animations[name] = std::move(animation);
 
   return true;
 }
 
-CBaseAnimation* CAssetsManager::GetAnimation(const std::string& name) {
+CBaseAnimation& CAssetsManager::GetAnimation(const std::string& name) {
   return animations[name];
-}
-
-CAssetsManager::~CAssetsManager() {
-  for (auto &[name, animation]: animations) {
-    delete animation;
-  }
 }
 
 CAssetsManager assets_manager;

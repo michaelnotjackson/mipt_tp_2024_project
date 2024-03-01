@@ -20,23 +20,23 @@ SDL_Texture* LoadTexture(const std::string& file_path) {
   return texture;
 }
 
-void Blit(CBaseAnimation& anim, int x, int y) {
+void Blit(CBaseAnimation* anim, int x, int y) {
   SDL_Rect dest;
 
   dest.x = x;
   dest.y = y;
 
-  dest.w = anim.frame.w * anim.scale;
-  dest.h = anim.frame.h * anim.scale;
+  dest.w = anim->frame.w * anim->scale;
+  dest.h = anim->frame.h * anim->scale;
 
-  SDL_Rect src = anim.frame;
+  SDL_Rect src = anim->frame;
   src.x +=
-      src.w * (((SDL_GetTicks64() - anim.start_tick) / anim.ticks_per_frame) %
-               anim.nFrames);
+      src.w * (((SDL_GetTicks64() - anim->start_tick) / anim->ticks_per_frame) %
+               anim->nFrames);
 
-  if (SDL_RenderCopy(app.renderer, anim.texture, &src, &dest) < 0) {
+  if (SDL_RenderCopy(app.renderer, anim->texture, &src, &dest) < 0) {
     SDL_Log("%s", SDL_GetError());
   }
 }
 
-void Blit(CBaseAnimation& anim, PosType* pos) { Blit(anim, pos->x, pos->y); }
+void Blit(CBaseAnimation* anim, PosType* pos) { Blit(anim, pos->x, pos->y); }

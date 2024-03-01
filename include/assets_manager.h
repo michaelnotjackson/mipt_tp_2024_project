@@ -10,7 +10,7 @@
 class CAssetsManager {
  private:
   std::unordered_map<std::string, SDL_Texture*> textures;
-  std::unordered_map<std::string, CBaseAnimation*> animations;
+  std::unordered_map<std::string, CBaseAnimation> animations;
 
  public:
   CAssetsManager();
@@ -19,11 +19,11 @@ class CAssetsManager {
 
   SDL_Texture* GetTexture(const std::string& name);
 
-  bool RegisterAnimation(CBaseAnimation* animation, const std::string& name);
+  bool RegisterAnimation(CBaseAnimation animation, const std::string& name);
 
-  CBaseAnimation* GetAnimation(const std::string& name);
+  CBaseAnimation& GetAnimation(const std::string& name);
 
-  ~CAssetsManager();
+  ~CAssetsManager() = default;
 };
 
 extern CAssetsManager assets_manager;

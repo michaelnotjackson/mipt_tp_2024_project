@@ -14,6 +14,7 @@ class IBaseEntity {
  private:
   CObjProperties props;
   PosType pos;
+  CBaseAnimation default_animation;
 
  public:
   CBaseAnimation animation;
@@ -24,6 +25,11 @@ class IBaseEntity {
 
   virtual ~IBaseEntity() = default;
 
+  virtual void SetAnimation(const CBaseAnimation& new_animation);
+
+  virtual void PlayAnimation(const CBaseAnimation& new_animation);
+
  public:
-  IBaseEntity(const CBaseAnimation& animation);
+  explicit IBaseEntity(CBaseAnimation& animation)
+      : default_animation(animation), animation(animation) {}
 };
