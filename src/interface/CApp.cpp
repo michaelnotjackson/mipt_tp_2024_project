@@ -156,8 +156,10 @@ void DrawEntities() {
 }
 
 void DrawRoom(const Room& room_a) {
-  for (int i = 0; i < SCREEN_WIDTH; i += SCREEN_WIDTH / 64) {
-    for (int j = 0; j < SCREEN_HEIGHT; j += SCREEN_HEIGHT / 64) {
+  int width = room_a.field[0][0]->GetTexture().frame.w * room_a.field[0][0]->GetTexture().scale;
+  int height = room_a.field[0][0]->GetTexture().frame.h * room_a.field[0][0]->GetTexture().scale;
+  for (int i = 0; i < SCREEN_WIDTH; i += height) {
+    for (int j = 0; j < SCREEN_HEIGHT; j += width) {
       CBaseAnimation tmp = ((*(room_a.GetField()[i / 64][j / 64])).GetTexture());
       Blit(&tmp, i, j);
     }
