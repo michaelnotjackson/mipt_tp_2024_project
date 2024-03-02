@@ -48,4 +48,4 @@ class Room {
   void DrawField ();
 };
 
-PosType GetTilePos(const CTile& tile, const Room& room);
+PosType GetTilePos(const CTile* tile, const Room& room);
