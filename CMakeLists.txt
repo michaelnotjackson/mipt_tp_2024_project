@@ -18,34 +18,28 @@ include_directories(include/SDL_image/include)
 include_directories(include/SDL/include)
 
 add_executable(${PROJECT_NAME}
-    include/entity.h
-    include/equipment.h
-    include/room.h
-    src/main.cpp
-    include/types.h
-    include/player.h
-    src/entity.cpp
-    include/interface/CApp.h
-    src/room.cpp
-    src/equipment.cpp
-    src/interface/CApp.cpp
-    include/interface/renderer.h
-    src/interface/renderer.cpp
-    include/animation.h
-    src/animation.cpp
-    include/properties.h
-    include/entitylist.h
-    src/entitylist.cpp
-    include/assets_manager.h
-    src/assets_manager.cpp
-    include/base_eventlistener.h
-    include/mouse_eventlisteners.h
-    src/mouse_eventlisteners.cpp
-    include/globals.h
-    src/globals.cpp
-    include/eventmanager.h
-    src/eventmanager.cpp
-)
+        include/entity.h
+        include/equipment.h
+        include/room.h
+        src/main.cpp
+        include/types.h
+        include/player.h
+        src/entity.cpp
+        include/interface/CApp.h
+        src/room.cpp
+        src/equipment.cpp
+        src/interface/CApp.cpp
+        include/interface/renderer.h
+        src/interface/renderer.cpp
+        include/animation.h
+        src/animation.cpp
+        include/properties.h
+        include/entitylist.h
+        src/entitylist.cpp
+        include/assets_manager.h
+        src/assets_manager.cpp
+        include/globals.h
+        src/globals.cpp)
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2_image)
