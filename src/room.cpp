@@ -3,6 +3,7 @@
 #include <room.h>
 #include <types.h>
 
+#include <algorithm>
 #include <random>
 #include <utility>
 #include <vector>
@@ -29,27 +30,42 @@ Room::Room(int width, int height)
 
 CBaseAnimation CTile::GetTexture() { return this->animation; }
 
-//void Room::SetField(SDL_Texture* texture) {
-//  std::random_device rd;
-//  std::mt19937 gen(rd());
-//  std::uniform_int_distribution<> dist(0, 1);
-//  SDL_Rect frame;
-//  frame.x = 40;
-//  frame.y = 40;
-//  frame.w = 40;
-//  frame.h = 40;
-//  CBaseAnimation grass_g(texture, frame, 1, SDL_GetTicks64(), 100);
-//  CTile grass(grass_g);
-//  frame.x = 400;
-//  CBaseAnimation grass_w(texture, frame, 1, SDL_GetTicks64(), 100);
-//  CTile sand(grass_w);
-//  for (int i = 0; i <= 680; i += 40) {
-//    for (int j = 0; j <= 680; j += 40) {
-//      if (dist(gen) == 0) {
-//        field[i / 40][j / 40] = grass;
-//      } else {
-//        field[i / 40][j / 40] = sand;
-//      }
-//    }
-//  }
-//}
+// void Room::SetField(SDL_Texture* texture) {
+//   std::random_device rd;
+//   std::mt19937 gen(rd());
+//   std::uniform_int_distribution<> dist(0, 1);
+//   SDL_Rect frame;
+//   frame.x = 40;
+//   frame.y = 40;
+//   frame.w = 40;
+//   frame.h = 40;
+//   CBaseAnimation grass_g(texture, frame, 1, SDL_GetTicks64(), 100);
+//   CTile grass(grass_g);
+//   frame.x = 400;
+//   CBaseAnimation grass_w(texture, frame, 1, SDL_GetTicks64(), 100);
+//   CTile sand(grass_w);
+//   for (int i = 0; i <= 680; i += 40) {
+//     for (int j = 0; j <= 680; j += 40) {
+//       if (dist(gen) == 0) {
+//         field[i / 40][j / 40] = grass;
+//       } else {
+//         field[i / 40][j / 40] = sand;
+//       }
+//     }
+//   }
+// }
+
+PosType GetTilePos(CTile* tile, const Room& room) {
+  int y = 0;
+  int width = tile->GetTexture().frame.w * tile->GetTexture().scale;
+  int height = tile->GetTexture().frame.h * tile->GetTexture().scale;
+  for (auto& raw : room.field) {
+    auto pos = std::find(raw.begin(), raw.end(), tile);
+    if (pos != raw.end()) {
+      return {static_cast<int>((pos - raw.begin()) * width), y * height};
+    }
+    ++y;
+  }
+
+  return {-1, -1};
+}
