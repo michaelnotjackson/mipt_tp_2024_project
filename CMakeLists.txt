@@ -3,7 +3,7 @@ project(tp_course_spring24_project CXX)
 
 set(PROJECT_NAME DND_RougeLike)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 include_directories(.)
 include_directories(include)
@@ -37,7 +37,15 @@ add_executable(${PROJECT_NAME}
     include/entitylist.h
     src/entitylist.cpp
     include/assets_manager.h
-    src/assets_manager.cpp)
+    src/assets_manager.cpp
+    include/base_eventlistener.h
+    include/mouse_eventlisteners.h
+    src/mouse_eventlisteners.cpp
+    include/globals.h
+    src/globals.cpp
+    include/eventmanager.h
+    src/eventmanager.cpp
+)
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2_image)
