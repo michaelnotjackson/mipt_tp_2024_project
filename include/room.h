@@ -28,6 +28,8 @@ class Room {
  private:
   int width;
   int height;
+
+ public:
   FieldType field;
 
  public:
@@ -36,9 +38,14 @@ class Room {
   Room(int width,
        int height);
 
+  Room() = default;
+
+ public:
   int GetWidth();
   int GetHeight();
   const FieldType& GetField() const;
   void SetField (SDL_Texture* texture);
   void DrawField ();
 };
+
+PosType GetTilePos(const CTile& tile, const Room& room);

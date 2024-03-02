@@ -3,7 +3,9 @@
 #include <room.h>
 #include <types.h>
 #include <assets_manager.h>
+#include <globals.h>
 
+#include <algorithm>
 #include <random>
 #include <utility>
 #include <vector>
@@ -45,4 +47,19 @@ void Room::SetField(SDL_Texture* texture) {
       }
     }
   }
+}
+
+PosType GetTilePos(CTile* tile, const Room& room) {
+  int y = 0;
+  int width = tile->GetTexture().frame.w * tile->GetTexture().scale;
+  int height = tile->GetTexture().frame.h * tile->GetTexture().scale;
+  for (auto& raw : room.field) {
+    auto pos = std::find(raw.begin(), raw.end(), tile);
+    if (pos != raw.end()) {
+      return {static_cast<int>((pos - raw.begin()) * width), y * height};
+    }
+    ++y;
+  }
+
+  return {-1, -1};
 }
