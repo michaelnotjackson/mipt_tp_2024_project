@@ -22,4 +22,8 @@ class CBaseAnimation {
 
  public:
   void ResetTiming();
+
+ public:
+  bool operator==(const CBaseAnimation& other) const;
+  bool operator!=(const CBaseAnimation& other) const;
 };
