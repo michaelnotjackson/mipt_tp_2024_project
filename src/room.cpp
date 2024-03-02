@@ -28,7 +28,7 @@ Room::Room(int width, int height, FieldType field)
 Room::Room(int width, int height)
     : width(width),
       height(height),
-      field(width / 40, std::vector<CTile>(height / 40)) {}
+      field(width / 64, std::vector<CTile*>(height / 64)) {}
 
 CBaseAnimation CTile::GetTexture() { return this->animation; }
 
@@ -36,10 +36,10 @@ void Room::SetField(SDL_Texture* texture) {
   std::random_device rd;
   std::mt19937 gen(rd());
   std::uniform_int_distribution<> dist(0, 1);
-  CTile grass(assets_manager.GetAnimation("animations/terrain/grass"));
-  CTile sand(assets_manager.GetAnimation("animations/terrain/grass"));
-  for (int i = 0; i <= SCREEN_WIDTH; i += 64) {
-    for (int j = 0; j <= SCREEN_HEIGHT; j += 64) {
+  auto* grass = new CTile(assets_manager.GetAnimation("animations/terrain/grass"));
+  auto* sand = new CTile((assets_manager.GetAnimation("animations/terrain/sand")));
+  for (int i = 0; i < SCREEN_WIDTH; i += 64) {
+    for (int j = 0; j < SCREEN_HEIGHT; j += 64) {
       if (dist(gen) == 0) {
         field[i / 64][j / 64] = grass;
       } else {
