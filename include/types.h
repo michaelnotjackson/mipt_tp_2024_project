@@ -59,9 +59,7 @@ enum class TileFlagsType { VISIBLE = 1 << 0 };
 
 class CTile;
 
-typedef std::vector<std::vector<CTile>> FieldType;
-
-typedef std::vector<std::vector<int>> Arr;
+typedef std::vector<std::vector<CTile*>> FieldType;
 
 struct PosType {
   int x;
@@ -69,6 +67,9 @@ struct PosType {
 
   PosType(): x(0), y(0) {}
   PosType(int x, int y) : x(x), y(y) {}
+
+  bool operator==(const PosType& oth) const = default;
+  bool operator!=(const PosType& oth) const = default;
 };
 
 class CSpell {};
