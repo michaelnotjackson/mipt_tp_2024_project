@@ -19,7 +19,10 @@ class CTile {
   CTile(CBaseAnimation texture);
 
   CTile();
+  bool operator==(const CTile& pic_1) const = default;
 };
+
+
 
 class Room {
  private:
@@ -35,7 +38,7 @@ class Room {
 
   int GetWidth();
   int GetHeight();
-  FieldType& GetField();
+  const FieldType& GetField() const;
   void SetField (SDL_Texture* texture);
   void DrawField ();
 };
