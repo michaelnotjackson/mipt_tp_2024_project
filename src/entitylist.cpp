@@ -1,3 +1,4 @@
+#include <SDL.h>
 #include <entitylist.h>
 
 CEntityNode::~CEntityNode() {
@@ -18,6 +19,18 @@ IBaseEntity* CEntityList::GetByIndex(int idx) {
 
   if (cur == nullptr) {
     return nullptr;
+  }
+
+  return cur->entity;
+}
+
+IBaseEntity* CEntityList::GetByPos(const SDL_Rect& rect) {
+  CEntityNode* cur = head;
+
+  PosType pos{rect.x, rect.y};
+
+  while (cur != nullptr && (*cur->entity->GetPos()) != pos) {
+    cur = cur->next;
   }
 
   return cur->entity;
@@ -66,12 +79,8 @@ void CEntityList::RemoveByIndex(int idx) {
   delete cur;
 }
 
-int CEntityList::EntityCount() { return ent_count; }
-
 CEntityNode* CEntityList::GetHead() { return this->head; }
 
-CEntityList::~CEntityList() {
-  delete head;
-}
+CEntityList::~CEntityList() { delete head; }
 
 CEntityList entity_list;
