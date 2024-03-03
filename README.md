@@ -8,7 +8,7 @@
 ## Сборка проекта
 Чтобы скопировать и запустить проект воспользуйтесь следующими командами:
 ```shell
-git clone -b dev --recurse-submodules -j8 git@gitlab.akhcheck.ru:sheiko.mikhail/tp_course_spring24_project.git
+git clone -b checkpoint_1 --recurse-submodules -j8 git@gitlab.akhcheck.ru:sheiko.mikhail/tp_course_spring24_project.git
 cd tp_course_spring24_project
 mkdir build
 cd build
