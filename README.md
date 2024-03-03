@@ -1,7 +1,6 @@
 # DND_RogueLike
 
 ## Авторы
-Над проектом работают:
 1. [Шейко Михаил](https://gitlab.akhcheck.ru/sheiko.mikhail)
 2. [Макар Расанов](https://gitlab.akhcheck.ru/makar.rasanov)
 3. [Мелеховец Кирилл](https://gitlab.akhcheck.ru/kirill.melekhovets)
@@ -11,7 +10,6 @@
 ```shell
 git clone -b dev --recurse-submodules -j8 git@gitlab.akhcheck.ru:sheiko.mikhail/tp_course_spring24_project.git
 cd tp_course_spring24_project
-git submodule 
 mkdir build
 cd build
 cmake ..
