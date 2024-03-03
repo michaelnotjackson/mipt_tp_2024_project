@@ -39,7 +39,12 @@ add_executable(${PROJECT_NAME}
         include/assets_manager.h
         src/assets_manager.cpp
         include/globals.h
-        src/globals.cpp)
+        src/globals.cpp
+    include/eventmanager.h
+    include/base_eventlistener.h
+    include/mouse_eventlisteners.h
+    src/eventmanager.cpp
+    src/mouse_eventlisteners.cpp)
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2_image)
