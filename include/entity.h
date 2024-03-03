@@ -26,7 +26,7 @@ class IBaseEntity {
   virtual ~IBaseEntity() = default;
 
   virtual void SetAnimation(const CBaseAnimation& new_animation);
-
+  virtual void SetAnimation();
   virtual void PlayAnimation(const CBaseAnimation& new_animation);
 
  public:
