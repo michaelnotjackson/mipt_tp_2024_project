@@ -17,9 +17,9 @@ make
 ```
 
 ## Описание архитектуры проекта
-В [assets](https://gitlab.akhcheck.ru/sheiko.mikhail/tp_course_spring24_project/-/tree/dev/assets?ref_type=heads) находятся ресурсы игры.
+В [assets](https://gitlab.akhcheck.ru/sheiko.mikhail/tp_course_spring24_project/-/tree/checkpoint_1/assets?ref_type=heads) находятся ресурсы игры.
 
-В [rooms](https://gitlab.akhcheck.ru/sheiko.mikhail/tp_course_spring24_project/-/tree/dev/rooms?ref_type=heads) находятся сохранённые комнаты.
+В [rooms](https://gitlab.akhcheck.ru/sheiko.mikhail/tp_course_spring24_project/-/tree/checkpoint_1/rooms?ref_type=heads) находятся сохранённые комнаты.
 
 **CBaseAnimation** содержит в себе информацию об анимациию (кол-во кадров, длительность кадра и т.д.).
 
