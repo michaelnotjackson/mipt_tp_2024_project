@@ -14,7 +14,7 @@ class CTile {
   void SetTexture(CBaseAnimation texture);
   void SetFlags(TileFlagsType flags);
 
-  CBaseAnimation GetTexture();
+  CBaseAnimation GetTexture() const;
 
   CTile(CBaseAnimation texture);
 
