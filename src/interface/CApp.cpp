@@ -182,6 +182,9 @@ int CApp::OnExecute() {
 
   entity_list.Insert(new CBasePlayer(assets_manager.GetAnimation("animations/warriors/warrior_blue/idle")));
 
+//  entity_list.GetHead()->entity->PlayAnimation(assets_manager.GetAnimation("animations/warriors/warrior_blue/idle"));
+//  testing set animation
+
   while (is_running) {
     while (SDL_PollEvent(&event)) {
       OnEvent(&event);
