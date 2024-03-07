@@ -8,15 +8,16 @@
 class CTile {
  private:
   CBaseAnimation animation;
-  TileFlagsType flags;
+  ObstacleType flag;
 
  public:
   void SetTexture(CBaseAnimation texture);
-  void SetFlags(TileFlagsType flags);
+  void SetFlags(ObstacleType flag);
+  ObstacleType GetFlag();
 
   CBaseAnimation GetTexture();
 
-  CTile(CBaseAnimation texture);
+  CTile(CBaseAnimation texture, ObstacleType flag);
 
   CTile();
   bool operator==(const CTile& pic_1) const = default;

@@ -132,6 +132,9 @@ bool CApp::OnInit() {
   CApp::RegisterAnimations();
 
   room.SetField(assets_manager.GetTexture("textures/terrain/grass"));
+  std::pair<int, int> start(0, 0);
+  std::pair<int, int> goal(2, 2);
+  //FindPath(room, start, goal);
 
   return true;
 }

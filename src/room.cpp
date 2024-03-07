@@ -16,14 +16,25 @@ int Room::GetHeight() { return this->height; }
 
 const FieldType& Room::GetField() const { return this->field; }
 
-CTile::CTile(CBaseAnimation texture)
-    : animation(texture), flags(TileFlagsType::VISIBLE){};
+CTile::CTile(CBaseAnimation texture, ObstacleType flag)
+    : animation(texture), flag(flag){};
 
-CTile::CTile() : animation(), flags(TileFlagsType::VISIBLE) {}
+CTile::CTile() : animation(), flag(ObstacleType::NO_OBSTACLES) {}
 
 Room::Room(int width, int height, FieldType field)
 
-    : width(width), height(height), field(std::move(field)) {}
+    : width(width), height(height), field(std::move(field)) {};
+
+void CTile::SetTexture(CBaseAnimation texture) {
+  texture = texture;
+}
+
+void CTile::SetFlags(ObstacleType flag) {
+  flag = flag;
+}
+
+ObstacleType CTile::GetFlag() { return flag; }
+
 
 Room::Room(int width, int height)
     : width(width),
@@ -36,8 +47,8 @@ void Room::SetField(SDL_Texture* texture) {
   std::random_device rd;
   std::mt19937 gen(rd());
   std::uniform_int_distribution<> dist(0, 1);
-  auto* grass = new CTile(assets_manager.GetAnimation("animations/terrain/grass"));
-  auto* sand = new CTile((assets_manager.GetAnimation("animations/terrain/sand")));
+  auto* grass = new CTile(assets_manager.GetAnimation("animations/terrain/grass"), ObstacleType::NO_OBSTACLES);
+  auto* sand = new CTile((assets_manager.GetAnimation("animations/terrain/sand")), ObstacleType::NO_OBSTACLES);
   for (int i = 0; i < SCREEN_WIDTH; i += 64) {
     for (int j = 0; j < SCREEN_HEIGHT; j += 64) {
       if (dist(gen) == 0) {
