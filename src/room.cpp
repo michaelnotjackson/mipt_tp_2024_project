@@ -29,8 +29,8 @@ void CTile::SetTexture(CBaseAnimation texture) {
   texture = texture;
 }
 
-void CTile::SetFlags(ObstacleType flag) {
-  flag = flag;
+void CTile::SetObstacleType(ObstacleType obstacle_type) {
+  obstacle_type = obstacle_type;
 }
 
 ObstacleType CTile::GetFlag() { return flag; }

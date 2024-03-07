@@ -8,11 +8,11 @@
 class CTile {
  private:
   CBaseAnimation animation;
-  ObstacleType flag;
+  ObstacleType obstacle_type;
 
  public:
   void SetTexture(CBaseAnimation texture);
-  void SetFlags(ObstacleType flag);
+  void SetObstacleType(ObstacleType obstacle_type);
   ObstacleType GetFlag();
 
   CBaseAnimation GetTexture() const;
