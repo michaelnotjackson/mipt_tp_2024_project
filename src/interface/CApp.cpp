@@ -53,49 +53,49 @@ bool CApp::RegisterAnimations() {
   if (!assets_manager.RegisterAnimation(
           CBaseAnimation(
               assets_manager.GetTexture("textures/warriors/warrior_blue"),
-              SDL_Rect{0, 192, 192, 192}, 6, SDL_GetTicks64(), 100, 0.4),
+              SDL_Rect{0, 192, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
           "animations/warriors/warrior_blue/move")) {
     return false;
   }
   if (!assets_manager.RegisterAnimation(
           CBaseAnimation(
               assets_manager.GetTexture("textures/warriors/warrior_blue"),
-              SDL_Rect{0, 192 * 2, 192, 192}, 6, SDL_GetTicks64(), 100, 0.4),
+              SDL_Rect{0, 192 * 2, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
           "animations/warriors/warrior_blue/attack1_right")) {
     return false;
   }
   if (!assets_manager.RegisterAnimation(
           CBaseAnimation(
               assets_manager.GetTexture("textures/warriors/warrior_blue"),
-              SDL_Rect{0, 192 * 3, 192, 192}, 6, SDL_GetTicks64(), 100, 0.4),
+              SDL_Rect{0, 192 * 3, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
           "animations/warriors/warrior_blue/attack2_right")) {
     return false;
   }
   if (!assets_manager.RegisterAnimation(
           CBaseAnimation(
               assets_manager.GetTexture("textures/warriors/warrior_blue"),
-              SDL_Rect{0, 192 * 4, 192, 192}, 6, SDL_GetTicks64(), 100, 0.4),
+              SDL_Rect{0, 192 * 4, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
           "animations/warriors/warrior_blue/attack1_down")) {
     return false;
   }
   if (!assets_manager.RegisterAnimation(
           CBaseAnimation(
               assets_manager.GetTexture("textures/warriors/warrior_blue"),
-              SDL_Rect{0, 192 * 5, 192, 192}, 6, SDL_GetTicks64(), 100, 0.4),
+              SDL_Rect{0, 192 * 5, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
           "animations/warriors/warrior_blue/attack2_down")) {
     return false;
   }
   if (!assets_manager.RegisterAnimation(
           CBaseAnimation(
               assets_manager.GetTexture("textures/warriors/warrior_blue"),
-              SDL_Rect{0, 192 * 6, 192, 192}, 6, SDL_GetTicks64(), 100, 0.4),
+              SDL_Rect{0, 192 * 6, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
           "animations/warriors/warrior_blue/attack1_up")) {
     return false;
   }
   if (!assets_manager.RegisterAnimation(
           CBaseAnimation(
               assets_manager.GetTexture("textures/warriors/warrior_blue"),
-              SDL_Rect{0, 0, 192, 192}, 6, SDL_GetTicks64(), 100, 0.4),
+              SDL_Rect{0, 0, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
           "animations/warriors/warrior_blue/attack2_up")) {
     return false;
   }
@@ -151,6 +151,10 @@ bool CApp::OnInit() {
 void CApp::OnEvent(SDL_Event* event) {
   if (event->type == SDL_QUIT) {
     is_running = false;
+    return;
+  }
+  if (event->type == SDL_KEYDOWN) {
+    entity_list.GetHead()->entity->PlayAnimation(assets_manager.GetAnimation("animations/warriors/warrior_blue/attack2_down"));
   }
 }
 
