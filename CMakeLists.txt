@@ -48,7 +48,9 @@ add_executable(${PROJECT_NAME}
     include/base_eventlistener.h
     include/mouse_eventlisteners.h
     src/eventmanager.cpp
-    src/mouse_eventlisteners.cpp)
+    src/mouse_eventlisteners.cpp
+    include/utils.h
+    src/utils.cpp)
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2_image)
