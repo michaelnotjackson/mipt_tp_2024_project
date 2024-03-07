@@ -16,10 +16,10 @@ int Room::GetHeight() { return this->height; }
 
 const FieldType& Room::GetField() const { return this->field; }
 
-CTile::CTile(CBaseAnimation texture, ObstacleType flag)
-    : animation(texture), flag(flag){};
+CTile::CTile(CBaseAnimation texture, ObstacleType obstacle_type)
+    : animation(texture), obstacle_type(obstacle_type){};
 
-CTile::CTile() : animation(), flag(ObstacleType::NO_OBSTACLES) {}
+CTile::CTile() : animation(), obstacle_type(ObstacleType::NO_OBSTACLES) {}
 
 Room::Room(int width, int height, FieldType field)
 
@@ -33,7 +33,7 @@ void CTile::SetObstacleType(ObstacleType obstacle_type) {
   obstacle_type = obstacle_type;
 }
 
-ObstacleType CTile::GetFlag() { return flag; }
+ObstacleType CTile::GetObstacleType() { return obstacle_type; }
 
 
 Room::Room(int width, int height)
@@ -42,10 +42,6 @@ Room::Room(int width, int height)
       field(width / 64, std::vector<CTile*>(height / 64)) {}
 
 CBaseAnimation CTile::GetTexture() const { return this->animation; }
-
-void CTile::SetTexture(CBaseAnimation texture) {
-  animation = texture;
-}
 
 void Room::SetField(SDL_Texture* texture) {
   std::random_device rd;

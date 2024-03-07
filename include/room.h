@@ -13,11 +13,11 @@ class CTile {
  public:
   void SetTexture(CBaseAnimation texture);
   void SetObstacleType(ObstacleType obstacle_type);
-  ObstacleType GetFlag();
+  ObstacleType GetObstacleType();
 
   CBaseAnimation GetTexture() const;
 
-  CTile(CBaseAnimation texture, ObstacleType flag);
+  CTile(CBaseAnimation texture, ObstacleType obstacleType);
 
   CTile();
   bool operator==(const CTile& pic_1) const = default;
