@@ -1,0 +1,12 @@
+# Change to directory where compile_commands.json is
+compilation_database_dir: ./cmake-build-debug
+# Change to directory where diagram should be written
+output_directory: docs/diagrams
+diagrams:
+  example_class_diagram:
+    type: class
+    glob:
+      - src/*.cpp
+    exclude:
+      namespaces:
+        - SDL

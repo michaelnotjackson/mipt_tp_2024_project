@@ -46,4 +46,14 @@ CBaseAnimation& CAssetsManager::GetAnimation(const std::string& name) {
   return animations[name];
 }
 
+std::string CAssetsManager::GetAnimationName(const CBaseAnimation& animation) {
+  for (auto &[k, v]: animations) {
+    if (v == animation) {
+      return k;
+    }
+  }
+
+  return "";
+}
+
 CAssetsManager assets_manager;

@@ -13,7 +13,7 @@
 class IBaseEntity {
  private:
   CObjProperties props;
-  PosType pos;
+  PosType pos; // Position on the map!
   CBaseAnimation default_animation;
 
  public:

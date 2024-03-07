@@ -23,6 +23,8 @@ class CAssetsManager {
 
   CBaseAnimation& GetAnimation(const std::string& name);
 
+  std::string GetAnimationName(const CBaseAnimation& animation);
+
   ~CAssetsManager() = default;
 };
 

@@ -15,7 +15,7 @@ class CTile {
   void SetFlags(ObstacleType flag);
   ObstacleType GetFlag();
 
-  CBaseAnimation GetTexture();
+  CBaseAnimation GetTexture() const;
 
   CTile(CBaseAnimation texture, ObstacleType flag);
 

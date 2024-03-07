@@ -3,7 +3,11 @@ project(tp_course_spring24_project CXX)
 
 set(PROJECT_NAME DND_RougeLike)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")
+
 set(CMAKE_CXX_STANDARD 20)
+
+set(CMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES})
 
 include_directories(.)
 include_directories(include)
@@ -41,12 +45,12 @@ add_executable(${PROJECT_NAME}
         include/globals.h
         src/globals.cpp
         src/utils.cpp
-        include/utils.h)
-#    include/eventmanager.h
-#    include/base_eventlistener.h
-#    include/mouse_eventlisteners.h
-#    src/eventmanager.cpp
-#    src/mouse_eventlisteners.cpp)
+        include/utils.h
+    include/eventmanager.h
+    include/base_eventlistener.h
+    include/mouse_eventlisteners.h
+    src/eventmanager.cpp
+    src/mouse_eventlisteners.cpp)
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2_image)
