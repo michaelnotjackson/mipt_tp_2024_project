@@ -24,7 +24,7 @@ class CApp {
 
   void OnRender();
 
-  void OnCleanup();
+  static void OnCleanup();
 
   bool LoadTextures();
   bool RegisterAnimations();

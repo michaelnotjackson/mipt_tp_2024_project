@@ -59,8 +59,6 @@ enum class DamageType {
   PSYCHIC
 };
 
-enum class TileFlagsType { VISIBLE = 1 << 0 };
-
 class CTile;
 
 typedef std::vector<std::vector<CTile*>> FieldType;
