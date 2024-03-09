@@ -135,15 +135,6 @@ bool CApp::OnInit() {
 
   room.SetField(assets_manager.GetTexture("textures/terrain/grass"));
   g_current_room = room;
-  PosType start(0, 0);
-  PosType goal(2, 2);
-  auto* path = FindPath(start, goal, room);
-
-  for (auto tile : *path) {
-    SDL_Log("%i%i", tile.x, tile.y);
-  }
-
-  delete path;
 
   return true;
 }
