@@ -44,9 +44,7 @@ add_executable(${PROJECT_NAME}
         src/assets_manager.cpp
         include/globals.h
         src/globals.cpp
-        src/utils.cpp
-        include/utils.h
-    include/eventmanager.h
+        include/eventmanager.h
     include/base_eventlistener.h
     include/mouse_eventlisteners.h
     src/eventmanager.cpp

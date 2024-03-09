@@ -1,7 +1,6 @@
 #pragma once
 
 #include <SDL.h>
-#include <utils.h>
 
 class CApp {
  private:
