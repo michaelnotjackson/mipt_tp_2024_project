@@ -24,6 +24,7 @@ class CTileHoverEventListener : public IBaseMouseEventListener {
 
  public:
   virtual void notify() final;
+  virtual void reset() final;
 
   SDL_Rect& GetRect();
 

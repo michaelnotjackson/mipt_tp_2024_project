@@ -3,6 +3,8 @@
 #include <entitylist.h>
 #include <globals.h>
 #include <mouse_eventlisteners.h>
+#include <string>
+#include <iostream>
 
 SDL_Rect& CTileHoverEventListener::GetRect() { return rect; }
 
@@ -11,20 +13,17 @@ CTileHoverEventListener::CTileHoverEventListener(const SDL_Rect& rect,
     : rect(rect), tile(tile) {}
 
 void CTileHoverEventListener::notify() {
-  std::string name = assets_manager.GetAnimationName(tile->GetTexture());
-
-  tile->SetTexture(assets_manager.GetAnimation(name + "_hovered"));
-
-  int x, y;
-  SDL_GetMouseState(&x, &y);
-
-  PosType tile_pos = GetTilePos(tile, g_current_room);
-  int width = tile->GetTexture().frame.w * tile->GetTexture().scale;
-  int height = tile->GetTexture().frame.h * tile->GetTexture().scale;
-
-  while (x >= tile_pos.x && y >= tile_pos.y && x <= width && y <= height) {
-    SDL_GetMouseState(&x, &y);
-  }
+  std::string name = assets_manager.GetAnimationName(tile->GetTexture()) + "_hovered";
 
   tile->SetTexture(assets_manager.GetAnimation(name));
+
+  PosType pos = GetTilePos(tile, g_current_room);
+  SDL_Log("%s%i%s%i", "hovered :", pos.x, " ", pos.y);
+}
+
+void CTileHoverEventListener::reset() {
+  std::string name = assets_manager.GetAnimationName(tile->GetTexture());
+  if (name.find("_hovered") != std::string::npos) {
+    tile->SetTexture(assets_manager.GetAnimation(name.substr(0, name.length() - 8)));
+  }
 }

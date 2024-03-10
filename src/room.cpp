@@ -26,7 +26,7 @@ Room::Room(int width, int height, FieldType field)
     : width(width), height(height), field(std::move(field)) {};
 
 void CTile::SetTexture(CBaseAnimation texture) {
-  texture = texture;
+  animation = texture;
 }
 
 void CTile::SetObstacleType(ObstacleType obstacle_type) {
@@ -47,14 +47,14 @@ void Room::SetField(SDL_Texture* texture) {
   std::random_device rd;
   std::mt19937 gen(rd());
   std::uniform_int_distribution<> dist(0, 1);
-  auto* grass = new CTile(assets_manager.GetAnimation("animations/terrain/grass"), ObstacleType::NO_OBSTACLES);
-  auto* sand = new CTile((assets_manager.GetAnimation("animations/terrain/sand")), ObstacleType::NO_OBSTACLES);
+  auto grass = assets_manager.GetAnimation("animations/terrain/grass");
+  auto sand = assets_manager.GetAnimation("animations/terrain/sand");
   for (int i = 0; i < SCREEN_WIDTH; i += 64) {
     for (int j = 0; j < SCREEN_HEIGHT; j += 64) {
       if (dist(gen) == 0) {
-        field[i / 64][j / 64] = grass;
+        field[i / 64][j / 64] = new CTile(grass, ObstacleType::NO_OBSTACLES);
       } else {
-        field[i / 64][j / 64] = sand;
+        field[i / 64][j / 64] = new CTile(sand, ObstacleType::NO_OBSTACLES);
       }
     }
   }
@@ -67,7 +67,7 @@ PosType GetTilePos(const CTile* tile, const Room& room) {
   for (auto& raw : room.field) {
     auto pos = std::find(raw.begin(), raw.end(), tile);
     if (pos != raw.end()) {
-      return {static_cast<int>((pos - raw.begin()) * width), y * height};
+      return {static_cast<int>(pos - raw.begin()), y};
     }
     ++y;
   }

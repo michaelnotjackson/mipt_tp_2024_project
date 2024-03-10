@@ -1,10 +1,11 @@
 #pragma once
 
-#include <base_eventlistener.h>
+#include <mouse_eventlisteners.h>
 
+template <typename EventListenerType>
 class CEventListenerNode {
  public:
-  IBaseEventListener* event_listener = nullptr;
+  EventListenerType* event_listener = nullptr;
   CEventListenerNode* prev = nullptr;
   CEventListenerNode* next = nullptr;
 
@@ -14,22 +15,37 @@ class CEventListenerNode {
   ~CEventListenerNode();
 };
 
-class CEventManager {
+template <typename EventListenerType>
+class CSpecificEventManager {
  private:
-  CEventListenerNode* head = nullptr;
-  CEventListenerNode* last = nullptr;
+  CEventListenerNode<EventListenerType>* head = nullptr;
+  CEventListenerNode<EventListenerType>* last = nullptr;
 
  public:
   int highest_listener;
   int listeners_count;
 
  public:
-  void Register(IBaseEventListener* event_listener);
+  void Register(EventListenerType* event_listener);
 
-  CEventListenerNode* GetByIndex(int idx);
+  CEventListenerNode<EventListenerType>* GetByIndex(int idx);
 
-  CEventListenerNode* GetHead();
+  CEventListenerNode<EventListenerType>* GetHead();
 
  public:
-  CEventManager();
+  CSpecificEventManager();
 };
+
+class CEventManager {
+ private:
+  CSpecificEventManager<CTileHoverEventListener> tile_hover_listeners;
+
+ public:
+  void RegisterCTileHoverListener(CTileHoverEventListener* listener);
+  CSpecificEventManager<CTileHoverEventListener>& GetTileHover();
+
+ public:
+  CTileHoverEventListener* current_hover = nullptr;
+};
+
+extern CEventManager event_manager;

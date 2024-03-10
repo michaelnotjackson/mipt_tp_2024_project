@@ -1,14 +1,17 @@
 #include <eventmanager.h>
 
-CEventListenerNode::~CEventListenerNode() {
+template <typename EventListenerType>
+CEventListenerNode<EventListenerType>::~CEventListenerNode() {
   delete event_listener;
   delete next;
 }
 
-CEventManager::CEventManager() : highest_listener(0), listeners_count(0) {}
+template <typename EventListenerType>
+CSpecificEventManager<EventListenerType>::CSpecificEventManager() : highest_listener(0), listeners_count(0) {}
 
-void CEventManager::Register(IBaseEventListener* event_listener) {
-  CEventListenerNode* new_node = new CEventListenerNode();
+template <typename EventListenerType>
+void CSpecificEventManager<EventListenerType>::Register(EventListenerType* event_listener) {
+  CEventListenerNode<EventListenerType>* new_node = new CEventListenerNode<EventListenerType>();
   new_node->event_listener = event_listener;
   new_node->idx = ++highest_listener;
 
@@ -22,8 +25,9 @@ void CEventManager::Register(IBaseEventListener* event_listener) {
   last = new_node;
 }
 
-CEventListenerNode* CEventManager::GetByIndex(int idx) {
-  CEventListenerNode* cur = head;
+template <typename EventListenerType>
+CEventListenerNode<EventListenerType>* CSpecificEventManager<EventListenerType>::GetByIndex(int idx) {
+  CEventListenerNode<EventListenerType>* cur = head;
 
   while (cur && cur->idx != idx) {
     cur = cur->next;
@@ -32,4 +36,12 @@ CEventListenerNode* CEventManager::GetByIndex(int idx) {
   return cur;
 }
 
-CEventListenerNode* CEventManager::GetHead() { return head; }
+template<> CEventListenerNode<CTileHoverEventListener> *CSpecificEventManager<CTileHoverEventListener>::GetHead() { return head; }
+
+void CEventManager::RegisterCTileHoverListener(CTileHoverEventListener* listener) {
+  tile_hover_listeners.Register(listener);
+}
+
+CSpecificEventManager<CTileHoverEventListener>& CEventManager::GetTileHover() { return tile_hover_listeners; }
+
+CEventManager event_manager;

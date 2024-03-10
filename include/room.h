@@ -24,7 +24,6 @@ class CTile {
 };
 
 
-
 class Room {
  private:
   int width;
