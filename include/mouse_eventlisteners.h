@@ -1,14 +1,11 @@
 #pragma once
 
-#include <base_eventlistener.h>
 #include <SDL.h>
-#include <room.h>
+#include <base_eventlistener.h>
 #include <entity.h>
+#include <room.h>
 
-enum class HoverTarget {
-  TILE,
-  UI
-};
+enum class HoverTarget { TILE, UI };
 
 class IBaseMouseEventListener : public IBaseEventListener {
  public:
