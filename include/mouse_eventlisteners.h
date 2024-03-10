@@ -24,6 +24,7 @@ class CTileHoverEventListener : public IBaseMouseEventListener {
   virtual void reset() final;
 
   SDL_Rect& GetRect();
+  CTile* GetTile();
 
  public:
   CTileHoverEventListener(const SDL_Rect& rect, CTile* tile);
@@ -40,6 +41,7 @@ class CTileClickEventListener : public IBaseMouseEventListener {
 
  public:
   virtual void notify() final;
+  virtual void reset() final {}
 
   SDL_Rect& GetRect();
 

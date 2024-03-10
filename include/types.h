@@ -70,8 +70,8 @@ struct PosType {
   PosType(): x(0), y(0) {}
   PosType(int x, int y) : x(x), y(y) {}
 
-  bool operator==(const PosType& oth) const = default;
-  bool operator!=(const PosType& oth) const = default;
+  bool operator==(const PosType& oth) const { return x == oth.x && y == oth.y; };
+  bool operator!=(const PosType& oth) const { return !(*this == oth); };
 };
 
 class CSpell {};

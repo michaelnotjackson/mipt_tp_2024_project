@@ -50,7 +50,9 @@ add_executable(${PROJECT_NAME}
         src/eventmanager.cpp
         src/mouse_eventlisteners.cpp
         include/utils.h
-        src/utils.cpp)
+        src/utils.cpp
+    include/turnmanager.h
+    src/turnmanager.cpp)
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2_image)

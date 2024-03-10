@@ -1,10 +1,11 @@
 #include <SDL.h>
 #include <assets_manager.h>
 #include <entitylist.h>
+#include <eventmanager.h>
 #include <globals.h>
 #include <mouse_eventlisteners.h>
+#include <utils.h>
 
-#include <iostream>
 #include <string>
 
 SDL_Rect& CTileHoverEventListener::GetRect() { return rect; }
@@ -20,7 +21,6 @@ void CTileHoverEventListener::notify() {
   tile->SetTexture(assets_manager.GetAnimation(name));
 
   PosType pos = GetTilePos(tile, g_current_room);
-  SDL_Log("%s%i%s%i", "hovered :", pos.x, " ", pos.y);
 }
 
 void CTileHoverEventListener::reset() {
@@ -30,4 +30,22 @@ void CTileHoverEventListener::reset() {
     tile->SetTexture(
         assets_manager.GetAnimation(name.substr(0, name.length() - 8)));
   }
+}
+
+CTile* CTileHoverEventListener::GetTile() { return tile; }
+
+CTileClickEventListener::CTileClickEventListener(const SDL_Rect& rect,
+                                                 CTile* tile)
+    : rect(rect), tile(tile) {}
+
+SDL_Rect& CTileClickEventListener::GetRect() { return rect; }
+
+void CTileClickEventListener::notify() {
+  IBaseEntity* ent = g_current_executor;
+  auto current_hover = event_manager.current_hover;
+
+  std::vector<PosType>* path = FindPath(
+      *ent->GetPos(), GetTilePos(current_hover->GetTile(), g_current_room));
+
+  g_current_executor->MoveBy(path);
 }

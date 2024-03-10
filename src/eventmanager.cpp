@@ -7,11 +7,14 @@ CEventListenerNode<EventListenerType>::~CEventListenerNode() {
 }
 
 template <typename EventListenerType>
-CSpecificEventManager<EventListenerType>::CSpecificEventManager() : highest_listener(0), listeners_count(0) {}
+CSpecificEventManager<EventListenerType>::CSpecificEventManager()
+    : highest_listener(0), listeners_count(0) {}
 
 template <typename EventListenerType>
-void CSpecificEventManager<EventListenerType>::Register(EventListenerType* event_listener) {
-  CEventListenerNode<EventListenerType>* new_node = new CEventListenerNode<EventListenerType>();
+void CSpecificEventManager<EventListenerType>::Register(
+    EventListenerType* event_listener) {
+  CEventListenerNode<EventListenerType>* new_node =
+      new CEventListenerNode<EventListenerType>();
   new_node->event_listener = event_listener;
   new_node->idx = ++highest_listener;
 
@@ -26,7 +29,8 @@ void CSpecificEventManager<EventListenerType>::Register(EventListenerType* event
 }
 
 template <typename EventListenerType>
-CEventListenerNode<EventListenerType>* CSpecificEventManager<EventListenerType>::GetByIndex(int idx) {
+CEventListenerNode<EventListenerType>*
+CSpecificEventManager<EventListenerType>::GetByIndex(int idx) {
   CEventListenerNode<EventListenerType>* cur = head;
 
   while (cur && cur->idx != idx) {
@@ -36,12 +40,35 @@ CEventListenerNode<EventListenerType>* CSpecificEventManager<EventListenerType>:
   return cur;
 }
 
-template<> CEventListenerNode<CTileHoverEventListener> *CSpecificEventManager<CTileHoverEventListener>::GetHead() { return head; }
+template <>
+CEventListenerNode<CTileHoverEventListener>*
+CSpecificEventManager<CTileHoverEventListener>::GetHead() {
+  return head;
+}
+template <>
+CEventListenerNode<CTileClickEventListener>*
+CSpecificEventManager<CTileClickEventListener>::GetHead() {
+  return head;
+}
 
-void CEventManager::RegisterCTileHoverListener(CTileHoverEventListener* listener) {
+void CEventManager::RegisterCTileHoverEventListener(
+    CTileHoverEventListener* listener) {
   tile_hover_listeners.Register(listener);
 }
 
-CSpecificEventManager<CTileHoverEventListener>& CEventManager::GetTileHover() { return tile_hover_listeners; }
+CSpecificEventManager<CTileHoverEventListener>&
+CEventManager::GetTileHoverListeners() {
+  return tile_hover_listeners;
+}
+
+void CEventManager::RegisterCTileClickEventListener(
+    CTileClickEventListener* listener) {
+  tile_click_listeners.Register(listener);
+}
+
+CSpecificEventManager<CTileClickEventListener>&
+CEventManager::GetTileClickListeners() {
+  return tile_click_listeners;
+}
 
 CEventManager event_manager;

@@ -21,9 +21,9 @@ class IBaseEntity {
 
  public:
   virtual CObjProperties* GetProperties();
-  virtual PosType* GetPos();
 
-  virtual ~IBaseEntity() = default;
+  virtual PosType* GetPos();
+  virtual void MoveBy(std::vector<PosType>* path);
 
   virtual void SetAnimation(const CBaseAnimation& new_animation);
   virtual void SetAnimation();
@@ -32,4 +32,6 @@ class IBaseEntity {
  public:
   explicit IBaseEntity(CBaseAnimation& animation)
       : default_animation(animation), animation(animation) {}
+
+  virtual ~IBaseEntity() = default;
 };

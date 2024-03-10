@@ -4,11 +4,13 @@
 #include <types.h>
 
 #include <vector>
+#include <set>
 
 class CTile {
  private:
   CBaseAnimation animation;
   ObstacleType obstacle_type;
+  std::set<IBaseEntity*> entities_on;
 
  public:
   void SetTexture(CBaseAnimation texture);

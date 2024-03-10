@@ -1,10 +1,27 @@
 #include <entity.h>
+#include <globals.h>
 
 #include <thread>
 
 CObjProperties* IBaseEntity::GetProperties() { return &this->props; }
 
 PosType* IBaseEntity::GetPos() { return &this->pos; }
+
+void MoveExecutor(IBaseEntity* entity, std::vector<PosType>* path) {
+  g_move_in_process = true;
+  if (!path) { return; }
+  for (auto &pos: *path) {
+    *entity->GetPos() = pos;
+    SDL_Delay(g_move_speed);
+  }
+  delete path;
+  g_move_in_process = false;
+}
+
+void IBaseEntity::MoveBy(std::vector<PosType>* path) {
+  std::thread th(MoveExecutor, this, path);
+  th.detach();
+}
 
 void IBaseEntity::SetAnimation(const CBaseAnimation& new_animation) {
   animation = new_animation;

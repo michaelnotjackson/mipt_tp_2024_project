@@ -170,12 +170,14 @@ bool CApp::OnInit() {
     for (int j = 0; j < room.GetField()[0].size(); j++) {
       rect.x = j * width;
       rect.y = i * height;
-      event_manager.RegisterCTileHoverListener(
+      event_manager.RegisterCTileHoverEventListener(
           new CTileHoverEventListener(rect, room.GetField()[i][j]));
+      event_manager.RegisterCTileClickEventListener(
+          new CTileClickEventListener(rect, room.GetField()[i][j]));
     }
   }
-  //  std::cout << event_manager.current_hover;
-  //  event_manager.current_hover->notify();
+
+  g_current_executor = g_turnmanager.GetExecutor();
 
   return true;
 }
@@ -201,10 +203,9 @@ void CApp::OnEvent(SDL_Event* event) {
       if (event_manager.current_hover != nullptr) {
         event_manager.current_hover->reset();
       }
-      auto* cur = event_manager.GetTileHover().GetHead();
+      auto* cur = event_manager.GetTileHoverListeners().GetHead();
       while (cur != nullptr) {
         if (CheckRect(cur->event_listener->GetRect(), x, y)) {
-          SDL_Log("%i %i", x, y);
           cur->event_listener->notify();
           break;
         }
@@ -212,6 +213,22 @@ void CApp::OnEvent(SDL_Event* event) {
       }
       event_manager.current_hover =
           cur == nullptr ? nullptr : cur->event_listener;
+    }
+  }
+  if (event->type == SDL_MOUSEBUTTONDOWN) {
+    int x = event->button.x, y = event->button.y;
+    if (event->button.button == SDL_BUTTON_LEFT) {
+      if (g_move_in_process) {
+        return;
+      }
+      auto* cur = event_manager.GetTileClickListeners().GetHead();
+      while (cur != nullptr) {
+        if (CheckRect(cur->event_listener->GetRect(), x, y)) {
+          cur->event_listener->notify();
+          break;
+        }
+        cur = cur->next;
+      }
     }
   }
 }
@@ -261,8 +278,9 @@ int CApp::OnExecute() {
 
   entity_list.Insert(new CBasePlayer(
       assets_manager.GetAnimation("animations/warriors/warrior_blue/idle")));
-  entity_list.GetHead()->entity->GetPos()->x = 3;
-  entity_list.GetHead()->entity->GetPos()->y = 2;
+
+  g_turnmanager.ShiftTurn();
+  g_turnmanager.ResetTurns();
 
   //  entity_list.GetHead()->entity->PlayAnimation(assets_manager.GetAnimation("animations/warriors/warrior_blue/idle"));
   //  testing set animation

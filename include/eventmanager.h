@@ -1,7 +1,5 @@
 #pragma once
 
-#include <mouse_eventlisteners.h>
-
 template <typename EventListenerType>
 class CEventListenerNode {
  public:
@@ -36,13 +34,20 @@ class CSpecificEventManager {
   CSpecificEventManager();
 };
 
+class CTileHoverEventListener;
+class CTileClickEventListener;
+
 class CEventManager {
  private:
   CSpecificEventManager<CTileHoverEventListener> tile_hover_listeners;
+  CSpecificEventManager<CTileClickEventListener> tile_click_listeners;
 
  public:
-  void RegisterCTileHoverListener(CTileHoverEventListener* listener);
-  CSpecificEventManager<CTileHoverEventListener>& GetTileHover();
+  void RegisterCTileHoverEventListener(CTileHoverEventListener* listener);
+  CSpecificEventManager<CTileHoverEventListener>& GetTileHoverListeners();
+
+  void RegisterCTileClickEventListener(CTileClickEventListener* listener);
+  CSpecificEventManager<CTileClickEventListener>& GetTileClickListeners();
 
  public:
   CTileHoverEventListener* current_hover = nullptr;

@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <set>
 #include <vector>
+#include <iostream>
 
 PosType PosRoomToScreen(IBaseEntity* entity) {
   PosType map_pos = *entity->GetPos();
@@ -36,6 +37,8 @@ std::vector<PosType>* RecursePath(PosType start, PosType end) {
 
   std::reverse(ret->begin(), ret->end());
 
+  std::cout << "=========================";
+
   return ret;
 }
 }  // namespace FindPathSpace
@@ -47,10 +50,10 @@ std::vector<PosType>* FindPath(PosType start, PosType end, const Room& room) {
               std::vector<bool>(room.field[0].size(), false));
 
   cost.assign(room.field.size(), std::vector<int>(room.field[0].size(), 1e9));
-  cost[start.x][start.y] = 0;
+  cost[start.y][start.x] = 0;
 
   eurest.assign(room.field.size(), std::vector<int>(room.field[0].size(), 1e9));
-  eurest[start.x][start.y] = 0;
+  eurest[start.y][start.x] = std::max(std::abs(start.x - end.x), std::abs(start.y - end.y));
 
   parent.assign(room.field.size(),
                 std::vector<PosType>(room.field[0].size(), {-1, -1}));
@@ -82,6 +85,9 @@ std::vector<PosType>* FindPath(PosType start, PosType end, const Room& room) {
       if (cur.y + dy[i] < 0 || cur.y + dy[i] >= room.field.size()) {
         continue;
       }
+      if (room.field[cur.y + dy[i]][cur.x + dx[i]]->GetObstacleType() == ObstacleType::WALL) {
+        continue;
+      }
 
       PosType vertex(cur.x + dx[i], cur.y + dy[i]);
 
@@ -101,8 +107,14 @@ std::vector<PosType>* FindPath(PosType start, PosType end, const Room& room) {
 
         q.insert(vertex);
       }
+      for (auto &v: q) {
+        std::cout << "{" << v.x << ", " << v.y << ", " << eurest[v.y][v.x] << "} ";
+      }
+      std::cout << '\n';
     }
   }
+
+  std::cout << "=========================\n";
 
   return nullptr;
 }
