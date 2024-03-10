@@ -218,7 +218,6 @@ void DrawEntities() {
 
   while (cur != nullptr) {
     auto *ent_pos = new PosType(PosRoomToScreen(cur->entity));
-//    auto* ent_pos = new PosType(*cur->entity->GetPos());
     Blit(&cur->entity->animation, ent_pos);
     cur = cur->next;
     delete ent_pos;
