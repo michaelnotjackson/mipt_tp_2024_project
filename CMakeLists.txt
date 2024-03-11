@@ -12,12 +12,12 @@ set(CMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTOR
 include_directories(.)
 include_directories(include)
 include_directories(src)
-include_directories(rooms)
 
 add_subdirectory(include/SDL)
 add_subdirectory(include/SDL_image)
 
 file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
+file(COPY rooms DESTINATION ${CMAKE_BINARY_DIR})
 
 include_directories(include/SDL_image/include)
 include_directories(include/SDL/include)

@@ -185,7 +185,7 @@ bool CApp::OnInit() {
   room.SetField();
   g_current_room = room;
 
-  CTile* tile = room.GetField()[0][0];
+  CTile *tile = room.GetField()[0][0];
   int width = tile->GetTexture().frame.w * tile->GetTexture().scale;
   int height = tile->GetTexture().frame.h * tile->GetTexture().scale;
   SDL_Rect rect;
@@ -207,12 +207,12 @@ bool CApp::OnInit() {
   return true;
 }
 
-bool CheckRect(const SDL_Rect& rect, int x, int y) {
+bool CheckRect(const SDL_Rect &rect, int x, int y) {
   return !(x < rect.x || y < rect.y || x > rect.x + rect.w ||
            y > rect.y + rect.h);
 }
 
-void CApp::OnEvent(SDL_Event* event) {
+void CApp::OnEvent(SDL_Event *event) {
   if (event->type == SDL_QUIT) {
     is_running = false;
     return;
@@ -233,7 +233,7 @@ void CApp::OnEvent(SDL_Event* event) {
       event_manager.current_hover->reset();
     }
 
-    auto* cur = event_manager.GetTileHoverListeners().GetHead();
+    auto *cur = event_manager.GetTileHoverListeners().GetHead();
     while (cur != nullptr) {
       if (CheckRect(cur->event_listener->GetRect(), x, y)) {
         cur->event_listener->notify();
@@ -245,7 +245,7 @@ void CApp::OnEvent(SDL_Event* event) {
     event_manager.current_hover = cur->event_listener;
 
     if (g_current_action == ActionType::MOVE) {
-      std::vector<PosType>* tmp_path =
+      std::vector<PosType> *tmp_path =
           FindPath(*g_current_executor->GetPos(),
                    GetTilePos(cur->event_listener->GetTile(), g_current_room));
 
@@ -264,7 +264,7 @@ void CApp::OnEvent(SDL_Event* event) {
     }
 
     if (event->button.button == SDL_BUTTON_LEFT) {
-      auto* cur = event_manager.GetTileClickListeners().GetHead();
+      auto *cur = event_manager.GetTileClickListeners().GetHead();
       while (cur != nullptr) {
         if (CheckRect(cur->event_listener->GetRect(), x, y)) {
           cur->event_listener->notify();
@@ -289,17 +289,17 @@ void CApp::OnLoop() {
 }
 
 void DrawEntities() {
-  CEntityNode* cur = entity_list.GetHead();
+  CEntityNode *cur = entity_list.GetHead();
 
   while (cur != nullptr) {
-    auto* ent_pos = new PosType(EntityPosRoomToScreen(cur->entity));
+    auto *ent_pos = new PosType(EntityPosRoomToScreen(cur->entity));
     Blit(&cur->entity->animation, ent_pos);
     cur = cur->next;
     delete ent_pos;
   }
 }
 
-void DrawRoom(const Room& room_a) {
+void DrawRoom(const Room &room_a) {
   int width = room_a.field[0][0]->GetTexture().frame.w *
               room_a.field[0][0]->GetTexture().scale;
   int height = room_a.field[0][0]->GetTexture().frame.h *
@@ -326,7 +326,7 @@ void DrawPath() {
 
   SDL_Point start = PointRoomToScreenTileCenter(*g_current_executor->GetPos());
 
-  auto* path = new SDL_Point[g_current_path.size() + 1];
+  auto *path = new SDL_Point[g_current_path.size() + 1];
   path[0] = start;
 
   for (int i = 0; i < g_current_path.size(); ++i) {
@@ -358,9 +358,6 @@ int CApp::OnExecute() {
 
   g_turnmanager.ShiftTurn();
   g_turnmanager.ResetTurns();
-
-  //  entity_list.GetHead()->entity->PlayAnimation(assets_manager.GetAnimation("animations/warriors/warrior_blue/idle"));
-  //  testing set animation
 
   while (is_running) {
     while (SDL_PollEvent(&event)) {
