@@ -12,6 +12,7 @@ set(CMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTOR
 include_directories(.)
 include_directories(include)
 include_directories(src)
+include_directories(rooms)
 
 add_subdirectory(include/SDL)
 add_subdirectory(include/SDL_image)
@@ -51,8 +52,9 @@ add_executable(${PROJECT_NAME}
         src/mouse_eventlisteners.cpp
         include/utils.h
         src/utils.cpp
-    include/turnmanager.h
-    src/turnmanager.cpp)
+        include/turnmanager.h
+        src/turnmanager.cpp
+        rooms/room.txt)
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2_image)
