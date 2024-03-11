@@ -26,18 +26,6 @@ bool CApp::LoadTextures() {
   }
 
   if (!assets_manager.LoadTexture(
-      "assets/Tiny Swords/Terrain/Ground/Tilemap_Elevation.png",
-      "textures/terrain/wall")) {
-    return false;
-  }
-
-  if (!assets_manager.LoadTexture(
-      "assets/Tiny Swords/Terrain/Ground/Tilemap_Elevation_Hovered.png",
-      "textures/terrain/wall_hovered")) {
-    return false;
-  }
-
-  if (!assets_manager.LoadTexture(
       "assets/Tiny Swords/Terrain/Ground/Tilemap_Flat.png",
       "textures/terrain/grass")) {
     return false;
@@ -46,6 +34,18 @@ bool CApp::LoadTextures() {
   if (!assets_manager.LoadTexture(
       "assets/Tiny Swords/Terrain/Ground/Tilemap_Flat_Hovered.png",
       "textures/terrain/grass_hovered")) {
+    return false;
+  }
+
+  if (!assets_manager.LoadTexture(
+      "assets/Tiny Swords/Terrain/Ground/Tilemap_Elevation.png",
+      "textures/terrain/wall")) {
+    return false;
+  }
+
+  if (!assets_manager.LoadTexture(
+      "assets/Tiny Swords/Terrain/Ground/Tilemap_Elevation_Hovered.png",
+      "textures/terrain/wall_hovered")) {
     return false;
   }
 
@@ -185,7 +185,7 @@ bool CApp::OnInit() {
   room.SetField();
   g_current_room = room;
 
-  CTile *tile = room.GetField()[0][0];
+  CTile* tile = room.GetField()[0][0];
   int width = tile->GetTexture().frame.w * tile->GetTexture().scale;
   int height = tile->GetTexture().frame.h * tile->GetTexture().scale;
   SDL_Rect rect;
@@ -207,12 +207,12 @@ bool CApp::OnInit() {
   return true;
 }
 
-bool CheckRect(const SDL_Rect &rect, int x, int y) {
+bool CheckRect(const SDL_Rect& rect, int x, int y) {
   return !(x < rect.x || y < rect.y || x > rect.x + rect.w ||
            y > rect.y + rect.h);
 }
 
-void CApp::OnEvent(SDL_Event *event) {
+void CApp::OnEvent(SDL_Event* event) {
   if (event->type == SDL_QUIT) {
     is_running = false;
     return;
@@ -223,30 +223,48 @@ void CApp::OnEvent(SDL_Event *event) {
   }
   if (event->type == SDL_MOUSEMOTION) {
     int x = event->motion.x, y = event->motion.y;
-    if (event_manager.current_hover == nullptr ||
-        !CheckRect(event_manager.current_hover->GetRect(), x, y)) {
-      if (event_manager.current_hover != nullptr) {
-        event_manager.current_hover->reset();
+
+    if (event_manager.current_hover != nullptr &&
+        CheckRect(event_manager.current_hover->GetRect(), x, y) && !g_current_path.empty()) {
+      goto MOUSEMOTIONEND;
+    }
+
+    if (event_manager.current_hover != nullptr) {
+      event_manager.current_hover->reset();
+    }
+
+    auto* cur = event_manager.GetTileHoverListeners().GetHead();
+    while (cur != nullptr) {
+      if (CheckRect(cur->event_listener->GetRect(), x, y)) {
+        cur->event_listener->notify();
+        break;
       }
-      auto *cur = event_manager.GetTileHoverListeners().GetHead();
-      while (cur != nullptr) {
-        if (CheckRect(cur->event_listener->GetRect(), x, y)) {
-          cur->event_listener->notify();
-          break;
-        }
-        cur = cur->next;
+      cur = cur->next;
+    }
+
+    event_manager.current_hover = cur->event_listener;
+
+    if (g_current_action == ActionType::MOVE) {
+      std::vector<PosType>* tmp_path =
+          FindPath(*g_current_executor->GetPos(),
+                   GetTilePos(cur->event_listener->GetTile(), g_current_room));
+
+      if (!tmp_path) {
+        g_current_path.clear();
+      } else {
+        g_current_path.assign(tmp_path->begin(), tmp_path->end());
       }
-      event_manager.current_hover =
-          cur == nullptr ? nullptr : cur->event_listener;
     }
   }
+   MOUSEMOTIONEND:
   if (event->type == SDL_MOUSEBUTTONDOWN) {
     int x = event->button.x, y = event->button.y;
+    if (g_current_action == ActionType::WAIT) {
+      goto MOUSEBUTTONDOWNEND;
+    }
+
     if (event->button.button == SDL_BUTTON_LEFT) {
-      if (g_move_in_process) {
-        return;
-      }
-      auto *cur = event_manager.GetTileClickListeners().GetHead();
+      auto* cur = event_manager.GetTileClickListeners().GetHead();
       while (cur != nullptr) {
         if (CheckRect(cur->event_listener->GetRect(), x, y)) {
           cur->event_listener->notify();
@@ -256,24 +274,32 @@ void CApp::OnEvent(SDL_Event *event) {
       }
     }
   }
+   MOUSEBUTTONDOWNEND:
 }
 
 void CApp::OnCleanup() { SDL_Quit(); }
 
-void CApp::OnLoop() {}
+void CApp::OnLoop() {
+  if (g_move_in_process) {
+    g_current_action = ActionType::WAIT;
+  }
+  if (g_current_action == ActionType::WAIT && !g_move_in_process) {
+    g_current_action = ActionType::MOVE;
+  }
+}
 
 void DrawEntities() {
-  CEntityNode *cur = entity_list.GetHead();
+  CEntityNode* cur = entity_list.GetHead();
 
   while (cur != nullptr) {
-    auto *ent_pos = new PosType(PosRoomToScreen(cur->entity));
+    auto* ent_pos = new PosType(EntityPosRoomToScreen(cur->entity));
     Blit(&cur->entity->animation, ent_pos);
     cur = cur->next;
     delete ent_pos;
   }
 }
 
-void DrawRoom(const Room &room_a) {
+void DrawRoom(const Room& room_a) {
   int width = room_a.field[0][0]->GetTexture().frame.w *
               room_a.field[0][0]->GetTexture().scale;
   int height = room_a.field[0][0]->GetTexture().frame.h *
@@ -287,10 +313,36 @@ void DrawRoom(const Room &room_a) {
   }
 }
 
+void DrawPath() {
+  if (g_current_action != ActionType::MOVE) {
+    return;
+  }
+
+  if (!g_current_executor) {
+    return;
+  }
+
+  SDL_SetRenderDrawColor(app.renderer, 0, 0, 0, 255);
+
+  SDL_Point start = PointRoomToScreenTileCenter(*g_current_executor->GetPos());
+
+  auto* path = new SDL_Point[g_current_path.size() + 1];
+  path[0] = start;
+
+  for (int i = 0; i < g_current_path.size(); ++i) {
+    path[i + 1] = PointRoomToScreenTileCenter(g_current_path[i]);
+  }
+
+  SDL_RenderDrawLines(app.renderer, path, g_current_path.size() + 1);
+
+  delete[] path;
+}
+
 void CApp::OnRender() {
   SDL_RenderClear(renderer);
   DrawRoom(room);
   DrawEntities();
+  DrawPath();
   SDL_RenderPresent(renderer);
 }
 

@@ -5,7 +5,7 @@ set(PROJECT_NAME DND_RougeLike)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 
 set(CMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES})
 
@@ -53,8 +53,7 @@ add_executable(${PROJECT_NAME}
         include/utils.h
         src/utils.cpp
         include/turnmanager.h
-        src/turnmanager.cpp
-        rooms/room.txt)
+        src/turnmanager.cpp)
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2_image)

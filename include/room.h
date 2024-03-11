@@ -46,7 +46,7 @@ class Room {
   int GetWidth();
   int GetHeight();
   const FieldType& GetField() const;
-  void SetField (SDL_Texture* texture);
+  void SetField ();
   void DrawField ();
 };
 

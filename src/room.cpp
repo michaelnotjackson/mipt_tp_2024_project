@@ -6,9 +6,9 @@
 #include <globals.h>
 
 #include <algorithm>
-#include <random>
 #include <utility>
 #include <vector>
+#include <fstream>
 
 int Room::GetWidth() { return this->width; }
 
@@ -43,18 +43,25 @@ Room::Room(int width, int height)
 
 CBaseAnimation CTile::GetTexture() const { return this->animation; }
 
-void Room::SetField(SDL_Texture* texture) {
-  std::random_device rd;
-  std::mt19937 gen(rd());
-  std::uniform_int_distribution<> dist(0, 1);
+void Room::SetField() {
+  std::ifstream in;
+  in.open("/Users/makarrasanov/tp_course_spring24_project/rooms/room.txt");
+//  std::random_device rd;
+//  std::mt19937 gen(rd());
+//  std::uniform_int_distribution<> dist(0, 1);
+  int tmp;
   auto grass = assets_manager.GetAnimation("animations/terrain/grass");
   auto sand = assets_manager.GetAnimation("animations/terrain/sand");
+  auto wall = assets_manager.GetAnimation("animations/terrain/wall");
   for (int i = 0; i < SCREEN_WIDTH; i += 64) {
     for (int j = 0; j < SCREEN_HEIGHT; j += 64) {
-      if (dist(gen) == 0) {
+      in >> tmp;
+      if (tmp == 1) {
         field[i / 64][j / 64] = new CTile(grass, ObstacleType::NO_OBSTACLES);
-      } else {
+      } else if (tmp == 2) {
         field[i / 64][j / 64] = new CTile(sand, ObstacleType::NO_OBSTACLES);
+      } else {
+        field[i / 64][j / 64] = new CTile(wall, ObstacleType::WALL);
       }
     }
   }

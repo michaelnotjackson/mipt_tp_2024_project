@@ -41,11 +41,5 @@ CTileClickEventListener::CTileClickEventListener(const SDL_Rect& rect,
 SDL_Rect& CTileClickEventListener::GetRect() { return rect; }
 
 void CTileClickEventListener::notify() {
-  IBaseEntity* ent = g_current_executor;
-  auto current_hover = event_manager.current_hover;
-
-  std::vector<PosType>* path = FindPath(
-      *ent->GetPos(), GetTilePos(current_hover->GetTile(), g_current_room));
-
-  g_current_executor->MoveBy(path);
+  g_current_executor->MoveBy(&g_current_path);
 }

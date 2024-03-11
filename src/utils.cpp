@@ -2,12 +2,10 @@
 #include <utils.h>
 
 #include <algorithm>
-#include <iostream>
 #include <queue>
 #include <vector>
-#include <iomanip>
 
-PosType PosRoomToScreen(IBaseEntity* entity) {
+PosType EntityPosRoomToScreen(IBaseEntity* entity) {
   PosType map_pos = *entity->GetPos();
 
   CBaseAnimation anim = g_current_room.field[0][0]->GetTexture();
@@ -23,6 +21,15 @@ PosType PosRoomToScreen(IBaseEntity* entity) {
                      entity->animation.scale / 2;
 
   return screen_pos;
+}
+
+SDL_Point PointRoomToScreenTileCenter(PosType room_point) {
+  SDL_Point screen_point;
+
+  screen_point.x = g_current_room.field[0][0]->GetTexture().frame.w * room_point.x + g_current_room.field[0][0]->GetTexture().frame.w / 2;
+  screen_point.y = g_current_room.field[0][0]->GetTexture().frame.h * room_point.y + g_current_room.field[0][0]->GetTexture().frame.h / 2;
+
+  return screen_point;
 }
 
 namespace FindPathSpace {
