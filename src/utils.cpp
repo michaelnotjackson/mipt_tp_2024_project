@@ -103,7 +103,7 @@ std::vector<PosType>* FindPath(PosType start, PosType end, const Room& room) {
       int new_cost =
           cost[current.y][current.x] +
           static_cast<int>(
-              g_current_room.field[next.y][next.x]->GetObstacleType());
+              g_current_room.field[next.y][next.x]->GetObstacleType()) + (dx[i] != 0 && dy[i] != 0);
 
       if (new_cost >= cost[next.y][next.x]) {
         continue;
