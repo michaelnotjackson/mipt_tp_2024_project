@@ -14,7 +14,7 @@ void MoveExecutor(IBaseEntity* entity, std::vector<PosType>* path) {
     *entity->GetPos() = pos;
     SDL_Delay(g_move_speed);
   }
-  delete path;
+  path->clear();
   g_move_in_process = false;
 }
 
