@@ -2,9 +2,10 @@
 #include <utils.h>
 
 #include <algorithm>
-#include <set>
-#include <vector>
 #include <iostream>
+#include <queue>
+#include <vector>
+#include <iomanip>
 
 PosType PosRoomToScreen(IBaseEntity* entity) {
   PosType map_pos = *entity->GetPos();
@@ -12,19 +13,21 @@ PosType PosRoomToScreen(IBaseEntity* entity) {
   CBaseAnimation anim = g_current_room.field[0][0]->GetTexture();
 
   PosType screen_pos;
-  screen_pos.x =
-      (static_cast<double>(map_pos.x) + 0.5) * (static_cast<double>(anim.frame.w) * anim.scale) -
-      static_cast<double>(entity->animation.frame.w) * entity->animation.scale / 2;
-  screen_pos.y =
-      (static_cast<double>(map_pos.y) + 0.5) * (static_cast<double>(anim.frame.h) * anim.scale) -
-      static_cast<double>(entity->animation.frame.h) * entity->animation.scale / 2;
+  screen_pos.x = (static_cast<double>(map_pos.x) + 0.5) *
+                     (static_cast<double>(anim.frame.w) * anim.scale) -
+                 static_cast<double>(entity->animation.frame.w) *
+                     entity->animation.scale / 2;
+  screen_pos.y = (static_cast<double>(map_pos.y) + 0.5) *
+                     (static_cast<double>(anim.frame.h) * anim.scale) -
+                 static_cast<double>(entity->animation.frame.h) *
+                     entity->animation.scale / 2;
 
   return screen_pos;
 }
 
 namespace FindPathSpace {
-std::vector<std::vector<bool>> used;
-std::vector<std::vector<int>> cost, eurest;
+std::vector<std::vector<bool>> used, in_queue;
+std::vector<std::vector<int>> cost;
 std::vector<std::vector<PosType>> parent;
 
 std::vector<PosType>* RecursePath(PosType start, PosType end) {
@@ -37,9 +40,19 @@ std::vector<PosType>* RecursePath(PosType start, PosType end) {
 
   std::reverse(ret->begin(), ret->end());
 
-  std::cout << "=========================";
-
   return ret;
+}
+
+class Cmp {
+ public:
+  bool operator()(const std::pair<PosType, int>& lhs,
+                  const std::pair<PosType, int>& rhs) {
+    return lhs.second > rhs.second;
+  }
+};
+
+int calc_heurest(const PosType& from, const PosType& to) {
+  return std::max(std::abs(from.x - to.x), std::abs(from.y - to.y)) * 5;
 }
 }  // namespace FindPathSpace
 
@@ -49,72 +62,63 @@ std::vector<PosType>* FindPath(PosType start, PosType end, const Room& room) {
   used.assign(room.field.size(),
               std::vector<bool>(room.field[0].size(), false));
 
+  in_queue.assign(room.field.size(),
+                  std::vector<bool>(room.field[0].size(), false));
+  in_queue[start.y][start.x] = true;
+
   cost.assign(room.field.size(), std::vector<int>(room.field[0].size(), 1e9));
   cost[start.y][start.x] = 0;
-
-  eurest.assign(room.field.size(), std::vector<int>(room.field[0].size(), 1e9));
-  eurest[start.y][start.x] = std::max(std::abs(start.x - end.x), std::abs(start.y - end.y));
 
   parent.assign(room.field.size(),
                 std::vector<PosType>(room.field[0].size(), {-1, -1}));
 
-  auto cmp = [](const PosType& lhs, const PosType& rhs) -> bool {
-    return eurest[lhs.y][lhs.x] < eurest[rhs.y][rhs.x];
-  };
+  std::priority_queue<std::pair<PosType, int>,
+                      std::vector<std::pair<PosType, int>>, Cmp>
+      q;
 
-  std::set<PosType, decltype(cmp)> q(cmp);
-  q.insert(start);
+  q.emplace(start, calc_heurest(start, end));
 
-  int8_t dx[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
-  int8_t dy[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
+  int dx[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
+  int dy[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
 
   while (!q.empty()) {
-    PosType cur = *q.begin();
-    q.erase(q.begin());
+    PosType current = q.top().first;
+    q.pop();
 
-    if (cur == end) {
+    in_queue[current.y][current.x] = false;
+    used[current.y][current.x] = true;
+
+    if (current == end) {
       return RecursePath(start, end);
     }
 
-    used[cur.y][cur.x] = true;
+    for (int i = 0; i < 8; ++i) {
+      PosType next(current.x + dx[i], current.y + dy[i]);
 
-    for (uint8_t i = 0; i < 8; ++i) {
-      if (cur.x + dx[i] < 0 || cur.x + dx[i] >= room.field[0].size()) {
-        continue;
-      }
-      if (cur.y + dy[i] < 0 || cur.y + dy[i] >= room.field.size()) {
-        continue;
-      }
-      if (room.field[cur.y + dy[i]][cur.x + dx[i]]->GetObstacleType() == ObstacleType::WALL) {
+      if (next.x < 0 || next.x >= g_current_room.field[0].size() ||
+          next.y < 0 || next.y >= g_current_room.field.size()) {
         continue;
       }
 
-      PosType vertex(cur.x + dx[i], cur.y + dy[i]);
+      int new_cost =
+          cost[current.y][current.x] +
+          static_cast<int>(
+              g_current_room.field[next.y][next.x]->GetObstacleType());
 
-      int score =
-          cost[cur.y][cur.x] +
-          static_cast<int>(room.field[vertex.y][vertex.x]->GetObstacleType());
-
-      if (used[vertex.y][vertex.x] && score >= cost[vertex.y][vertex.x]) {
+      if (new_cost >= cost[next.y][next.x]) {
         continue;
       }
-      if (!used[vertex.y][vertex.x] || score < cost[vertex.y][vertex.x]) {
-        parent[vertex.y][vertex.x] = cur;
-        cost[vertex.y][vertex.x] = score;
-        eurest[vertex.y][vertex.x] =
-            score +
-            std::max(std::abs(vertex.x - end.x), std::abs(vertex.y - end.y));
 
-        q.insert(vertex);
+      int priority = new_cost + calc_heurest(next, end);
+      cost[next.y][next.x] = new_cost;
+      parent[next.y][next.x] = current;
+
+      if (!in_queue[next.y][next.x]) {
+        q.emplace(next, priority);
+        in_queue[next.y][next.x] = true;
       }
-      for (auto &v: q) {
-        std::cout << "{" << v.x << ", " << v.y << ", " << eurest[v.y][v.x] << "} ";
-      }
-      std::cout << '\n';
     }
   }
-
-  std::cout << "=========================\n";
 
   return nullptr;
 }
