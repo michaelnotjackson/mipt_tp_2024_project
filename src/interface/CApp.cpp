@@ -275,7 +275,7 @@ MOUSEMOTIONEND:
       }
     }
   }
-MOUSEBUTTONDOWNEND:
+MOUSEBUTTONDOWNEND:;
 }
 
 void CApp::OnCleanup() { SDL_Quit(); }
