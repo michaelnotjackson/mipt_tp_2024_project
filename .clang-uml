@@ -7,6 +7,9 @@ diagrams:
     type: class
     glob:
       - src/*.cpp
+      - src/interface/*.cpp
+      - include/*.h
+      - include/interface/*.h
     exclude:
       namespaces:
         - SDL
