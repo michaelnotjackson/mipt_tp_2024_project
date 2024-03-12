@@ -286,6 +286,17 @@ void CApp::OnLoop() {
   }
   if (g_current_action == ActionType::WAIT && !g_move_in_process) {
     g_current_action = ActionType::MOVE;
+    if (g_current_path.empty()) {
+      std::vector<PosType>* tmp_path =
+          FindPath(*g_current_executor->GetPos(),
+                   GetTilePos(event_manager.current_hover->GetTile(), g_current_room));
+
+      if (!tmp_path) {
+        g_current_path.clear();
+      } else {
+        g_current_path.assign(tmp_path->begin(), tmp_path->end());
+      }
+    }
   }
 }
 
