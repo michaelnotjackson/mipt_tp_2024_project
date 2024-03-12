@@ -243,12 +243,16 @@ void CApp::OnEvent(SDL_Event* event) {
       cur = cur->next;
     }
 
-    event_manager.current_hover = cur->event_listener;
+    if (cur != nullptr)  {
+        event_manager.current_hover = cur->event_listener;
+    } else if (event_manager.current_hover == nullptr) {
+      event_manager.current_hover = event_manager.GetTileHoverListeners().GetHead()->event_listener;
+    }
 
     if (g_current_action == ActionType::MOVE) {
       std::vector<PosType>* tmp_path =
           FindPath(*g_current_executor->GetPos(),
-                   GetTilePos(cur->event_listener->GetTile(), g_current_room));
+                   GetTilePos(event_manager.current_hover->GetTile(), g_current_room));
 
       if (!tmp_path) {
         g_current_path.clear();
