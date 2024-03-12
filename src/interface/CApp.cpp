@@ -19,33 +19,33 @@ Room room(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 bool CApp::LoadTextures() {
   if (!assets_manager.LoadTexture(
-      "assets/Tiny "
-      "Swords/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png",
-      "textures/warriors/warrior_blue")) {
+          "assets/Tiny "
+          "Swords/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png",
+          "textures/warriors/warrior_blue")) {
     return false;
   }
 
   if (!assets_manager.LoadTexture(
-      "assets/Tiny Swords/Terrain/Ground/Tilemap_Flat.png",
-      "textures/terrain/grass")) {
+          "assets/Tiny Swords/Terrain/Ground/Tilemap_Flat.png",
+          "textures/terrain/grass")) {
     return false;
   }
 
   if (!assets_manager.LoadTexture(
-      "assets/Tiny Swords/Terrain/Ground/Tilemap_Flat_Hovered.png",
-      "textures/terrain/grass_hovered")) {
+          "assets/Tiny Swords/Terrain/Ground/Tilemap_Flat_Hovered.png",
+          "textures/terrain/grass_hovered")) {
     return false;
   }
 
   if (!assets_manager.LoadTexture(
-      "assets/Tiny Swords/Terrain/Ground/Tilemap_Elevation.png",
-      "textures/terrain/wall")) {
+          "assets/Tiny Swords/Terrain/Ground/Tilemap_Elevation.png",
+          "textures/terrain/wall")) {
     return false;
   }
 
   if (!assets_manager.LoadTexture(
-      "assets/Tiny Swords/Terrain/Ground/Tilemap_Elevation_Hovered.png",
-      "textures/terrain/wall_hovered")) {
+          "assets/Tiny Swords/Terrain/Ground/Tilemap_Elevation_Hovered.png",
+          "textures/terrain/wall_hovered")) {
     return false;
   }
 
@@ -54,98 +54,98 @@ bool CApp::LoadTextures() {
 
 bool CApp::RegisterAnimations() {
   if (!assets_manager.RegisterAnimation(
-      CBaseAnimation(assets_manager.GetTexture("textures/terrain/grass"),
-                     SDL_Rect{64, 64, 64, 64}, 1, SDL_GetTicks64(), 1, 1),
-      "animations/terrain/grass")) {
+          CBaseAnimation(assets_manager.GetTexture("textures/terrain/grass"),
+                         SDL_Rect{64, 64, 64, 64}, 1, SDL_GetTicks64(), 1, 1),
+          "animations/terrain/grass")) {
     return false;
   }
   if (!assets_manager.RegisterAnimation(
-      CBaseAnimation(
-          assets_manager.GetTexture("textures/terrain/grass_hovered"),
-          SDL_Rect{64, 64, 64, 64}, 1, SDL_GetTicks64(), 1, 1),
-      "animations/terrain/grass_hovered")) {
+          CBaseAnimation(
+              assets_manager.GetTexture("textures/terrain/grass_hovered"),
+              SDL_Rect{64, 64, 64, 64}, 1, SDL_GetTicks64(), 1, 1),
+          "animations/terrain/grass_hovered")) {
     return false;
   }
   if (!assets_manager.RegisterAnimation(
-      CBaseAnimation(assets_manager.GetTexture("textures/terrain/wall"),
-                     SDL_Rect{64, 64, 64, 64}, 1, SDL_GetTicks64(), 1, 1),
-      "animations/terrain/wall")) {
+          CBaseAnimation(assets_manager.GetTexture("textures/terrain/wall"),
+                         SDL_Rect{64, 64, 64, 64}, 1, SDL_GetTicks64(), 1, 1),
+          "animations/terrain/wall")) {
     return false;
   }
   if (!assets_manager.RegisterAnimation(
-      CBaseAnimation(
-          assets_manager.GetTexture("textures/terrain/wall_hovered"),
-          SDL_Rect{64, 64, 64, 64}, 1, SDL_GetTicks64(), 1, 1),
-      "animations/terrain/wall_hovered")) {
+          CBaseAnimation(
+              assets_manager.GetTexture("textures/terrain/wall_hovered"),
+              SDL_Rect{64, 64, 64, 64}, 1, SDL_GetTicks64(), 1, 1),
+          "animations/terrain/wall_hovered")) {
     return false;
   }
   if (!assets_manager.RegisterAnimation(
-      CBaseAnimation(assets_manager.GetTexture("textures/terrain/grass"),
-                     SDL_Rect{384, 64, 64, 64}, 1, SDL_GetTicks64(), 1, 1),
-      "animations/terrain/sand")) {
+          CBaseAnimation(assets_manager.GetTexture("textures/terrain/grass"),
+                         SDL_Rect{384, 64, 64, 64}, 1, SDL_GetTicks64(), 1, 1),
+          "animations/terrain/sand")) {
     return false;
   }
   if (!assets_manager.RegisterAnimation(
-      CBaseAnimation(
-          assets_manager.GetTexture("textures/terrain/grass_hovered"),
-          SDL_Rect{384, 64, 64, 64}, 1, SDL_GetTicks64(), 1, 1),
-      "animations/terrain/sand_hovered")) {
+          CBaseAnimation(
+              assets_manager.GetTexture("textures/terrain/grass_hovered"),
+              SDL_Rect{384, 64, 64, 64}, 1, SDL_GetTicks64(), 1, 1),
+          "animations/terrain/sand_hovered")) {
     return false;
   }
   if (!assets_manager.RegisterAnimation(
-      CBaseAnimation(
-          assets_manager.GetTexture("textures/warriors/warrior_blue"),
-          SDL_Rect{0, 0, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
-      "animations/warriors/warrior_blue/idle")) {
+          CBaseAnimation(
+              assets_manager.GetTexture("textures/warriors/warrior_blue"),
+              SDL_Rect{0, 0, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
+          "animations/warriors/warrior_blue/idle")) {
     return false;
   }
   if (!assets_manager.RegisterAnimation(
-      CBaseAnimation(
-          assets_manager.GetTexture("textures/warriors/warrior_blue"),
-          SDL_Rect{0, 192, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
-      "animations/warriors/warrior_blue/move")) {
+          CBaseAnimation(
+              assets_manager.GetTexture("textures/warriors/warrior_blue"),
+              SDL_Rect{0, 192, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
+          "animations/warriors/warrior_blue/move")) {
     return false;
   }
   if (!assets_manager.RegisterAnimation(
-      CBaseAnimation(
-          assets_manager.GetTexture("textures/warriors/warrior_blue"),
-          SDL_Rect{0, 192 * 2, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
-      "animations/warriors/warrior_blue/attack1_right")) {
+          CBaseAnimation(
+              assets_manager.GetTexture("textures/warriors/warrior_blue"),
+              SDL_Rect{0, 192 * 2, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
+          "animations/warriors/warrior_blue/attack1_right")) {
     return false;
   }
   if (!assets_manager.RegisterAnimation(
-      CBaseAnimation(
-          assets_manager.GetTexture("textures/warriors/warrior_blue"),
-          SDL_Rect{0, 192 * 3, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
-      "animations/warriors/warrior_blue/attack2_right")) {
+          CBaseAnimation(
+              assets_manager.GetTexture("textures/warriors/warrior_blue"),
+              SDL_Rect{0, 192 * 3, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
+          "animations/warriors/warrior_blue/attack2_right")) {
     return false;
   }
   if (!assets_manager.RegisterAnimation(
-      CBaseAnimation(
-          assets_manager.GetTexture("textures/warriors/warrior_blue"),
-          SDL_Rect{0, 192 * 4, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
-      "animations/warriors/warrior_blue/attack1_down")) {
+          CBaseAnimation(
+              assets_manager.GetTexture("textures/warriors/warrior_blue"),
+              SDL_Rect{0, 192 * 4, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
+          "animations/warriors/warrior_blue/attack1_down")) {
     return false;
   }
   if (!assets_manager.RegisterAnimation(
-      CBaseAnimation(
-          assets_manager.GetTexture("textures/warriors/warrior_blue"),
-          SDL_Rect{0, 192 * 5, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
-      "animations/warriors/warrior_blue/attack2_down")) {
+          CBaseAnimation(
+              assets_manager.GetTexture("textures/warriors/warrior_blue"),
+              SDL_Rect{0, 192 * 5, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
+          "animations/warriors/warrior_blue/attack2_down")) {
     return false;
   }
   if (!assets_manager.RegisterAnimation(
-      CBaseAnimation(
-          assets_manager.GetTexture("textures/warriors/warrior_blue"),
-          SDL_Rect{0, 192 * 6, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
-      "animations/warriors/warrior_blue/attack1_up")) {
+          CBaseAnimation(
+              assets_manager.GetTexture("textures/warriors/warrior_blue"),
+              SDL_Rect{0, 192 * 6, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
+          "animations/warriors/warrior_blue/attack1_up")) {
     return false;
   }
   if (!assets_manager.RegisterAnimation(
-      CBaseAnimation(
-          assets_manager.GetTexture("textures/warriors/warrior_blue"),
-          SDL_Rect{0, 0, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
-      "animations/warriors/warrior_blue/attack2_up")) {
+          CBaseAnimation(
+              assets_manager.GetTexture("textures/warriors/warrior_blue"),
+              SDL_Rect{0, 0, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
+          "animations/warriors/warrior_blue/attack2_up")) {
     return false;
   }
 
@@ -185,7 +185,7 @@ bool CApp::OnInit() {
   room.SetField();
   g_current_room = room;
 
-  CTile *tile = room.GetField()[0][0];
+  CTile* tile = room.GetField()[0][0];
   int width = tile->GetTexture().frame.w * tile->GetTexture().scale;
   int height = tile->GetTexture().frame.h * tile->GetTexture().scale;
   SDL_Rect rect;
@@ -207,12 +207,12 @@ bool CApp::OnInit() {
   return true;
 }
 
-bool CheckRect(const SDL_Rect &rect, int x, int y) {
+bool CheckRect(const SDL_Rect& rect, int x, int y) {
   return !(x < rect.x || y < rect.y || x > rect.x + rect.w ||
            y > rect.y + rect.h);
 }
 
-void CApp::OnEvent(SDL_Event *event) {
+void CApp::OnEvent(SDL_Event* event) {
   if (event->type == SDL_QUIT) {
     is_running = false;
     return;
@@ -225,7 +225,8 @@ void CApp::OnEvent(SDL_Event *event) {
     int x = event->motion.x, y = event->motion.y;
 
     if (event_manager.current_hover != nullptr &&
-        CheckRect(event_manager.current_hover->GetRect(), x, y) && !g_current_path.empty()) {
+        CheckRect(event_manager.current_hover->GetRect(), x, y) &&
+        !g_current_path.empty()) {
       goto MOUSEMOTIONEND;
     }
 
@@ -233,7 +234,7 @@ void CApp::OnEvent(SDL_Event *event) {
       event_manager.current_hover->reset();
     }
 
-    auto *cur = event_manager.GetTileHoverListeners().GetHead();
+    auto* cur = event_manager.GetTileHoverListeners().GetHead();
     while (cur != nullptr) {
       if (CheckRect(cur->event_listener->GetRect(), x, y)) {
         cur->event_listener->notify();
@@ -245,7 +246,7 @@ void CApp::OnEvent(SDL_Event *event) {
     event_manager.current_hover = cur->event_listener;
 
     if (g_current_action == ActionType::MOVE) {
-      std::vector<PosType> *tmp_path =
+      std::vector<PosType>* tmp_path =
           FindPath(*g_current_executor->GetPos(),
                    GetTilePos(cur->event_listener->GetTile(), g_current_room));
 
@@ -256,7 +257,7 @@ void CApp::OnEvent(SDL_Event *event) {
       }
     }
   }
-   MOUSEMOTIONEND:
+MOUSEMOTIONEND:
   if (event->type == SDL_MOUSEBUTTONDOWN) {
     int x = event->button.x, y = event->button.y;
     if (g_current_action == ActionType::WAIT) {
@@ -264,7 +265,7 @@ void CApp::OnEvent(SDL_Event *event) {
     }
 
     if (event->button.button == SDL_BUTTON_LEFT) {
-      auto *cur = event_manager.GetTileClickListeners().GetHead();
+      auto* cur = event_manager.GetTileClickListeners().GetHead();
       while (cur != nullptr) {
         if (CheckRect(cur->event_listener->GetRect(), x, y)) {
           cur->event_listener->notify();
@@ -274,7 +275,7 @@ void CApp::OnEvent(SDL_Event *event) {
       }
     }
   }
-   MOUSEBUTTONDOWNEND:
+MOUSEBUTTONDOWNEND:
 }
 
 void CApp::OnCleanup() { SDL_Quit(); }
@@ -289,17 +290,17 @@ void CApp::OnLoop() {
 }
 
 void DrawEntities() {
-  CEntityNode *cur = entity_list.GetHead();
+  CEntityNode* cur = entity_list.GetHead();
 
   while (cur != nullptr) {
-    auto *ent_pos = new PosType(EntityPosRoomToScreen(cur->entity));
+    auto* ent_pos = new PosType(EntityPosRoomToScreen(cur->entity));
     Blit(&cur->entity->animation, ent_pos);
     cur = cur->next;
     delete ent_pos;
   }
 }
 
-void DrawRoom(const Room &room_a) {
+void DrawRoom(const Room& room_a) {
   int width = room_a.field[0][0]->GetTexture().frame.w *
               room_a.field[0][0]->GetTexture().scale;
   int height = room_a.field[0][0]->GetTexture().frame.h *
@@ -326,7 +327,7 @@ void DrawPath() {
 
   SDL_Point start = PointRoomToScreenTileCenter(*g_current_executor->GetPos());
 
-  auto *path = new SDL_Point[g_current_path.size() + 1];
+  auto* path = new SDL_Point[g_current_path.size() + 1];
   path[0] = start;
 
   for (int i = 0; i < g_current_path.size(); ++i) {
