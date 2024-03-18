@@ -16,6 +16,8 @@ cmake ..
 make
 ```
 
+## [TODO List](https://docs.google.com/spreadsheets/d/1gpTZHRZXcu_5gRCPRNt9WfnoYGGq2b76oUtnzlpWW3I/edit?hl=ru#gid=0)
+
 ## Описание архитектуры проекта
 В [assets](https://gitlab.akhcheck.ru/sheiko.mikhail/tp_course_spring24_project/-/tree/dev/assets?ref_type=heads) находятся ресурсы игры.
 
