@@ -1,6 +1,6 @@
 #include <SDL.h>
 #include <SDL_image.h>
-#include <assets_manager.h>
+#include <assets_storage.h>
 #include <entitylist.h>
 #include <eventmanager.h>
 #include <globals.h>

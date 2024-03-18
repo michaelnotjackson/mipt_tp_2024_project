@@ -1,12 +1,12 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <animation.h>
-#include <assets_manager.h>
+#include <assets_storage.h>
 #include <interface/CApp.h>
 
-CAssetsManager::CAssetsManager() : textures() {}
+CAssetsStorage::CAssetsStorage() : textures() {}
 
-bool CAssetsManager::LoadTexture(const std::string& path,
+bool CAssetsStorage::LoadTexture(const std::string& path,
                                  const std::string& name) {
   SDL_Texture* texture = IMG_LoadTexture(app.renderer, path.c_str());
 
@@ -24,11 +24,11 @@ bool CAssetsManager::LoadTexture(const std::string& path,
   return true;
 }
 
-SDL_Texture* CAssetsManager::GetTexture(const std::string& name) {
+SDL_Texture* CAssetsStorage::GetTexture(const std::string& name) {
   return textures[name];
 }
 
-bool CAssetsManager::RegisterAnimation(CBaseAnimation animation,
+bool CAssetsStorage::RegisterAnimation(CBaseAnimation animation,
                                        const std::string& name) {
   if (animations.find(name) != animations.end()) {
     SDL_LogError(1, "%s",
@@ -42,11 +42,11 @@ bool CAssetsManager::RegisterAnimation(CBaseAnimation animation,
   return true;
 }
 
-CBaseAnimation& CAssetsManager::GetAnimation(const std::string& name) {
+CBaseAnimation& CAssetsStorage::GetAnimation(const std::string& name) {
   return animations[name];
 }
 
-std::string CAssetsManager::GetAnimationName(const CBaseAnimation& animation) {
+std::string CAssetsStorage::GetAnimationName(const CBaseAnimation& animation) {
   for (auto &[k, v]: animations) {
     if (v == animation) {
       return k;
@@ -56,4 +56,4 @@ std::string CAssetsManager::GetAnimationName(const CBaseAnimation& animation) {
   return "";
 }
 
-CAssetsManager assets_manager;
+CAssetsStorage assets_manager;

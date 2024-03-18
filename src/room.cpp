@@ -1,14 +1,14 @@
 #include <SDL.h>
+#include <assets_storage.h>
+#include <globals.h>
 #include <interface/renderer.h>
 #include <room.h>
 #include <types.h>
-#include <assets_manager.h>
-#include <globals.h>
 
 #include <algorithm>
+#include <fstream>
 #include <utility>
 #include <vector>
-#include <fstream>
 
 int Room::GetWidth() { return this->width; }
 

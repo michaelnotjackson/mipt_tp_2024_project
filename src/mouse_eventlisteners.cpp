@@ -1,5 +1,5 @@
 #include <SDL.h>
-#include <assets_manager.h>
+#include <assets_storage.h>
 #include <entitylist.h>
 #include <eventmanager.h>
 #include <globals.h>

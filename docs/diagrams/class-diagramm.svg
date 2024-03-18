@@ -1448,11 +1448,11 @@
     ></g
     ><g font-size="11px" transform="matrix(1,0,0,1,601.2222,860.1667)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" image-rendering="optimizeQuality" font-family="sans-serif" stroke="black" stroke-opacity="1"
     ><text x="2" xml:space="preserve" y="91" clip-path="url(#clipPath55)" stroke="none"
-      >+CSpecificEventManager()</text
+      >+CSpecificEventStorage()</text
     ></g
     ><g font-size="11px" transform="translate(601.2222,846.1667)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" image-rendering="optimizeQuality" font-family="sans-serif" stroke="black" font-weight="bold" stroke-opacity="1"
     ><text x="64" xml:space="preserve" y="11" clip-path="url(#clipPath56)" stroke="none"
-      >CSpecificEventManager</text
+      >CSpecificEventStorage</text
     ></g
     ><g font-size="11px" transform="translate(2224.2222,2596.1667)" fill-opacity="1" fill="rgb(122,207,245)" text-rendering="geometricPrecision" image-rendering="optimizeQuality" font-family="sans-serif" stroke="rgb(122,207,245)" font-weight="bold" stroke-opacity="1"
     ><rect x="0" width="108" height="81" y="0" clip-path="url(#clipPath57)" stroke="none"
@@ -1538,11 +1538,11 @@
     /></g
     ><g font-size="11px" transform="matrix(1,0,0,1,944.2222,856.1667)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" image-rendering="optimizeQuality" font-family="sans-serif" stroke="black" stroke-opacity="1"
     ><text x="2" xml:space="preserve" y="10" clip-path="url(#clipPath67)" stroke="none"
-      >-tile_hover_listeners : CSpecificEventManager&lt;CTileHoverEventListener&gt;</text
+      >-tile_hover_listeners : CSpecificEventStorage&lt;CTileHoverEventListener&gt;</text
     ></g
     ><g font-size="11px" transform="matrix(1,0,0,1,944.2222,856.1667)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" image-rendering="optimizeQuality" font-family="sans-serif" stroke="black" stroke-opacity="1"
     ><text x="2" xml:space="preserve" y="21" clip-path="url(#clipPath67)" stroke="none"
-      >-tile_click_listeners : CSpecificEventManager&lt;CTileClickEventListener&gt;</text
+      >-tile_click_listeners : CSpecificEventStorage&lt;CTileClickEventListener&gt;</text
     ></g
     ><g font-size="11px" transform="matrix(1,0,0,1,944.2222,856.1667)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" image-rendering="optimizeQuality" font-family="sans-serif" stroke="black" stroke-opacity="1"
     ><text x="2" xml:space="preserve" y="32" clip-path="url(#clipPath67)" stroke="none"
@@ -1567,7 +1567,7 @@
     ></g
     ><g font-size="11px" transform="translate(944.2222,846.1667)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" image-rendering="optimizeQuality" font-family="sans-serif" stroke="black" font-weight="bold" stroke-opacity="1"
     ><text x="142" xml:space="preserve" y="11" clip-path="url(#clipPath68)" stroke="none"
-      >CEventManager</text
+      >CEventStorage</text
     ></g
     ><g font-size="11px" transform="translate(644.2222,662.1667)" fill-opacity="1" fill="rgb(122,207,245)" text-rendering="geometricPrecision" image-rendering="optimizeQuality" font-family="sans-serif" stroke="rgb(122,207,245)" font-weight="bold" stroke-opacity="1"
     ><rect x="0" width="187" height="81" y="0" clip-path="url(#clipPath69)" stroke="none"
@@ -1982,7 +1982,7 @@
     /></g
     ><g font-size="11px" transform="matrix(1,0,0,1,2.2222,2054.1667)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" image-rendering="optimizeQuality" font-family="sans-serif" stroke="black" stroke-opacity="1"
     ><text x="2" xml:space="preserve" y="36" clip-path="url(#clipPath99)" stroke="none"
-      >+CAssetsManager()</text
+      >+CAssetsStorage()</text
     ></g
     ><g font-size="11px" transform="matrix(1,0,0,1,2.2222,2054.1667)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" image-rendering="optimizeQuality" font-family="sans-serif" stroke="black" stroke-opacity="1"
     ><text x="2" xml:space="preserve" y="47" clip-path="url(#clipPath99)" stroke="none"
@@ -2006,11 +2006,11 @@
     ></g
     ><g font-size="11px" transform="matrix(1,0,0,1,2.2222,2054.1667)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" image-rendering="optimizeQuality" font-family="sans-serif" stroke="black" stroke-opacity="1"
     ><text x="2" xml:space="preserve" y="102" clip-path="url(#clipPath99)" stroke="none"
-      >+~CAssetsManager()</text
+      >+CAssetsStorage()</text
     ></g
     ><g font-size="11px" transform="translate(2.2222,2040.1667)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" image-rendering="optimizeQuality" font-family="sans-serif" stroke="black" font-weight="bold" stroke-opacity="1"
     ><text x="93" xml:space="preserve" y="11" clip-path="url(#clipPath100)" stroke="none"
-      >CAssetsManager</text
+      >CAssetsStorage</text
     ></g
     ><g font-size="11px" transform="translate(994.2222,2156.1667)" fill-opacity="1" fill="rgb(122,207,245)" text-rendering="geometricPrecision" image-rendering="optimizeQuality" font-family="sans-serif" stroke="rgb(122,207,245)" font-weight="bold" stroke-opacity="1"
     ><rect x="0" width="142" height="162" y="0" clip-path="url(#clipPath101)" stroke="none"

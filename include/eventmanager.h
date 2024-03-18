@@ -14,7 +14,7 @@ class CEventListenerNode {
 };
 
 template <typename EventListenerType>
-class CSpecificEventManager {
+class CSpecificEventStorage {
  private:
   CEventListenerNode<EventListenerType>* head = nullptr;
   CEventListenerNode<EventListenerType>* last = nullptr;
@@ -31,26 +31,26 @@ class CSpecificEventManager {
   CEventListenerNode<EventListenerType>* GetHead();
 
  public:
-  CSpecificEventManager();
+  CSpecificEventStorage();
 };
 
 class CTileHoverEventListener;
 class CTileClickEventListener;
 
-class CEventManager {
+class CEventStorage {
  private:
-  CSpecificEventManager<CTileHoverEventListener> tile_hover_listeners;
-  CSpecificEventManager<CTileClickEventListener> tile_click_listeners;
+  CSpecificEventStorage<CTileHoverEventListener> tile_hover_listeners;
+  CSpecificEventStorage<CTileClickEventListener> tile_click_listeners;
 
  public:
   void RegisterCTileHoverEventListener(CTileHoverEventListener* listener);
-  CSpecificEventManager<CTileHoverEventListener>& GetTileHoverListeners();
+  CSpecificEventStorage<CTileHoverEventListener>& GetTileHoverListeners();
 
   void RegisterCTileClickEventListener(CTileClickEventListener* listener);
-  CSpecificEventManager<CTileClickEventListener>& GetTileClickListeners();
+  CSpecificEventStorage<CTileClickEventListener>& GetTileClickListeners();
 
  public:
   CTileHoverEventListener* current_hover = nullptr;
 };
 
-extern CEventManager event_manager;
+extern CEventStorage event_manager;
