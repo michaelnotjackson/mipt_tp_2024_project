@@ -7,13 +7,13 @@
 #include <string>
 #include <unordered_map>
 
-class CAssetsManager {
+class CAssetsStorage {
  private:
   std::unordered_map<std::string, SDL_Texture*> textures;
   std::unordered_map<std::string, CBaseAnimation> animations;
 
  public:
-  CAssetsManager();
+  CAssetsStorage();
 
   bool LoadTexture(const std::string& path, const std::string& name = "");
 
@@ -25,7 +25,7 @@ class CAssetsManager {
 
   std::string GetAnimationName(const CBaseAnimation& animation);
 
-  ~CAssetsManager() = default;
+  ~CAssetsStorage() = default;
 };
 
-extern CAssetsManager assets_manager;
+extern CAssetsStorage assets_manager;

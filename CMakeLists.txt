@@ -41,8 +41,8 @@ add_executable(${PROJECT_NAME}
         include/properties.h
         include/entitylist.h
         src/entitylist.cpp
-        include/assets_manager.h
-        src/assets_manager.cpp
+    include/assets_storage.h
+    src/assets_storage.cpp
         include/globals.h
         src/globals.cpp
         include/eventmanager.h
