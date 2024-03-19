@@ -3,7 +3,7 @@
 Room g_current_room;
 
 IBaseEntity *g_current_executor;
-CTurnManager g_turnmanager;
+CTurnController g_turnmanager;
 
 ActionType g_current_action;
 

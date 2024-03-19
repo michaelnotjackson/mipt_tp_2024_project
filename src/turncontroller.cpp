@@ -1,13 +1,13 @@
 #include <globals.h>
-#include <turnmanager.h>
+#include <turncontroller.h>
 
-CTurnManager::CTurnManager() : turn_num(1) {}
+CTurnController::CTurnController() : turn_num(1) {}
 
-IBaseEntity* CTurnManager::GetExecutor() {
+IBaseEntity* CTurnController::GetExecutor() {
   return executor == nullptr ? nullptr : executor->entity;
 }
 
-void CTurnManager::ShiftTurn(int num) {
+void CTurnController::ShiftTurn(int num) {
   if (executor == nullptr) {
     executor = entity_list.GetHead();
   }
@@ -23,4 +23,4 @@ void CTurnManager::ShiftTurn(int num) {
   g_current_executor = executor->entity;
 }
 
-void CTurnManager::ResetTurns() { turn_num = 1; }
+void CTurnController::ResetTurns() { turn_num = 1; }

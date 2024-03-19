@@ -2,11 +2,11 @@
 
 #include <entitylist.h>
 
-class CTurnManager {
+class CTurnController {
  int turn_num;
  CEntityNode* executor;
  public:
-  CTurnManager();
+  CTurnController();
 
  public:
   int GetTurn() const;
