@@ -1,4 +1,4 @@
-#include <eventmanager.h>
+#include <event_storage.h>
 
 template <typename EventListenerType>
 CEventListenerNode<EventListenerType>::~CEventListenerNode() {

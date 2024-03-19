@@ -2,7 +2,7 @@
 
 #include <entity.h>
 #include <room.h>
-#include <turncontroller.h>
+#include <turn_controller.h>
 
 enum class ActionType {
   MOVE,

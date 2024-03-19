@@ -1,5 +1,5 @@
 #include <globals.h>
-#include <turncontroller.h>
+#include <turn_controller.h>
 
 CTurnController::CTurnController() : turn_num(1) {}
 
