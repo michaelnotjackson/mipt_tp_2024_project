@@ -1,7 +1,7 @@
 #include <SDL.h>
 #include <assets_storage.h>
 #include <entitylist.h>
-#include <eventmanager.h>
+#include <event_storage.h>
 #include <globals.h>
 #include <mouse_eventlisteners.h>
 #include <utils.h>

@@ -2,7 +2,7 @@
 #include <SDL_image.h>
 #include <assets_storage.h>
 #include <entitylist.h>
-#include <eventmanager.h>
+#include <event_storage.h>
 #include <globals.h>
 #include <interface/CApp.h>
 #include <interface/renderer.h>

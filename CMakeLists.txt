@@ -45,15 +45,15 @@ add_executable(${PROJECT_NAME}
     src/assets_storage.cpp
         include/globals.h
         src/globals.cpp
-        include/eventmanager.h
+    include/event_storage.h
         include/base_eventlistener.h
         include/mouse_eventlisteners.h
-        src/eventmanager.cpp
+    src/event_storage.cpp
         src/mouse_eventlisteners.cpp
         include/utils.h
         src/utils.cpp
-    include/turncontroller.h
-    src/turncontroller.cpp)
+    include/turn_controller.h
+    src/turn_controller.cpp)
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2_image)
