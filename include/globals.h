@@ -1,8 +1,8 @@
 #pragma once
 
-#include <room.h>
 #include <entity.h>
-#include <turnmanager.h>
+#include <room.h>
+#include <turncontroller.h>
 
 enum class ActionType {
   MOVE,
@@ -15,7 +15,7 @@ extern Room g_current_room;
 
 extern IBaseEntity* g_current_executor;
 
-extern CTurnManager g_turnmanager;
+extern CTurnController g_turnmanager;
 
 extern ActionType g_current_action;
 
