@@ -3,6 +3,9 @@
 
 #include <thread>
 
+IBaseEntity::IBaseEntity(CBaseAnimation& animation)
+    : default_animation(animation), animation(animation) {}
+
 CObjProperties* IBaseEntity::GetProperties() { return &this->props; }
 
 PosType* IBaseEntity::GetPos() { return &this->pos; }
