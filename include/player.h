@@ -6,7 +6,8 @@
 
 class CBasePlayer : public IBaseEntity {
  public:
-  explicit CBasePlayer(CBaseAnimation& animation) : IBaseEntity(animation) {}
+  explicit CBasePlayer(CBaseAnimation& animation, ClassType player_class = ClassType::fighter,
+                       RaceType player_race = RaceType::human);
   std::vector<CSpell*> spell_list;
   std::vector<CBaseEquipment*> inventory;
 };

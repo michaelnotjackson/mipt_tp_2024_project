@@ -53,7 +53,14 @@ add_executable(${PROJECT_NAME}
         include/utils.h
         src/utils.cpp
     include/turn_controller.h
-    src/turn_controller.cpp)
+    src/turn_controller.cpp
+    src/player.cpp
+    src/properties.cpp
+    include/playable_classes.h
+    include/playable_races.h
+    src/playable_classes.cpp
+    src/playable_races.cpp
+    include/dice_roller.h)
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2_image)
