@@ -67,8 +67,7 @@ void Room::SetField() {
 
 PosType GetTilePos(const CTile *tile, const Room &room) {
   int y = 0;
-  int width = tile->GetTexture().frame.w * tile->GetTexture().scale;
-  int height = tile->GetTexture().frame.h * tile->GetTexture().scale;
+
   for (auto &raw: room.field) {
     auto pos = std::find(raw.begin(), raw.end(), tile);
     if (pos != raw.end()) {
