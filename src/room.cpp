@@ -48,7 +48,6 @@ void Room::SetField() {
   using json = nlohmann::json;
   std::ifstream in("rooms/room.json");
   json file = json::parse(in);
-
   std::vector<std::vector<int>> numbers = file["numbers"];
   int tmp;
   auto grass = assets_manager.GetAnimation("animations/terrain/grass");
@@ -59,7 +58,6 @@ void Room::SetField() {
     int j = 0;
       for (const auto& elem : row) {
           tmp = static_cast<int>(elem);
-          std::cout << tmp;
           if (tmp == 1) {
             field[i][j] = new CTile(grass, ObstacleType::NO_OBSTACLES);
           } else if (tmp == 2) {
