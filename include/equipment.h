@@ -17,7 +17,7 @@ class CBaseEquipment {
   int count;
 
  public:
-  CBaseEquipment(std::string name, EquipType type, int cost, double weight,
+  CBaseEquipment(const std::string& name, const EquipType& type, int cost, double weight,
                  int count);
 
   std::string GetName();
@@ -36,9 +36,9 @@ class CBaseWeapon : CBaseEquipment {
   DamageType type;
 
  public:
-  CBaseWeapon(std::string name, EquipType equip_type, int cost, double weight,
-              int count, int damage, WeaponProperties properties,
-              DamageType damage_type);
+  CBaseWeapon(const std::string& name, const EquipType& equip_type, int cost, double weight,
+              int count, int damage, const WeaponProperties& properties,
+              const DamageType& damage_type);
 
   WeaponProperties GetProperties();
   DamageType GetDamageType();
@@ -48,11 +48,10 @@ class CRangedWeapon : CBaseWeapon {
  private:
   int range;
   std::string ammo_type;
-  // not string, but enum Ammo
 
  public:
-  CRangedWeapon(int damage, WeaponProperties properties, DamageType type,
-                int range, std::string ammo_type);
+  CRangedWeapon(int damage, const WeaponProperties& properties, const DamageType& type,
+                int range, const std::string& ammo_type);
 
   int GetRange();
   std::string GetAmmoType();
@@ -65,9 +64,9 @@ class CBaseArmor : CBaseEquipment {
   int armor_points;
 
  public:
-  CBaseArmor(std::string name, EquipType type, int cost, double weight,
+  CBaseArmor(const std::string& name, const EquipType& type, int cost, double weight,
              int count, int minimum_strength,
-             std::pair<CharacteristicType, int> modifier, int armor_points);
+             const std::pair<CharacteristicType, int>& modifier, int armor_points);
 
   int GetMinStrength();
   std::pair<CharacteristicType, int> GetModifier();
@@ -84,5 +83,5 @@ class CBasePotion : CBaseEquipment {
 
   int GetHP();
   std::string GetTrueName();
-  void ChangeTrueName(std::string true_name);
+  void ChangeTrueName(const std::string& true_name);
 };
