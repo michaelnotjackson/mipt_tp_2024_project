@@ -12,12 +12,13 @@
 
 class IBaseEntity {
  protected:
-  CObjProperties props;
   PosType pos; // Position on the map!
   CBaseAnimation default_animation;
 
  public:
   CBaseAnimation animation;
+  CObjProperties props;
+  int characteristics[6];
 
  public:
   virtual CObjProperties* GetProperties();

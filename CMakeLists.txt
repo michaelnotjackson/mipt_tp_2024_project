@@ -59,7 +59,9 @@ add_executable(${PROJECT_NAME}
     include/playable_races.h
     src/playable_classes.cpp
     src/playable_races.cpp
-    include/dice_roller.h)
+    include/dice_roller.h
+    src/dice_roller.cpp
+)
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2_image)

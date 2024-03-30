@@ -1,6 +1,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <assets_storage.h>
+#include <dice_roller.h>
 #include <entitylist.h>
 #include <event_storage.h>
 #include <globals.h>
@@ -22,6 +23,13 @@ bool CApp::LoadTextures() {
           "assets/Tiny "
           "Swords/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png",
           "textures/warriors/warrior_blue")) {
+    return false;
+  }
+
+  if (!assets_manager.LoadTexture(
+          "assets/Tiny "
+          "Swords/Factions/Knights/Troops/Warrior/Red/Warrior_Red.png",
+          "textures/warriors/warrior_red")) {
     return false;
   }
 
@@ -149,6 +157,63 @@ bool CApp::RegisterAnimations() {
     return false;
   }
 
+  if (!assets_manager.RegisterAnimation(
+          CBaseAnimation(
+              assets_manager.GetTexture("textures/warriors/warrior_red"),
+              SDL_Rect{0, 0, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
+          "animations/warriors/warrior_red/idle")) {
+    return false;
+  }
+  if (!assets_manager.RegisterAnimation(
+          CBaseAnimation(
+              assets_manager.GetTexture("textures/warriors/warrior_red"),
+              SDL_Rect{0, 192, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
+          "animations/warriors/warrior_red/move")) {
+    return false;
+  }
+  if (!assets_manager.RegisterAnimation(
+          CBaseAnimation(
+              assets_manager.GetTexture("textures/warriors/warrior_red"),
+              SDL_Rect{0, 192 * 2, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
+          "animations/warriors/warrior_red/attack1_right")) {
+    return false;
+  }
+  if (!assets_manager.RegisterAnimation(
+          CBaseAnimation(
+              assets_manager.GetTexture("textures/warriors/warrior_red"),
+              SDL_Rect{0, 192 * 3, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
+          "animations/warriors/warrior_red/attack2_right")) {
+    return false;
+  }
+  if (!assets_manager.RegisterAnimation(
+          CBaseAnimation(
+              assets_manager.GetTexture("textures/warriors/warrior_red"),
+              SDL_Rect{0, 192 * 4, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
+          "animations/warriors/warrior_red/attack1_down")) {
+    return false;
+  }
+  if (!assets_manager.RegisterAnimation(
+          CBaseAnimation(
+              assets_manager.GetTexture("textures/warriors/warrior_red"),
+              SDL_Rect{0, 192 * 5, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
+          "animations/warriors/warrior_red/attack2_down")) {
+    return false;
+  }
+  if (!assets_manager.RegisterAnimation(
+          CBaseAnimation(
+              assets_manager.GetTexture("textures/warriors/warrior_red"),
+              SDL_Rect{0, 192 * 6, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
+          "animations/warriors/warrior_red/attack1_up")) {
+    return false;
+  }
+  if (!assets_manager.RegisterAnimation(
+          CBaseAnimation(
+              assets_manager.GetTexture("textures/warriors/warrior_red"),
+              SDL_Rect{0, 0, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
+          "animations/warriors/warrior_red/attack2_up")) {
+    return false;
+  }
+
   return true;
 }
 
@@ -218,8 +283,21 @@ void CApp::OnEvent(SDL_Event* event) {
     return;
   }
   if (event->type == SDL_KEYDOWN) {
-    entity_list.GetHead()->entity->PlayAnimation(assets_manager.GetAnimation(
-        "animations/warriors/warrior_blue/attack2_down"));
+    if (event->key.keysym.sym == SDLK_SPACE) {
+      g_turnmanager.ShiftTurn();
+
+      if (g_current_action == ActionType::MOVE) {
+        std::vector<PosType>* tmp_path = FindPath(
+            *g_current_executor->GetPos(),
+            GetTilePos(event_manager.current_hover->GetTile(), g_current_room));
+
+        if (!tmp_path) {
+          g_current_path.clear();
+        } else {
+          g_current_path.assign(tmp_path->begin(), tmp_path->end());
+        }
+      }
+    }
   }
   if (event->type == SDL_MOUSEMOTION) {
     int x = event->motion.x, y = event->motion.y;
@@ -243,16 +321,17 @@ void CApp::OnEvent(SDL_Event* event) {
       cur = cur->next;
     }
 
-    if (cur != nullptr)  {
-        event_manager.current_hover = cur->event_listener;
+    if (cur != nullptr) {
+      event_manager.current_hover = cur->event_listener;
     } else if (event_manager.current_hover == nullptr) {
-      event_manager.current_hover = event_manager.GetTileHoverListeners().GetHead()->event_listener;
+      event_manager.current_hover =
+          event_manager.GetTileHoverListeners().GetHead()->event_listener;
     }
 
     if (g_current_action == ActionType::MOVE) {
-      std::vector<PosType>* tmp_path =
-          FindPath(*g_current_executor->GetPos(),
-                   GetTilePos(event_manager.current_hover->GetTile(), g_current_room));
+      std::vector<PosType>* tmp_path = FindPath(
+          *g_current_executor->GetPos(),
+          GetTilePos(event_manager.current_hover->GetTile(), g_current_room));
 
       if (!tmp_path) {
         g_current_path.clear();
@@ -291,9 +370,9 @@ void CApp::OnLoop() {
   if (g_current_action == ActionType::WAIT && !g_move_in_process) {
     g_current_action = ActionType::MOVE;
     if (g_current_path.empty()) {
-      std::vector<PosType>* tmp_path =
-          FindPath(*g_current_executor->GetPos(),
-                   GetTilePos(event_manager.current_hover->GetTile(), g_current_room));
+      std::vector<PosType>* tmp_path = FindPath(
+          *g_current_executor->GetPos(),
+          GetTilePos(event_manager.current_hover->GetTile(), g_current_room));
 
       if (!tmp_path) {
         g_current_path.clear();
@@ -371,6 +450,9 @@ int CApp::OnExecute() {
 
   entity_list.Insert(new CBasePlayer(
       assets_manager.GetAnimation("animations/warriors/warrior_blue/idle")));
+
+  entity_list.Insert(new CBasePlayer(
+      assets_manager.GetAnimation("animations/warriors/warrior_red/idle")));
 
   g_turnmanager.ShiftTurn();
   g_turnmanager.ResetTurns();

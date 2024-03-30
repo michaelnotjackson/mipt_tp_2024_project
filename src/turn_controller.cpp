@@ -12,12 +12,13 @@ void CTurnController::ShiftTurn(int num) {
     executor = entity_list.GetHead();
   }
 
-  while (num--) {
+  while (num) {
     if (executor->next == nullptr) {
       executor = entity_list.GetHead();
-      continue;
+    } else {
+      executor = executor->next;
     }
-    executor = executor->next;
+    num -= GetPropValue<int>(executor->entity->props, "i_team") != 0;
   }
 
   g_current_executor = executor->entity;
