@@ -30,6 +30,7 @@ add_executable(${PROJECT_NAME}
     src/interface/CApp.cpp
     src/interface/renderer.cpp
     src/animation.cpp
+    include/entitylist.h
     src/entitylist.cpp
     src/assets_storage.cpp
     src/globals.cpp
@@ -41,7 +42,7 @@ add_executable(${PROJECT_NAME}
     src/playable_classes.cpp
     src/playable_races.cpp
     src/dice_roller.cpp
-)
+    src/turn_controller.cpp)
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2_image)

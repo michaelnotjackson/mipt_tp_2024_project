@@ -8,7 +8,7 @@
 ## Сборка проекта
 Чтобы скопировать и запустить проект воспользуйтесь следующими командами:
 ```shell
-git clone -b dev --recurse-submodules -j8 git@gitlab.akhcheck.ru:sheiko.mikhail/tp_course_spring24_project.git
+git clone -b checkpoint_1 --recurse-submodules -j8 git@gitlab.akhcheck.ru:sheiko.mikhail/tp_course_spring24_project.git
 cd tp_course_spring24_project
 mkdir build
 cd build
@@ -19,9 +19,9 @@ make
 ## [TODO List](https://docs.google.com/spreadsheets/d/1gpTZHRZXcu_5gRCPRNt9WfnoYGGq2b76oUtnzlpWW3I/edit?hl=ru#gid=0)
 
 ## Описание архитектуры проекта
-В [assets](https://gitlab.akhcheck.ru/sheiko.mikhail/tp_course_spring24_project/-/tree/dev/assets?ref_type=heads) находятся ресурсы игры.
+В [assets](https://gitlab.akhcheck.ru/sheiko.mikhail/tp_course_spring24_project/-/tree/checkpoint_1/assets?ref_type=heads) находятся ресурсы игры.
 
-В [rooms](https://gitlab.akhcheck.ru/sheiko.mikhail/tp_course_spring24_project/-/tree/dev/rooms?ref_type=heads) находятся сохранённые комнаты.
+В [rooms](https://gitlab.akhcheck.ru/sheiko.mikhail/tp_course_spring24_project/-/tree/checkpoint_1/rooms?ref_type=heads) находятся сохранённые комнаты.
 
 **CBaseAnimation** содержит в себе информацию об анимациию (кол-во кадров, длительность кадра и т.д.).
 
