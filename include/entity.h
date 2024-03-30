@@ -11,13 +11,14 @@
 #include <utility>
 
 class IBaseEntity {
- private:
-  CObjProperties props;
+ protected:
   PosType pos; // Position on the map!
   CBaseAnimation default_animation;
 
  public:
   CBaseAnimation animation;
+  CObjProperties props;
+  int characteristics[6];
 
  public:
   virtual CObjProperties* GetProperties();
@@ -30,8 +31,7 @@ class IBaseEntity {
   virtual void PlayAnimation(const CBaseAnimation& new_animation);
 
  public:
-  explicit IBaseEntity(CBaseAnimation& animation)
-      : default_animation(animation), animation(animation) {}
+  explicit IBaseEntity(CBaseAnimation& animation);
 
   virtual ~IBaseEntity() = default;
 };

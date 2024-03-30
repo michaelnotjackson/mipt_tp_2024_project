@@ -18,11 +18,11 @@ enum class ObstacleType {
 enum class CharacteristicType { STR, DEX, CON, INT, WIS, CHR };
 
 enum class RaceType {
-
+  human
 };
 
 enum class ClassType {
-
+  fighter
 };
 
 enum class EntityState {

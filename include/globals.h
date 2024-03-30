@@ -4,12 +4,10 @@
 #include <room.h>
 #include <turn_controller.h>
 
-enum class ActionType {
-  MOVE,
-  ATTACK,
-  CAST,
-  WAIT
-};
+#include <chrono>
+#include <random>
+
+enum class ActionType { MOVE, ATTACK, CAST, WAIT };
 
 extern Room g_current_room;
 
@@ -25,3 +23,5 @@ extern int SCREEN_HEIGHT;
 extern const int g_move_speed;
 extern bool g_move_in_process;
 extern std::vector<PosType> g_current_path;
+
+extern std::mt19937 g_rng;

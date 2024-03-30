@@ -1,19 +1,16 @@
 #pragma once
 
+#include <types.h>
+
 #include <map>
 #include <string>
+#include <variant>
 
-enum class PropValueType { INT, STRING };
+typedef std::variant<int, std::string, CharacteristicType, std::vector<CharacteristicType>, std::vector<int>> CProp;
 
-struct CProp {
-  PropValueType value_type;
-  void* value;
-};
+typedef std::map<std::string, CProp> CObjProperties;
 
-class CObjProperties {
- private:
-  std::map<std::string, CProp> props;
-
- public:
-  CProp* GetProp(const std::string& name);
-};
+template <typename T>
+T& GetPropValue(CObjProperties& properties_obj, const std::string& name) {
+  return get<T>(properties_obj[name]);
+}

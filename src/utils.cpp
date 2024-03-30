@@ -26,8 +26,12 @@ PosType EntityPosRoomToScreen(IBaseEntity* entity) {
 SDL_Point PointRoomToScreenTileCenter(PosType room_point) {
   SDL_Point screen_point;
 
-  screen_point.x = g_current_room.field[0][0]->GetTexture().frame.w * room_point.x + g_current_room.field[0][0]->GetTexture().frame.w / 2;
-  screen_point.y = g_current_room.field[0][0]->GetTexture().frame.h * room_point.y + g_current_room.field[0][0]->GetTexture().frame.h / 2;
+  screen_point.x =
+      g_current_room.field[0][0]->GetTexture().frame.w * room_point.x +
+      g_current_room.field[0][0]->GetTexture().frame.w / 2;
+  screen_point.y =
+      g_current_room.field[0][0]->GetTexture().frame.h * room_point.y +
+      g_current_room.field[0][0]->GetTexture().frame.h / 2;
 
   return screen_point;
 }
@@ -110,7 +114,8 @@ std::vector<PosType>* FindPath(PosType start, PosType end, const Room& room) {
       int new_cost =
           cost[current.y][current.x] +
           static_cast<int>(
-              g_current_room.field[next.y][next.x]->GetObstacleType()) + (dx[i] != 0 && dy[i] != 0);
+              g_current_room.field[next.y][next.x]->GetObstacleType()) +
+          (dx[i] != 0 && dy[i] != 0);
 
       if (new_cost >= cost[next.y][next.x]) {
         continue;

@@ -13,3 +13,5 @@ int SCREEN_HEIGHT = 640;
 const int g_move_speed = 150;
 bool g_move_in_process = false;
 std::vector<PosType> g_current_path;
+
+std::mt19937 g_rng(std::chrono::high_resolution_clock::now().time_since_epoch().count());
