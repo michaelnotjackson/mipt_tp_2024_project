@@ -1,14 +1,14 @@
-#include <SDL.h>
 #include <assets_storage.h>
 #include <globals.h>
-#include <interface/renderer.h>
 #include <room.h>
 #include <types.h>
+#include <nlohmann/json.hpp>
 
-#include <algorithm>
 #include <fstream>
 #include <utility>
 #include <vector>
+#include <iostream>
+
 
 int Room::GetWidth() { return this->width; }
 
@@ -45,29 +45,34 @@ Room::Room(int width, int height)
 CBaseAnimation CTile::GetTexture() const { return this->animation; }
 
 void Room::SetField() {
-  std::ifstream in;
-  in.open("rooms/room.txt");
+  using json = nlohmann::json;
+  std::ifstream in("rooms/room.json");
+  json file = json::parse(in);
+  std::vector<std::vector<int>> numbers = file["numbers"];
   int tmp;
   auto grass = assets_manager.GetAnimation("animations/terrain/grass");
   auto sand = assets_manager.GetAnimation("animations/terrain/sand");
   auto wall = assets_manager.GetAnimation("animations/terrain/wall");
-  for (int i = 0; i < SCREEN_WIDTH; i += 64) {
-    for (int j = 0; j < SCREEN_HEIGHT; j += 64) {
-      in >> tmp;
-      if (tmp == 1) {
-        field[i / 64][j / 64] = new CTile(grass, ObstacleType::NO_OBSTACLES);
-      } else if (tmp == 2) {
-        field[i / 64][j / 64] = new CTile(sand, ObstacleType::NO_OBSTACLES);
-      } else {
-        field[i / 64][j / 64] = new CTile(wall, ObstacleType::WALL);
+  int i = 0;
+  for (const auto& row : numbers) {
+    int j = 0;
+      for (const auto& elem : row) {
+          tmp = static_cast<int>(elem);
+          if (tmp == 1) {
+            field[i][j] = new CTile(grass, ObstacleType::NO_OBSTACLES);
+          } else if (tmp == 2) {
+            field[i][j] = new CTile(sand, ObstacleType::NO_OBSTACLES);
+          } else {
+            field[i][j] = new CTile(wall, ObstacleType::WALL);
+          }
+        j++;
       }
-    }
+      i++;
   }
 }
 
 PosType GetTilePos(const CTile *tile, const Room &room) {
   int y = 0;
-
   for (auto &raw: room.field) {
     auto pos = std::find(raw.begin(), raw.end(), tile);
     if (pos != raw.end()) {
