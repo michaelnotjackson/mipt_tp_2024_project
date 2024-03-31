@@ -2,3 +2,4 @@
 .clang-format
 cmake-build-*
 .DS_Store
+.metadata
