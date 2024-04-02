@@ -22,7 +22,7 @@ file(COPY rooms DESTINATION ${CMAKE_BINARY_DIR})
 include_directories(include/SDL_image/include)
 include_directories(include/SDL/include)
 
-add_library(engine
+add_library(engine STATIC
     src/engine/entity.cpp
     src/engine/room.cpp
     src/engine/equipment.cpp
