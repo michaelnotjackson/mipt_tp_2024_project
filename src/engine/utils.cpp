@@ -71,6 +71,10 @@ int calc_heurest(const PosType& from, const PosType& to) {
 std::vector<PosType>* FindPath(PosType start, PosType end, const Room& room) {
   using namespace FindPathSpace;
 
+  if (room.field[end.y][end.x]->entity_on != nullptr) {
+    return nullptr;
+  }
+
   used.assign(room.field.size(),
               std::vector<bool>(room.field[0].size(), false));
 

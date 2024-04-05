@@ -30,6 +30,7 @@ class IBaseEntity {
   virtual void SetAnimation();
   virtual void PlayAnimation(const CBaseAnimation& new_animation);
 
+
  public:
   explicit IBaseEntity(CBaseAnimation& animation);
 

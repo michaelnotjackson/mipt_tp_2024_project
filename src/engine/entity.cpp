@@ -23,8 +23,10 @@ void MoveExecutor(IBaseEntity* entity, std::vector<PosType>* path) {
 }
 
 void IBaseEntity::MoveBy(std::vector<PosType>* path) {
+  g_current_room.field[this->GetPos()->y][this->GetPos()->x]->entity_on = nullptr;
   std::thread th(MoveExecutor, this, path);
   th.detach();
+  g_current_room.field[path->back().y][path->back().x]->entity_on = this;
 }
 
 void IBaseEntity::SetAnimation(const CBaseAnimation& new_animation) {
