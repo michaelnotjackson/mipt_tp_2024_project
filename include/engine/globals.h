@@ -7,7 +7,7 @@
 #include "room.h"
 #include "turn_controller.h"
 
-enum class ActionType { MOVE, ATTACK, CAST, WAIT };
+enum class ActionType { FREE, BUSY };
 
 extern Room g_current_room;
 

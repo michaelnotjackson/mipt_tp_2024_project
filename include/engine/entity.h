@@ -21,15 +21,17 @@ class IBaseEntity {
   int characteristics[6];
 
  public:
+  void Attack(PosType pos);
+
   virtual CObjProperties* GetProperties();
 
   virtual PosType* GetPos();
   virtual void MoveBy(std::vector<PosType>* path);
+  virtual void MoveBy(const std::shared_ptr<std::vector<PosType>>& path);
 
   virtual void SetAnimation(const CBaseAnimation& new_animation);
   virtual void SetAnimation();
   virtual void PlayAnimation(const CBaseAnimation& new_animation);
-
 
  public:
   explicit IBaseEntity(CBaseAnimation& animation);

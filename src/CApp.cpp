@@ -1,5 +1,7 @@
 #include "include/CApp.h"
 
+#include <thread>
+
 #include <engine/engine_init.h>
 
 #include "include/SDL_image/include/SDL_image.h"
@@ -11,6 +13,17 @@
 #include "include/engine/player.h"
 #include "include/engine/renderer.h"
 #include "include/engine/utils.h"
+
+void RecalculatePath() {
+  std::vector<PosType>* tmp_path = FindPath(
+      *g_current_executor->GetPos(),
+      GetTilePos(event_manager.current_hover->GetTile(), g_current_room));
+  if (!tmp_path) {
+    g_current_path.clear();
+  } else {
+    g_current_path.assign(tmp_path->begin(), tmp_path->end());
+  }
+}
 
 CApp::CApp() : is_running(true), window(nullptr), renderer(nullptr) {}
 
@@ -85,7 +98,7 @@ void CApp::OnEvent(SDL_Event* event) {
     if (event->key.keysym.sym == SDLK_SPACE) {
       g_turnmanager.ShiftTurn();
 
-      if (g_current_action == ActionType::MOVE) {
+      if (g_current_action == ActionType::FREE) {
         std::vector<PosType>* tmp_path = FindPath(
             *g_current_executor->GetPos(),
             GetTilePos(event_manager.current_hover->GetTile(), g_current_room));
@@ -127,22 +140,14 @@ void CApp::OnEvent(SDL_Event* event) {
           event_manager.GetTileHoverListeners().GetHead()->event_listener;
     }
 
-    if (g_current_action == ActionType::MOVE) {
-      std::vector<PosType>* tmp_path = FindPath(
-          *g_current_executor->GetPos(),
-          GetTilePos(event_manager.current_hover->GetTile(), g_current_room));
-
-      if (!tmp_path) {
-        g_current_path.clear();
-      } else {
-        g_current_path.assign(tmp_path->begin(), tmp_path->end());
-      }
+    if (g_current_action == ActionType::FREE) {
+      RecalculatePath();
     }
   }
 MOUSEMOTIONEND:
   if (event->type == SDL_MOUSEBUTTONDOWN) {
     int x = event->button.x, y = event->button.y;
-    if (g_current_action == ActionType::WAIT) {
+    if (g_current_action == ActionType::BUSY) {
       goto MOUSEBUTTONDOWNEND;
     }
 
@@ -156,6 +161,25 @@ MOUSEMOTIONEND:
         cur = cur->next;
       }
     }
+    if (event->button.button == SDL_BUTTON_RIGHT) {
+      if (g_current_path.size() == 1) {
+        g_current_executor->Attack(g_current_path[g_current_path.size() - 1]);
+        goto MOUSEBUTTONDOWNEND;
+      }
+      if (g_current_path.size() == 0) {
+        goto MOUSEBUTTONDOWNEND;
+      }
+
+      g_current_action = ActionType::BUSY;
+      auto tmp_path = std::make_shared<decltype(g_current_path)>(g_current_path);
+      tmp_path->pop_back();
+
+      if (!tmp_path->empty()) {
+        g_current_executor->MoveBy(tmp_path);
+      }
+      g_current_executor->Attack(g_current_path[g_current_path.size() - 1]);
+      RecalculatePath();
+    }
   }
 MOUSEBUTTONDOWNEND:;
 }
@@ -164,10 +188,10 @@ void CApp::OnCleanup() { SDL_Quit(); }
 
 void CApp::OnLoop() {
   if (g_move_in_process) {
-    g_current_action = ActionType::WAIT;
+    g_current_action = ActionType::BUSY;
   }
-  if (g_current_action == ActionType::WAIT && !g_move_in_process) {
-    g_current_action = ActionType::MOVE;
+  if (g_current_action == ActionType::BUSY && !g_move_in_process) {
+    g_current_action = ActionType::FREE;
     if (g_current_path.empty()) {
       std::vector<PosType>* tmp_path = FindPath(
           *g_current_executor->GetPos(),
@@ -208,7 +232,7 @@ void DrawRoom(const Room& room_a) {
 }
 
 void DrawPath() {
-  if (g_current_action != ActionType::MOVE) {
+  if (g_current_action != ActionType::FREE) {
     return;
   }
 
@@ -240,6 +264,12 @@ void CApp::OnRender() {
   SDL_RenderPresent(renderer);
 }
 
+void CApp::RenderLoop() {
+  while(is_running) {
+    OnRender();
+  }
+}
+
 int CApp::OnExecute() {
   if (!OnInit()) {
     return -1;
@@ -256,17 +286,19 @@ int CApp::OnExecute() {
   g_turnmanager.ShiftTurn();
   g_turnmanager.ResetTurns();
 
+  std::thread render_thread(&CApp::RenderLoop, this);
+
   while (is_running) {
     while (SDL_PollEvent(&event)) {
       OnEvent(&event);
     }
 
     OnLoop();
-    OnRender();
 
     SDL_Delay(16);
   }
 
+  render_thread.join();
   OnCleanup();
 
   return 0;
