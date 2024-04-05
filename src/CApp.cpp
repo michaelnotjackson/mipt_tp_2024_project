@@ -91,6 +91,9 @@ void CApp::OnEvent(SDL_Event* event) {
       g_turnmanager.ShiftTurn();
 
       if (g_current_action == ActionType::MOVE) {
+        if (event_manager.current_hover == nullptr) {
+          event_manager.current_hover = event_manager.GetTileHoverListeners().GetHead()->event_listener;
+        }
         std::vector<PosType>* tmp_path = FindPath(
             *g_current_executor->GetPos(),
             GetTilePos(event_manager.current_hover->GetTile(), g_current_room));
