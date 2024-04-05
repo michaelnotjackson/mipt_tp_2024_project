@@ -138,7 +138,6 @@ void CheckBorder() {
           s[3] = '0';
         }
       }
-      std::cout << s << "\n";
       g_dungeon[i][j] = file[s][0];
     }
   }
