@@ -5,6 +5,9 @@
 
 #include "entity.h"
 #include "types.h"
+#include "include/nlohmann/json.hpp"
+#include <queue>
+#include "include/engine/globals.h"
 
 class CTile {
  private:
@@ -52,9 +55,13 @@ class Room {
 
   const FieldType &GetField() const;
 
-  void SetField();
-
-  void DrawField();
+  void SetField(int number);
 };
 
 PosType GetTilePos(const CTile *tile, const Room &room);
+
+void CreateDung(std::vector<std::vector<int>>& dungeon);
+
+void CheckBorder();
+
+void AddRoomToDung(const std::string& s, std::queue<std::pair<int, int>>& border, int& number, int x, int y);

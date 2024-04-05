@@ -46,7 +46,8 @@ bool CApp::OnInit() {
   EngineInitTextures();
   EngineInitAnimations();
 
-  room.SetField();
+  CreateDung(g_dungeon);
+  room.SetField(g_dungeon[7][7]);
   g_current_room = room;
 
   CTile* tile = room.GetField()[0][0];
@@ -77,6 +78,10 @@ bool CheckRect(const SDL_Rect& rect, int x, int y) {
 }
 
 void CApp::OnEvent(SDL_Event* event) {
+  using json = nlohmann::json;
+  std::ifstream in("rooms/room.json");
+  json file = json::parse(in);
+
   if (event->type == SDL_QUIT) {
     is_running = false;
     return;
@@ -97,6 +102,31 @@ void CApp::OnEvent(SDL_Event* event) {
         }
       }
     }
+    std::string room_1 = "room_" + std::to_string(g_dungeon[g_current_room_1.first][g_current_room_1.second]);
+    if (event->key.keysym.sym == SDLK_UP && file[room_1]["doors"][0] == 1 && g_current_room_1.first - 1 >= 0) {
+      g_current_room_1.first--;
+      room.SetField(g_dungeon[g_current_room_1.first][g_current_room_1.second]);
+      g_current_room = room;
+    }
+
+    if (event->key.keysym.sym == SDLK_DOWN && file[room_1]["doors"][2] == 1 && g_current_room_1.first + 1 < g_dungeon.size()) {
+      g_current_room_1.first++;
+      room.SetField(g_dungeon[g_current_room_1.first][g_current_room_1.second]);
+      g_current_room = room;
+    }
+
+    if (event->key.keysym.sym == SDLK_RIGHT && file[room_1]["doors"][1] == 1 && g_current_room_1.second + 1 < g_dungeon[0].size()) {
+      g_current_room_1.second++;
+      room.SetField(g_dungeon[g_current_room_1.first][g_current_room_1.second]);
+      g_current_room = room;
+    }
+
+    if (event->key.keysym.sym == SDLK_LEFT && file[room_1]["doors"][3] == 1 && g_current_room_1.second - 1 >= 0) {
+      g_current_room_1.second--;
+      room.SetField(g_dungeon[g_current_room_1.first][g_current_room_1.second]);
+      g_current_room = room;
+    }
+
   }
   if (event->type == SDL_MOUSEMOTION) {
     int x = event->motion.x, y = event->motion.y;

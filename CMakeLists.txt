@@ -23,28 +23,28 @@ include_directories(include/SDL_image/include)
 include_directories(include/SDL/include)
 
 add_library(engine STATIC
-    src/engine/entity.cpp
-    src/engine/room.cpp
-    src/engine/equipment.cpp
-    src/engine/renderer.cpp
-    src/engine/animation.cpp
-    src/engine/entitylist.cpp
-    src/engine/assets_storage.cpp
-    src/engine/globals.cpp
-    src/engine/event_storage.cpp
-    src/engine/mouse_eventlisteners.cpp
-    src/engine/utils.cpp
-    src/engine/turn_controller.cpp
-    src/engine/player.cpp
-    src/engine/playable_classes.cpp
-    src/engine/playable_races.cpp
-    src/engine/dice_roller.cpp
-    src/engine/engine_init.cpp
+        src/engine/room.cpp
+        src/engine/entity.cpp
+        src/engine/equipment.cpp
+        src/engine/renderer.cpp
+        src/engine/animation.cpp
+        src/engine/entitylist.cpp
+        src/engine/assets_storage.cpp
+        src/engine/globals.cpp
+        src/engine/event_storage.cpp
+        src/engine/mouse_eventlisteners.cpp
+        src/engine/utils.cpp
+        src/engine/turn_controller.cpp
+        src/engine/player.cpp
+        src/engine/playable_classes.cpp
+        src/engine/playable_races.cpp
+        src/engine/dice_roller.cpp
+        src/engine/engine_init.cpp
 )
 
 add_executable(client
-    src/main.cpp
-    src/CApp.cpp
+        src/main.cpp
+        src/CApp.cpp
 
 )
 

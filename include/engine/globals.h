@@ -4,12 +4,16 @@
 #include <random>
 
 #include "entity.h"
-#include "room.h"
 #include "turn_controller.h"
 
 enum class ActionType { MOVE, ATTACK, CAST, WAIT };
 
+class Room;
+
 extern Room g_current_room;
+extern std::vector<std::vector<int>> g_dungeon;
+extern std::pair<int, int> g_current_room_1;
+
 
 extern IBaseEntity* g_current_executor;
 

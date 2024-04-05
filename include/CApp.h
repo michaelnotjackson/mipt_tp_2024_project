@@ -1,6 +1,7 @@
 #pragma once
 
 #include "include/SDL/include/SDL.h"
+#include <fstream>
 
 class CApp {
  private:

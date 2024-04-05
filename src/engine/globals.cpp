@@ -1,5 +1,7 @@
 #include "include/engine/globals.h"
 
+#include <engine/room.h>
+
 Room g_current_room;
 
 IBaseEntity *g_current_executor;
@@ -7,6 +9,8 @@ CTurnController g_turnmanager;
 
 ActionType g_current_action;
 
+std::vector<std::vector<int>> g_dungeon(15, std::vector(15, 0));
+std::pair<int, int> g_current_room_1 = std::pair(7, 7);
 int SCREEN_WIDTH = 640;
 int SCREEN_HEIGHT = 640;
 
