@@ -5,6 +5,7 @@
 #include <thread>
 
 #include "include/engine/globals.h"
+#include "include/engine/utils.h"
 
 IBaseEntity::IBaseEntity(CBaseAnimation& animation)
     : default_animation(animation), animation(animation) {}
@@ -15,6 +16,8 @@ PosType* IBaseEntity::GetPos() { return &this->pos; }
 
 void MoveExecutor(IBaseEntity* entity, std::vector<PosType>* path) {
   g_move_in_process = true;
+  g_current_room.field[entity->GetPos()->y][entity->GetPos()->x]->entity_on =
+      nullptr;
   if (!path) {
     return;
   }
@@ -23,12 +26,17 @@ void MoveExecutor(IBaseEntity* entity, std::vector<PosType>* path) {
     SDL_Delay(g_move_speed);
   }
   path->clear();
+  g_current_room.field[entity->GetPos()->y][entity->GetPos()->x]->entity_on =
+      entity;
+  RecalculatePath();
   g_move_in_process = false;
 }
 
 void MoveExecutorShared(IBaseEntity* entity,
                         const std::shared_ptr<std::vector<PosType>>& path) {
   g_move_in_process = true;
+  g_current_room.field[entity->GetPos()->y][entity->GetPos()->x]->entity_on =
+      nullptr;
   if (path.get() == nullptr) {
     return;
   }
@@ -37,22 +45,19 @@ void MoveExecutorShared(IBaseEntity* entity,
     SDL_Delay(g_move_speed);
   }
   path->clear();
+  g_current_room.field[entity->GetPos()->y][entity->GetPos()->x]->entity_on =
+      entity;
+  RecalculatePath();
   g_move_in_process = false;
 }
 
 void IBaseEntity::MoveBy(std::vector<PosType>* path) {
-  g_current_room.field[this->GetPos()->y][this->GetPos()->x]->entity_on =
-      nullptr;
   std::thread th(MoveExecutor, this, path);
   th.detach();
-  g_current_room.field[path->back().y][path->back().x]->entity_on = this;
 }
 void IBaseEntity::MoveBy(const std::shared_ptr<std::vector<PosType>>& path) {
-  g_current_room.field[this->GetPos()->y][this->GetPos()->x]->entity_on =
-      nullptr;
   std::thread th(MoveExecutorShared, this, path);
   th.detach();
-  g_current_room.field[path->back().y][path->back().x]->entity_on = this;
 }
 
 void IBaseEntity::SetAnimation(const CBaseAnimation& new_animation) {
@@ -84,13 +89,20 @@ void IBaseEntity::PlayAnimation(const CBaseAnimation& new_animation) {
   th.detach();
 }
 
-void IBaseEntity::Attack(PosType enemy_pos) {
+void AttackExecutor(PosType enemy_pos) {
+  while (*g_current_executor->GetPos() != g_current_path.back()) {
+  }
   if (g_current_room.field[enemy_pos.y][enemy_pos.x]->entity_on != nullptr) {
     g_current_room.field[enemy_pos.y][enemy_pos.x]->entity_on->PlayAnimation(
         assets_manager.GetAnimation(
             "animations/warriors/warrior_blue/attack2_right"));
-    PlayAnimation(assets_manager.GetAnimation(
+    g_current_executor->PlayAnimation(assets_manager.GetAnimation(
         "animations/warriors/warrior_blue/attack2_right"));
   }
   g_current_action = ActionType::FREE;
+}
+
+void IBaseEntity::Attack(PosType enemy_pos) {
+  std::thread th(AttackExecutor, enemy_pos);
+  th.detach();
 }

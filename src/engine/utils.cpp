@@ -4,7 +4,8 @@
 #include <queue>
 #include <vector>
 
-#include "include/engine/globals.h"
+#include "include/engine/event_storage.h"
+#include "include/engine/mouse_eventlisteners.h"
 
 PosType EntityPosRoomToScreen(IBaseEntity* entity) {
   PosType map_pos = *entity->GetPos();
@@ -42,7 +43,7 @@ std::vector<std::vector<bool>> used, in_queue;
 std::vector<std::vector<int>> cost;
 std::vector<std::vector<PosType>> parent;
 
-std::vector<PosType>* RecursePath(PosType start, PosType end) {
+std::vector<PosType>* RecursePath(PosType start, PosType end, bool f) {
   auto* ret = new std::vector<PosType>();
 
   while (end != start) {
@@ -51,6 +52,10 @@ std::vector<PosType>* RecursePath(PosType start, PosType end) {
   }
 
   std::reverse(ret->begin(), ret->end());
+
+  if (f) {
+    ret->pop_back();
+  }
 
   return ret;
 }
@@ -69,11 +74,11 @@ int calc_heurest(const PosType& from, const PosType& to) {
 }  // namespace FindPathSpace
 
 std::vector<PosType>* FindPath(PosType start, PosType end, const Room& room) {
-  using namespace FindPathSpace;
+  if (start == end) {
+    return nullptr;
+  }
 
-//  if (room.field[end.y][end.x]->entity_on != nullptr) {
-//    return nullptr;
-//  }
+  using namespace FindPathSpace;
 
   used.assign(room.field.size(),
               std::vector<bool>(room.field[0].size(), false));
@@ -105,7 +110,11 @@ std::vector<PosType>* FindPath(PosType start, PosType end, const Room& room) {
     used[current.y][current.x] = true;
 
     if (current == end) {
-      return RecursePath(start, end);
+      bool f = false;
+      if (room.field[end.y][end.x]->entity_on != nullptr) {
+        f = true;
+      }
+      return RecursePath(start, end, f);
     }
 
     for (int i = 0; i < 8; ++i) {
@@ -138,4 +147,14 @@ std::vector<PosType>* FindPath(PosType start, PosType end, const Room& room) {
   }
 
   return nullptr;
+}
+void RecalculatePath() {
+  std::vector<PosType>* tmp_path = FindPath(
+      *g_current_executor->GetPos(),
+      GetTilePos(event_manager.current_hover->GetTile(), g_current_room));
+  if (tmp_path == nullptr || tmp_path->size() == 0) {
+    g_current_path.clear();
+  } else {
+    g_current_path.assign(tmp_path->begin(), tmp_path->end());
+  }
 }

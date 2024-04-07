@@ -14,17 +14,6 @@
 #include "include/engine/renderer.h"
 #include "include/engine/utils.h"
 
-void RecalculatePath() {
-  std::vector<PosType>* tmp_path = FindPath(
-      *g_current_executor->GetPos(),
-      GetTilePos(event_manager.current_hover->GetTile(), g_current_room));
-  if (!tmp_path) {
-    g_current_path.clear();
-  } else {
-    g_current_path.assign(tmp_path->begin(), tmp_path->end());
-  }
-}
-
 CApp::CApp() : is_running(true), window(nullptr), renderer(nullptr) {}
 
 Room room(SCREEN_WIDTH, SCREEN_HEIGHT);  // NOLINT
@@ -96,6 +85,9 @@ void CApp::OnEvent(SDL_Event* event) {
   }
   if (event->type == SDL_KEYDOWN) {
     if (event->key.keysym.sym == SDLK_SPACE) {
+      if (g_current_action == ActionType::BUSY) {
+        goto KEYDOWNEND;
+      }
       g_turnmanager.ShiftTurn();
 
       if (g_current_action == ActionType::FREE) {
@@ -111,6 +103,7 @@ void CApp::OnEvent(SDL_Event* event) {
       }
     }
   }
+KEYDOWNEND:;
   if (event->type == SDL_MOUSEMOTION) {
     int x = event->motion.x, y = event->motion.y;
 
@@ -162,19 +155,13 @@ MOUSEMOTIONEND:
       }
     }
     if (event->button.button == SDL_BUTTON_RIGHT) {
-      if (g_current_path.empty()) {
+      auto enemy_pos = GetTilePos(event_manager.current_hover->GetTile(), g_current_room);
+      if (g_current_room.field[enemy_pos.y][enemy_pos.x]->entity_on == nullptr) {
         goto MOUSEBUTTONDOWNEND;
       }
       g_current_action = ActionType::BUSY;
-      auto tmp_path =
-          std::make_shared<decltype(g_current_path)>(g_current_path);
-      tmp_path->pop_back();
-
-      if (!tmp_path->empty()) {
-        g_current_executor->MoveBy(tmp_path);
-      }
-      g_current_executor->Attack(g_current_path[g_current_path.size() - 2]);
-      RecalculatePath();
+      g_current_executor->MoveBy(&g_current_path);
+      g_current_executor->Attack(enemy_pos);
     }
   }
 MOUSEBUTTONDOWNEND:;
@@ -273,6 +260,8 @@ int CApp::OnExecute() {
 
   SDL_Event event;
 
+  entity_list.Insert(new CBasePlayer(
+      assets_manager.GetAnimation("animations/warriors/warrior_blue/idle")));
   entity_list.Insert(new CBasePlayer(
       assets_manager.GetAnimation("animations/warriors/warrior_blue/idle")));
 
