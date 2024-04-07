@@ -1,8 +1,8 @@
 #include "include/CApp.h"
 
-#include <thread>
-
 #include <engine/engine_init.h>
+
+#include <thread>
 
 #include "include/SDL_image/include/SDL_image.h"
 #include "include/engine/assets_storage.h"
@@ -162,22 +162,18 @@ MOUSEMOTIONEND:
       }
     }
     if (event->button.button == SDL_BUTTON_RIGHT) {
-      if (g_current_path.size() == 1) {
-        g_current_executor->Attack(g_current_path[g_current_path.size() - 1]);
+      if (g_current_path.empty()) {
         goto MOUSEBUTTONDOWNEND;
       }
-      if (g_current_path.size() == 0) {
-        goto MOUSEBUTTONDOWNEND;
-      }
-
       g_current_action = ActionType::BUSY;
-      auto tmp_path = std::make_shared<decltype(g_current_path)>(g_current_path);
+      auto tmp_path =
+          std::make_shared<decltype(g_current_path)>(g_current_path);
       tmp_path->pop_back();
 
       if (!tmp_path->empty()) {
         g_current_executor->MoveBy(tmp_path);
       }
-      g_current_executor->Attack(g_current_path[g_current_path.size() - 1]);
+      g_current_executor->Attack(g_current_path[g_current_path.size() - 2]);
       RecalculatePath();
     }
   }
@@ -265,7 +261,7 @@ void CApp::OnRender() {
 }
 
 void CApp::RenderLoop() {
-  while(is_running) {
+  while (is_running) {
     OnRender();
   }
 }

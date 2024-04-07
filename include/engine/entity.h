@@ -21,7 +21,7 @@ class IBaseEntity {
   int characteristics[6];
 
  public:
-  void Attack(PosType pos);
+  void Attack(PosType enemy_pos);
 
   virtual CObjProperties* GetProperties();
 
