@@ -5,7 +5,7 @@
 #include "include/SDL_image/include/SDL_image.h"
 #include "include/engine/assets_storage.h"
 #include "include/engine/entitylist.h"
-#include "include/engine/event_storage.h"
+#include "include/engine/event_storage.hpp"
 #include "include/engine/globals.h"
 #include "include/engine/mouse_eventlisteners.h"
 #include "include/engine/player.h"
@@ -50,7 +50,7 @@ bool CApp::OnInit() {
   room.SetField(g_dungeon[7][7]);
   g_current_room = room;
 
-  CTile* tile = room.GetField()[0][0];
+  CTile *tile = room.GetField()[0][0];
   int width = tile->GetTexture().frame.w * tile->GetTexture().scale;   // NOLINT
   int height = tile->GetTexture().frame.h * tile->GetTexture().scale;  // NOLINT
   SDL_Rect rect;
@@ -61,9 +61,9 @@ bool CApp::OnInit() {
       rect.x = j * width;
       rect.y = i * height;
       event_manager.RegisterCTileHoverEventListener(
-          new CTileHoverEventListener(rect, room.GetField()[i][j]));
+          new CTileHoverEventListener(rect, g_current_room.GetField()[i][j]));
       event_manager.RegisterCTileClickEventListener(
-          new CTileClickEventListener(rect, room.GetField()[i][j]));
+          new CTileClickEventListener(rect, g_current_room.GetField()[i][j]));
     }
   }
 
@@ -72,12 +72,32 @@ bool CApp::OnInit() {
   return true;
 }
 
-bool CheckRect(const SDL_Rect& rect, int x, int y) {
+bool CheckRect(const SDL_Rect &rect, int x, int y) {
   return !(x < rect.x || y < rect.y || x > rect.x + rect.w ||
            y > rect.y + rect.h);
 }
 
-void CApp::OnEvent(SDL_Event* event) {
+void UpdateListeners() {
+  CTile *tile = room.GetField()[1][1];
+  int width = tile->GetTexture().frame.w * tile->GetTexture().scale;   // NOLINT
+  int height = tile->GetTexture().frame.h * tile->GetTexture().scale;  // NOLINT
+  SDL_Rect rect;
+  rect.w = width;
+  rect.h = height;
+  event_manager.Clear();
+  for (int i = 0; i < room.GetField().size(); i++) {
+    for (int j = 0; j < room.GetField()[0].size(); j++) {
+      rect.x = j * width;
+      rect.y = i * height;
+      event_manager.RegisterCTileHoverEventListener(
+          new CTileHoverEventListener(rect, g_current_room.GetField()[i][j]));
+      event_manager.RegisterCTileClickEventListener(
+          new CTileClickEventListener(rect, g_current_room.GetField()[i][j]));
+    }
+  }
+}
+
+void CApp::OnEvent(SDL_Event *event) {
   using json = nlohmann::json;
   std::ifstream in("rooms/room.json");
   json file = json::parse(in);
@@ -110,24 +130,30 @@ void CApp::OnEvent(SDL_Event* event) {
       g_current_room_1.first--;
       room.SetField(g_dungeon[g_current_room_1.first][g_current_room_1.second]);
       g_current_room = room;
+      UpdateListeners();
     }
 
-    if (event->key.keysym.sym == SDLK_DOWN && file[room_1]["doors"][2] == 1 && g_current_room_1.first + 1 < g_dungeon.size()) {
+    if (event->key.keysym.sym == SDLK_DOWN && file[room_1]["doors"][2] == 1 &&
+        g_current_room_1.first + 1 < g_dungeon.size()) {
       g_current_room_1.first++;
       room.SetField(g_dungeon[g_current_room_1.first][g_current_room_1.second]);
       g_current_room = room;
+      UpdateListeners();
     }
 
-    if (event->key.keysym.sym == SDLK_RIGHT && file[room_1]["doors"][1] == 1 && g_current_room_1.second + 1 < g_dungeon[0].size()) {
+    if (event->key.keysym.sym == SDLK_RIGHT && file[room_1]["doors"][1] == 1 &&
+        g_current_room_1.second + 1 < g_dungeon[0].size()) {
       g_current_room_1.second++;
       room.SetField(g_dungeon[g_current_room_1.first][g_current_room_1.second]);
       g_current_room = room;
+      UpdateListeners();
     }
 
     if (event->key.keysym.sym == SDLK_LEFT && file[room_1]["doors"][3] == 1 && g_current_room_1.second - 1 >= 0) {
       g_current_room_1.second--;
       room.SetField(g_dungeon[g_current_room_1.first][g_current_room_1.second]);
       g_current_room = room;
+      UpdateListeners();
     }
 
   }
@@ -144,7 +170,7 @@ void CApp::OnEvent(SDL_Event* event) {
       event_manager.current_hover->reset();
     }
 
-    auto* cur = event_manager.GetTileHoverListeners().GetHead();
+    auto *cur = event_manager.GetTileHoverListeners().GetHead();
     while (cur != nullptr) {
       if (CheckRect(cur->event_listener->GetRect(), x, y)) {
         cur->event_listener->notify();
@@ -161,7 +187,7 @@ void CApp::OnEvent(SDL_Event* event) {
     }
 
     if (g_current_action == ActionType::MOVE) {
-      std::vector<PosType>* tmp_path = FindPath(
+      std::vector<PosType> *tmp_path = FindPath(
           *g_current_executor->GetPos(),
           GetTilePos(event_manager.current_hover->GetTile(), g_current_room));
 
@@ -172,7 +198,7 @@ void CApp::OnEvent(SDL_Event* event) {
       }
     }
   }
-MOUSEMOTIONEND:
+   MOUSEMOTIONEND:
   if (event->type == SDL_MOUSEBUTTONDOWN) {
     int x = event->button.x, y = event->button.y;
     if (g_current_action == ActionType::WAIT) {
@@ -180,7 +206,7 @@ MOUSEMOTIONEND:
     }
 
     if (event->button.button == SDL_BUTTON_LEFT) {
-      auto* cur = event_manager.GetTileClickListeners().GetHead();
+      auto *cur = event_manager.GetTileClickListeners().GetHead();
       while (cur != nullptr) {
         if (CheckRect(cur->event_listener->GetRect(), x, y)) {
           cur->event_listener->notify();
@@ -190,7 +216,7 @@ MOUSEMOTIONEND:
       }
     }
   }
-MOUSEBUTTONDOWNEND:;
+   MOUSEBUTTONDOWNEND:;
 }
 
 void CApp::OnCleanup() { SDL_Quit(); }
@@ -202,7 +228,7 @@ void CApp::OnLoop() {
   if (g_current_action == ActionType::WAIT && !g_move_in_process) {
     g_current_action = ActionType::MOVE;
     if (g_current_path.empty()) {
-      std::vector<PosType>* tmp_path = FindPath(
+      std::vector<PosType> *tmp_path = FindPath(
           *g_current_executor->GetPos(),
           GetTilePos(event_manager.current_hover->GetTile(), g_current_room));
 
@@ -216,17 +242,17 @@ void CApp::OnLoop() {
 }
 
 void DrawEntities() {
-  CEntityNode* cur = entity_list.GetHead();
+  CEntityNode *cur = entity_list.GetHead();
 
   while (cur != nullptr) {
-    auto* ent_pos = new PosType(EntityPosRoomToScreen(cur->entity));
+    auto *ent_pos = new PosType(EntityPosRoomToScreen(cur->entity));
     Blit(&cur->entity->animation, ent_pos);
     cur = cur->next;
     delete ent_pos;
   }
 }
 
-void DrawRoom(const Room& room_a) {
+void DrawRoom(const Room &room_a) {
   int width = room_a.field[0][0]->GetTexture().frame.w *  // NOLINT
               room_a.field[0][0]->GetTexture().scale;
   int height = room_a.field[0][0]->GetTexture().frame.h *  // NOLINT
@@ -253,7 +279,7 @@ void DrawPath() {
 
   SDL_Point start = PointRoomToScreenTileCenter(*g_current_executor->GetPos());
 
-  auto* path = new SDL_Point[g_current_path.size() + 1];
+  auto *path = new SDL_Point[g_current_path.size() + 1];
   path[0] = start;
 
   for (int i = 0; i < g_current_path.size(); ++i) {

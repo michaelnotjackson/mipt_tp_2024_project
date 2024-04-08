@@ -29,3 +29,5 @@ class CApp {
 };
 
 extern CApp app;
+
+void UpdateListeners();
