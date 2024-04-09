@@ -97,6 +97,12 @@ void UpdateListeners() {
   }
 }
 
+void SwitchRoom() {
+  room.SetField(g_dungeon[g_current_room_1.first][g_current_room_1.second]);
+  g_current_room = room;
+  UpdateListeners();
+}
+
 void CApp::OnEvent(SDL_Event *event) {
   using json = nlohmann::json;
   std::ifstream in("rooms/room.json");
@@ -114,7 +120,7 @@ void CApp::OnEvent(SDL_Event *event) {
         if (event_manager.current_hover == nullptr) {
           event_manager.current_hover = event_manager.GetTileHoverListeners().GetHead()->event_listener;
         }
-        std::vector<PosType>* tmp_path = FindPath(
+        std::vector<PosType> *tmp_path = FindPath(
             *g_current_executor->GetPos(),
             GetTilePos(event_manager.current_hover->GetTile(), g_current_room));
 
@@ -125,35 +131,40 @@ void CApp::OnEvent(SDL_Event *event) {
         }
       }
     }
+
     std::string room_1 = "room_" + std::to_string(g_dungeon[g_current_room_1.first][g_current_room_1.second]);
     if (event->key.keysym.sym == SDLK_UP && file[room_1]["doors"][0] == 1 && g_current_room_1.first - 1 >= 0) {
+      if (g_current_action == ActionType::WAIT) {
+        goto MOUSEBUTTONDOWNEND;
+      }
       g_current_room_1.first--;
-      room.SetField(g_dungeon[g_current_room_1.first][g_current_room_1.second]);
-      g_current_room = room;
-      UpdateListeners();
+      SwitchRoom();
     }
 
     if (event->key.keysym.sym == SDLK_DOWN && file[room_1]["doors"][2] == 1 &&
         g_current_room_1.first + 1 < g_dungeon.size()) {
+      if (g_current_action == ActionType::WAIT) {
+        goto MOUSEBUTTONDOWNEND;
+      }
       g_current_room_1.first++;
-      room.SetField(g_dungeon[g_current_room_1.first][g_current_room_1.second]);
-      g_current_room = room;
-      UpdateListeners();
+      SwitchRoom();
     }
 
     if (event->key.keysym.sym == SDLK_RIGHT && file[room_1]["doors"][1] == 1 &&
         g_current_room_1.second + 1 < g_dungeon[0].size()) {
+      if (g_current_action == ActionType::WAIT) {
+        goto MOUSEBUTTONDOWNEND;
+      }
       g_current_room_1.second++;
-      room.SetField(g_dungeon[g_current_room_1.first][g_current_room_1.second]);
-      g_current_room = room;
-      UpdateListeners();
+      SwitchRoom();
     }
 
     if (event->key.keysym.sym == SDLK_LEFT && file[room_1]["doors"][3] == 1 && g_current_room_1.second - 1 >= 0) {
+      if (g_current_action == ActionType::WAIT) {
+        goto MOUSEBUTTONDOWNEND;
+      }
       g_current_room_1.second--;
-      room.SetField(g_dungeon[g_current_room_1.first][g_current_room_1.second]);
-      g_current_room = room;
-      UpdateListeners();
+      SwitchRoom();
     }
 
   }
