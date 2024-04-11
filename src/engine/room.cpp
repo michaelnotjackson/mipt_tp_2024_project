@@ -14,9 +14,9 @@ int Room::GetHeight() { return this->height; }
 const FieldType &Room::GetField() const { return this->field; }
 
 CTile::CTile(CBaseAnimation texture, ObstacleType obstacle_type)
-    : animation(texture), obstacle_type(obstacle_type) {};
+    : animation(texture), obstacle_type(obstacle_type), entity_on(nullptr) {};
 
-CTile::CTile() : animation(), obstacle_type(ObstacleType::NO_OBSTACLES) {}
+CTile::CTile() : animation(), obstacle_type(ObstacleType::NO_OBSTACLES), entity_on(nullptr) {}
 
 Room::Room(int width, int height, FieldType field)
 

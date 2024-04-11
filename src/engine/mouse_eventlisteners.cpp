@@ -5,7 +5,7 @@
 #include "include/SDL/include/SDL.h"
 #include "include/engine/assets_storage.h"
 #include "include/engine/entitylist.h"
-#include "include/engine/event_storage.hpp"
+#include "include/engine/event_storage.h"
 #include "include/engine/globals.h"
 #include "include/engine/utils.h"
 

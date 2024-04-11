@@ -13,7 +13,9 @@ class CTile {
  private:
   CBaseAnimation animation;
   ObstacleType obstacle_type;
-  std::set<IBaseEntity *> entities_on;
+
+ public:
+  IBaseEntity* entity_on;
 
  public:
   void SetTexture(CBaseAnimation texture);
@@ -28,9 +30,8 @@ class CTile {
 
   CTile();
 
-  bool operator==(const CTile &pic_1) const = default;
+  bool operator==(const CTile& pic_1) const = default;
 };
-
 
 class Room {
  private:
@@ -43,8 +44,7 @@ class Room {
  public:
   Room(int width, int height, FieldType field);
 
-  Room(int width,
-       int height);
+  Room(int width, int height);
 
   Room() = default;
 
@@ -53,7 +53,7 @@ class Room {
 
   int GetHeight();
 
-  const FieldType &GetField() const;
+  const FieldType& GetField() const;
 
   void SetField(int number);
 };

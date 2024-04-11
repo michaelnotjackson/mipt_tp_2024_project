@@ -2,10 +2,12 @@
 
 #include <engine/engine_init.h>
 
+#include <thread>
+
 #include "include/SDL_image/include/SDL_image.h"
 #include "include/engine/assets_storage.h"
 #include "include/engine/entitylist.h"
-#include "include/engine/event_storage.hpp"
+#include "include/engine/event_storage.h"
 #include "include/engine/globals.h"
 #include "include/engine/mouse_eventlisteners.h"
 #include "include/engine/player.h"
@@ -114,13 +116,13 @@ void CApp::OnEvent(SDL_Event *event) {
   }
   if (event->type == SDL_KEYDOWN) {
     if (event->key.keysym.sym == SDLK_SPACE) {
+      if (g_current_action == ActionType::BUSY) {
+        goto KEYDOWNEND;
+      }
       g_turnmanager.ShiftTurn();
 
-      if (g_current_action == ActionType::MOVE) {
-        if (event_manager.current_hover == nullptr) {
-          event_manager.current_hover = event_manager.GetTileHoverListeners().GetHead()->event_listener;
-        }
-        std::vector<PosType> *tmp_path = FindPath(
+      if (g_current_action == ActionType::FREE) {
+        std::vector<PosType>* tmp_path = FindPath(
             *g_current_executor->GetPos(),
             GetTilePos(event_manager.current_hover->GetTile(), g_current_room));
 
@@ -134,7 +136,7 @@ void CApp::OnEvent(SDL_Event *event) {
 
     std::string room_1 = "room_" + std::to_string(g_dungeon[g_current_room_1.first][g_current_room_1.second]);
     if (event->key.keysym.sym == SDLK_UP && file[room_1]["doors"][0] == 1 && g_current_room_1.first - 1 >= 0) {
-      if (g_current_action == ActionType::WAIT) {
+      if (g_current_action == ActionType::BUSY) {
         goto MOUSEBUTTONDOWNEND;
       }
       g_current_room_1.first--;
@@ -143,7 +145,7 @@ void CApp::OnEvent(SDL_Event *event) {
 
     if (event->key.keysym.sym == SDLK_DOWN && file[room_1]["doors"][2] == 1 &&
         g_current_room_1.first + 1 < g_dungeon.size()) {
-      if (g_current_action == ActionType::WAIT) {
+      if (g_current_action == ActionType::BUSY) {
         goto MOUSEBUTTONDOWNEND;
       }
       g_current_room_1.first++;
@@ -152,7 +154,7 @@ void CApp::OnEvent(SDL_Event *event) {
 
     if (event->key.keysym.sym == SDLK_RIGHT && file[room_1]["doors"][1] == 1 &&
         g_current_room_1.second + 1 < g_dungeon[0].size()) {
-      if (g_current_action == ActionType::WAIT) {
+      if (g_current_action == ActionType::BUSY) {
         goto MOUSEBUTTONDOWNEND;
       }
       g_current_room_1.second++;
@@ -160,7 +162,7 @@ void CApp::OnEvent(SDL_Event *event) {
     }
 
     if (event->key.keysym.sym == SDLK_LEFT && file[room_1]["doors"][3] == 1 && g_current_room_1.second - 1 >= 0) {
-      if (g_current_action == ActionType::WAIT) {
+      if (g_current_action == ActionType::BUSY) {
         goto MOUSEBUTTONDOWNEND;
       }
       g_current_room_1.second--;
@@ -168,6 +170,7 @@ void CApp::OnEvent(SDL_Event *event) {
     }
 
   }
+KEYDOWNEND:;
   if (event->type == SDL_MOUSEMOTION) {
     int x = event->motion.x, y = event->motion.y;
 
@@ -197,22 +200,14 @@ void CApp::OnEvent(SDL_Event *event) {
           event_manager.GetTileHoverListeners().GetHead()->event_listener;
     }
 
-    if (g_current_action == ActionType::MOVE) {
-      std::vector<PosType> *tmp_path = FindPath(
-          *g_current_executor->GetPos(),
-          GetTilePos(event_manager.current_hover->GetTile(), g_current_room));
-
-      if (!tmp_path) {
-        g_current_path.clear();
-      } else {
-        g_current_path.assign(tmp_path->begin(), tmp_path->end());
-      }
+    if (g_current_action == ActionType::FREE) {
+      RecalculatePath();
     }
   }
    MOUSEMOTIONEND:
   if (event->type == SDL_MOUSEBUTTONDOWN) {
     int x = event->button.x, y = event->button.y;
-    if (g_current_action == ActionType::WAIT) {
+    if (g_current_action == ActionType::BUSY) {
       goto MOUSEBUTTONDOWNEND;
     }
 
@@ -226,6 +221,15 @@ void CApp::OnEvent(SDL_Event *event) {
         cur = cur->next;
       }
     }
+    if (event->button.button == SDL_BUTTON_RIGHT) {
+      auto enemy_pos = GetTilePos(event_manager.current_hover->GetTile(), g_current_room);
+      if (g_current_room.field[enemy_pos.y][enemy_pos.x]->entity_on == nullptr) {
+        goto MOUSEBUTTONDOWNEND;
+      }
+      g_current_action = ActionType::BUSY;
+      g_current_executor->MoveBy(&g_current_path);
+      g_current_executor->Attack(enemy_pos);
+    }
   }
    MOUSEBUTTONDOWNEND:;
 }
@@ -234,10 +238,10 @@ void CApp::OnCleanup() { SDL_Quit(); }
 
 void CApp::OnLoop() {
   if (g_move_in_process) {
-    g_current_action = ActionType::WAIT;
+    g_current_action = ActionType::BUSY;
   }
-  if (g_current_action == ActionType::WAIT && !g_move_in_process) {
-    g_current_action = ActionType::MOVE;
+  if (g_current_action == ActionType::BUSY && !g_move_in_process) {
+    g_current_action = ActionType::FREE;
     if (g_current_path.empty()) {
       std::vector<PosType> *tmp_path = FindPath(
           *g_current_executor->GetPos(),
@@ -278,7 +282,7 @@ void DrawRoom(const Room &room_a) {
 }
 
 void DrawPath() {
-  if (g_current_action != ActionType::MOVE) {
+  if (g_current_action != ActionType::FREE) {
     return;
   }
 
@@ -310,6 +314,12 @@ void CApp::OnRender() {
   SDL_RenderPresent(renderer);
 }
 
+void CApp::RenderLoop() {
+  while (is_running) {
+    OnRender();
+  }
+}
+
 int CApp::OnExecute() {
   if (!OnInit()) {
     return -1;
@@ -319,6 +329,8 @@ int CApp::OnExecute() {
 
   entity_list.Insert(new CBasePlayer(
       assets_manager.GetAnimation("animations/warriors/warrior_blue/idle")));
+  entity_list.Insert(new CBasePlayer(
+      assets_manager.GetAnimation("animations/warriors/warrior_blue/idle")));
 
   entity_list.Insert(new CBasePlayer(
       assets_manager.GetAnimation("animations/warriors/warrior_red/idle")));
@@ -326,17 +338,19 @@ int CApp::OnExecute() {
   g_turnmanager.ShiftTurn();
   g_turnmanager.ResetTurns();
 
+  std::thread render_thread(&CApp::RenderLoop, this);
+
   while (is_running) {
     while (SDL_PollEvent(&event)) {
       OnEvent(&event);
     }
 
     OnLoop();
-    OnRender();
 
     SDL_Delay(16);
   }
 
+  render_thread.join();
   OnCleanup();
 
   return 0;

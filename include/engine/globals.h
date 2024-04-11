@@ -6,7 +6,7 @@
 #include "entity.h"
 #include "turn_controller.h"
 
-enum class ActionType { MOVE, ATTACK, CAST, WAIT };
+enum class ActionType { FREE, BUSY };
 
 class Room;
 

@@ -1,4 +1,4 @@
-#include "include/engine/event_storage.hpp"
+#include "include/engine/event_storage.h"
 
 void CEventStorage::RegisterCTileHoverEventListener(
     CTileHoverEventListener* listener) {
