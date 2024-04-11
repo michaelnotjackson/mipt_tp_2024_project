@@ -99,7 +99,7 @@ void AttackExecutor(PosType enemy_pos) {
     g_current_executor->PlayAnimation(assets_manager.GetAnimation(
         "animations/warriors/warrior_blue/attack2_right"));
     std::get<int>(g_current_room.field[enemy_pos.y][enemy_pos.x]
-                      ->entity_on->props["i_health"]) -= 5;
+                      ->entity_on->props["i_health"]) -= 5; // TODO Weapon damage
   }
   g_current_action = ActionType::FREE;
 }
