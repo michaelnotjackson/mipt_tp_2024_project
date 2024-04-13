@@ -17,8 +17,6 @@ class CApp {
   int OnExecute();
 
  public:
-  void RenderLoop();
-
   bool OnInit();
 
   void OnEvent(SDL_Event* event);

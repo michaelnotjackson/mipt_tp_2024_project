@@ -314,12 +314,6 @@ void CApp::OnRender() {
   SDL_RenderPresent(renderer);
 }
 
-void CApp::RenderLoop() {
-  while (is_running) {
-    OnRender();
-  }
-}
-
 int CApp::OnExecute() {
   if (!OnInit()) {
     return -1;
@@ -338,19 +332,17 @@ int CApp::OnExecute() {
   g_turnmanager.ShiftTurn();
   g_turnmanager.ResetTurns();
 
-  std::thread render_thread(&CApp::RenderLoop, this);
-
   while (is_running) {
     while (SDL_PollEvent(&event)) {
       OnEvent(&event);
     }
 
     OnLoop();
+    OnRender();
 
     SDL_Delay(16);
   }
 
-  render_thread.join();
   OnCleanup();
 
   return 0;
