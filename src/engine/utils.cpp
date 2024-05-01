@@ -1,6 +1,7 @@
 #include "include/engine/utils.h"
 
 #include <algorithm>
+#include <iostream>
 #include <queue>
 #include <vector>
 
@@ -40,7 +41,7 @@ SDL_Point PointRoomToScreenTileCenter(PosType room_point) {
 
 namespace FindPathSpace {
 std::vector<std::vector<bool>> used, in_queue;
-std::vector<std::vector<int>> cost;
+std::vector<std::vector<int64_t>> cost;
 std::vector<std::vector<PosType>> parent;
 
 std::vector<PosType>* RecursePath(PosType start, PosType end, bool f) {
@@ -87,14 +88,15 @@ std::vector<PosType>* FindPath(PosType start, PosType end, const Room& room) {
                   std::vector<bool>(room.field[0].size(), false));
   in_queue[start.y][start.x] = true;
 
-  cost.assign(room.field.size(), std::vector<int>(room.field[0].size(), 1e9));
+  cost.assign(room.field.size(),
+              std::vector<int64_t>(room.field[0].size(), 1e10));
   cost[start.y][start.x] = 0;
 
   parent.assign(room.field.size(),
                 std::vector<PosType>(room.field[0].size(), {-1, -1}));
 
-  std::priority_queue<std::pair<PosType, int>,
-                      std::vector<std::pair<PosType, int>>, Cmp>
+  std::priority_queue<std::pair<PosType, int64_t>,
+                      std::vector<std::pair<PosType, int64_t>>, Cmp>
       q;
 
   q.emplace(start, calc_heurest(start, end));
@@ -124,18 +126,33 @@ std::vector<PosType>* FindPath(PosType start, PosType end, const Room& room) {
           next.y < 0 || next.y >= g_current_room.field.size()) {
         continue;
       }
+      if (used[next.y][next.x]) {
+        continue;
+      }
 
-      int new_cost =
-          cost[current.y][current.x] +
+      int obstacle_cost =
           static_cast<int>(
-              g_current_room.field[next.y][next.x]->GetObstacleType()) +
-          (dx[i] != 0 && dy[i] != 0);
+              g_current_room.field[next.y][next.x]->GetObstacleType());
+
+      if (g_current_room.field[next.y][next.x]->entity_on != nullptr &&
+          (next.x != end.x || next.y != end.y)) {
+        if (std::abs(next.x - end.x) <= 1 && std::abs(next.y - end.y) <= 1) {
+          obstacle_cost =
+              std::max(obstacle_cost, static_cast<int>(ObstacleType::WALL));
+        } else {
+          obstacle_cost = std::max(
+              obstacle_cost, static_cast<int>(ObstacleType::HALF_SPEED));
+        }
+      }
+
+      int64_t new_cost = cost[current.y][current.x] + obstacle_cost +
+                         (dx[i] != 0 && dy[i] != 0);
 
       if (new_cost >= cost[next.y][next.x]) {
         continue;
       }
 
-      int priority = new_cost + calc_heurest(next, end);
+      int64_t priority = new_cost + calc_heurest(next, end);
       cost[next.y][next.x] = new_cost;
       parent[next.y][next.x] = current;
 
