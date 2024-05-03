@@ -13,6 +13,7 @@
 #include "include/engine/player.h"
 #include "include/engine/renderer.h"
 #include "include/engine/utils.h"
+#include <iostream>
 
 CApp::CApp() : is_running(true), window(nullptr), renderer(nullptr) {}
 
@@ -49,8 +50,19 @@ bool CApp::OnInit() {
   EngineInitAnimations();
 
   CreateDung(g_dungeon);
-  room.SetField(g_dungeon[7][7]);
+  int x, y;
+  for (int i = 0; i < g_dungeon.size(); i++) {
+    for (int j = 0; j < g_dungeon[0].size(); j++) {
+      if (g_dungeon[i][j] != 0) {
+        x = i;
+        y = j;
+      }
+    }
+  }
+  room.SetField(g_dungeon[x][y]);
   g_current_room = room;
+  g_current_room_coord.first = x;
+  g_current_room_coord.second = y;
 
   CTile *tile = room.GetField()[0][0];
   int width = tile->GetTexture().frame.w * tile->GetTexture().scale;   // NOLINT
@@ -97,18 +109,19 @@ void UpdateListeners() {
           new CTileClickEventListener(rect, g_current_room.GetField()[i][j]));
     }
   }
+  event_manager.current_hover = event_manager.GetTileHoverListeners().GetHead()->event_listener;
 }
 
-void SwitchRoom() {
-  room.SetField(g_dungeon[g_current_room_1.first][g_current_room_1.second]);
+void SwitchRoom(PosType pos) {
+  while (g_move_in_process) {
+  }
+  room.SetField(g_dungeon[g_current_room_coord.first][g_current_room_coord.second]);
   g_current_room = room;
   UpdateListeners();
+  *g_current_executor->GetPos() = pos;
 }
 
 void CApp::OnEvent(SDL_Event *event) {
-  using json = nlohmann::json;
-  std::ifstream in("rooms/room.json");
-  json file = json::parse(in);
 
   if (event->type == SDL_QUIT) {
     is_running = false;
@@ -122,7 +135,7 @@ void CApp::OnEvent(SDL_Event *event) {
       g_turnmanager.ShiftTurn();
 
       if (g_current_action == ActionType::FREE) {
-        std::vector<PosType>* tmp_path = FindPath(
+        std::vector<PosType> *tmp_path = FindPath(
             *g_current_executor->GetPos(),
             GetTilePos(event_manager.current_hover->GetTile(), g_current_room));
 
@@ -134,43 +147,8 @@ void CApp::OnEvent(SDL_Event *event) {
       }
     }
 
-    std::string room_1 = "room_" + std::to_string(g_dungeon[g_current_room_1.first][g_current_room_1.second]);
-    if (event->key.keysym.sym == SDLK_UP && file[room_1]["doors"][0] == 1 && g_current_room_1.first - 1 >= 0) {
-      if (g_current_action == ActionType::BUSY) {
-        goto MOUSEBUTTONDOWNEND;
-      }
-      g_current_room_1.first--;
-      SwitchRoom();
-    }
-
-    if (event->key.keysym.sym == SDLK_DOWN && file[room_1]["doors"][2] == 1 &&
-        g_current_room_1.first + 1 < g_dungeon.size()) {
-      if (g_current_action == ActionType::BUSY) {
-        goto MOUSEBUTTONDOWNEND;
-      }
-      g_current_room_1.first++;
-      SwitchRoom();
-    }
-
-    if (event->key.keysym.sym == SDLK_RIGHT && file[room_1]["doors"][1] == 1 &&
-        g_current_room_1.second + 1 < g_dungeon[0].size()) {
-      if (g_current_action == ActionType::BUSY) {
-        goto MOUSEBUTTONDOWNEND;
-      }
-      g_current_room_1.second++;
-      SwitchRoom();
-    }
-
-    if (event->key.keysym.sym == SDLK_LEFT && file[room_1]["doors"][3] == 1 && g_current_room_1.second - 1 >= 0) {
-      if (g_current_action == ActionType::BUSY) {
-        goto MOUSEBUTTONDOWNEND;
-      }
-      g_current_room_1.second--;
-      SwitchRoom();
-    }
-
   }
-KEYDOWNEND:;
+   KEYDOWNEND:;
   if (event->type == SDL_MOUSEMOTION) {
     int x = event->motion.x, y = event->motion.y;
 
@@ -212,6 +190,7 @@ KEYDOWNEND:;
     }
 
     if (event->button.button == SDL_BUTTON_LEFT) {
+
       auto *cur = event_manager.GetTileClickListeners().GetHead();
       while (cur != nullptr) {
         if (CheckRect(cur->event_listener->GetRect(), x, y)) {
@@ -219,6 +198,50 @@ KEYDOWNEND:;
           break;
         }
         cur = cur->next;
+      }
+
+      auto pos = GetTilePos(event_manager.current_hover->GetTile(), g_current_room);
+      if (g_current_room.field[pos.y][pos.x]->GetObstacleType() == ObstacleType::DOOR) {
+
+        int flag = 0;
+        std::pair<int, int> tmp = g_current_room_coord;
+
+        if (pos.y == 0 && flag == 0) {
+          pos.y = g_current_room.field.size() - 1;
+          g_current_room_coord.first--;
+          flag++;
+        }
+
+        if (pos.y == g_current_room.field.size() - 1 && flag == 0) {
+          pos.y = 0;
+          g_current_room_coord.first++;
+          flag++;
+        }
+
+        if (pos.x == 0 && flag == 0) {
+          pos.x = g_current_room.field[0].size() - 1;
+          g_current_room_coord.second--;
+          flag++;
+        }
+
+        if (pos.x == g_current_room.field[0].size() - 1 && flag == 0) {
+          pos.x = 0;
+          g_current_room_coord.second++;
+          flag++;
+        }
+
+
+        if (g_current_action == ActionType::BUSY) {
+          g_current_room_coord = tmp;
+          goto MOUSEBUTTONDOWNEND;
+        }
+        g_current_room.field[g_current_executor->GetPos()->y][g_current_executor->GetPos()->x]->entity_on =
+            nullptr;
+        g_current_room.field[pos.y][pos.x]->entity_on =
+            g_current_executor;
+        std::thread th(SwitchRoom, pos);
+        th.detach();
+
       }
     }
     if (event->button.button == SDL_BUTTON_RIGHT) {
