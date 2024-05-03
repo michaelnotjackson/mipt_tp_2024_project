@@ -58,13 +58,14 @@ void Room::SetField(int number) {
       if (tmp == 3) {
         field[i][j] = new CTile(wall, ObstacleType::WALL);
       } else {
-        if (i == 0 || i == numbers.size() - 1 || j == 0 || j == numbers[0].size() - 1) {
-          if (tmp == 1) {
-            field[i][j] = new CTile(grass, ObstacleType::DOOR);
-          } else {
-            field[i][j] = new CTile(sand, ObstacleType::DOOR);
-          }
-        } else if (tmp == 1) {
+//        if (i == 0 || i == numbers.size() - 1 || j == 0 || j == numbers[0].size() - 1) {
+//          if (tmp == 1) {
+//            field[i][j] = new CTile(grass, ObstacleType::DOOR);
+//          } else {
+//            field[i][j] = new CTile(sand, ObstacleType::DOOR);
+//          }
+        //} else
+        if (tmp == 1) {
           field[i][j] = new CTile(grass, ObstacleType::NO_OBSTACLES);
         } else if (tmp == 2) {
           field[i][j] = new CTile(sand, ObstacleType::NO_OBSTACLES);

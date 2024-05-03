@@ -112,13 +112,25 @@ void UpdateListeners() {
   event_manager.current_hover = event_manager.GetTileHoverListeners().GetHead()->event_listener;
 }
 
-void SwitchRoom(PosType pos) {
+void SwitchRoom(PosType pos, PosType old_pos) {
   while (g_move_in_process) {
   }
+
+  g_current_room.field[old_pos.y][old_pos.x]->entity_on =
+      nullptr;
+  g_current_room.field[pos.y][pos.x]->entity_on =
+      g_current_executor;
   room.SetField(g_dungeon[g_current_room_coord.first][g_current_room_coord.second]);
+  *g_current_executor->GetPos() = pos;
+
+  for (int i = 0; i < g_current_room.field.size(); i++) {
+    for (int j = 0; j < g_current_room.field[0].size(); j++) {
+      room.field[i][j]->entity_on = g_current_room.field[i][j]->entity_on;
+    }
+  }
+
   g_current_room = room;
   UpdateListeners();
-  *g_current_executor->GetPos() = pos;
 }
 
 void CApp::OnEvent(SDL_Event *event) {
@@ -201,7 +213,8 @@ void CApp::OnEvent(SDL_Event *event) {
       }
 
       auto pos = GetTilePos(event_manager.current_hover->GetTile(), g_current_room);
-      if (g_current_room.field[pos.y][pos.x]->GetObstacleType() == ObstacleType::DOOR) {
+      auto old_pos = pos;
+      if (g_current_room.field[pos.y][pos.x]->GetObstacleType() == ObstacleType::NO_OBSTACLES) {
 
         int flag = 0;
         std::pair<int, int> tmp = g_current_room_coord;
@@ -235,11 +248,8 @@ void CApp::OnEvent(SDL_Event *event) {
           g_current_room_coord = tmp;
           goto MOUSEBUTTONDOWNEND;
         }
-        g_current_room.field[g_current_executor->GetPos()->y][g_current_executor->GetPos()->x]->entity_on =
-            nullptr;
-        g_current_room.field[pos.y][pos.x]->entity_on =
-            g_current_executor;
-        std::thread th(SwitchRoom, pos);
+
+        std::thread th(SwitchRoom, pos, old_pos);
         th.detach();
 
       }
