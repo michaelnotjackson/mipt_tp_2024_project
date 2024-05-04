@@ -15,6 +15,10 @@
 #include "include/engine/utils.h"
 #include <iostream>
 
+using json = nlohmann::json;
+std::ifstream in("rooms/room.json");
+json file = json::parse(in);
+
 CApp::CApp() : is_running(true), window(nullptr), renderer(nullptr) {}
 
 Room room(SCREEN_WIDTH, SCREEN_HEIGHT);  // NOLINT
@@ -112,7 +116,7 @@ void UpdateListeners() {
   event_manager.current_hover = event_manager.GetTileHoverListeners().GetHead()->event_listener;
 }
 
-void SwitchRoom(PosType pos, PosType old_pos) {
+void SwitchRoom(PosType pos, PosType old_pos, int door) {
   while (g_move_in_process) {
   }
 
@@ -120,8 +124,38 @@ void SwitchRoom(PosType pos, PosType old_pos) {
       nullptr;
   g_current_room.field[pos.y][pos.x]->entity_on =
       g_current_executor;
-  room.SetField(g_dungeon[g_current_room_coord.first][g_current_room_coord.second]);
   *g_current_executor->GetPos() = pos;
+  room.SetField(g_dungeon[g_current_room_coord.first][g_current_room_coord.second]);
+
+  std::vector<std::vector<int>> coord_after_switch = file["coord_after_switch"];
+
+  int j = 0;
+
+  for (auto &ent: entity_list) {
+    if (typeid(*ent) == typeid(CBasePlayer)) {
+      g_current_room.field[ent->GetPos()->y][ent->GetPos()->x]->entity_on =
+          nullptr;
+      g_current_room.field[coord_after_switch[door][2 * j]][coord_after_switch[door][2 * j + 1]]->entity_on =
+          ent;
+
+      PosType new_pos(coord_after_switch[door][2 * j + 1], coord_after_switch[door][2 * j]);
+      *ent->GetPos() = new_pos;
+
+      j++;
+    }
+  }
+
+//  for (int i = 0; i < entity_list.ent_count; i++) {
+//    if (typeid(entity_list.GetByIndex(i)) == typeid(CBasePlayer)) {
+//      g_current_room.field[entity_list.GetByIndex(i)->GetPos()->y][entity_list.GetByIndex(i)->GetPos()->x]->entity_on =
+//          nullptr;
+//      g_current_room.field[coord_after_switch[door][2 * i]][coord_after_switch[door][2 * i + 1]]->entity_on =
+//          entity_list.GetByIndex(i);
+//      PosType new_pos(coord_after_switch[door][2 * i], coord_after_switch[door][2 * i + 1]);
+//      *entity_list.GetByIndex(i)->GetPos() = new_pos;
+//    }
+//    j++;
+//  }
 
   for (int i = 0; i < g_current_room.field.size(); i++) {
     for (int j = 0; j < g_current_room.field[0].size(); j++) {
@@ -214,6 +248,7 @@ void CApp::OnEvent(SDL_Event *event) {
 
       auto pos = GetTilePos(event_manager.current_hover->GetTile(), g_current_room);
       auto old_pos = pos;
+      int door = 0;
       if (g_current_room.field[pos.y][pos.x]->GetObstacleType() == ObstacleType::NO_OBSTACLES) {
 
         int flag = 0;
@@ -223,34 +258,39 @@ void CApp::OnEvent(SDL_Event *event) {
           pos.y = g_current_room.field.size() - 1;
           g_current_room_coord.first--;
           flag++;
+          door = 0;
         }
 
         if (pos.y == g_current_room.field.size() - 1 && flag == 0) {
           pos.y = 0;
           g_current_room_coord.first++;
           flag++;
+          door = 2;
         }
 
         if (pos.x == 0 && flag == 0) {
           pos.x = g_current_room.field[0].size() - 1;
           g_current_room_coord.second--;
           flag++;
+          door = 1;
         }
 
         if (pos.x == g_current_room.field[0].size() - 1 && flag == 0) {
           pos.x = 0;
           g_current_room_coord.second++;
           flag++;
+          door = 3;
         }
 
-
-        if (g_current_action == ActionType::BUSY) {
+        if (flag == 0) {
           g_current_room_coord = tmp;
           goto MOUSEBUTTONDOWNEND;
         }
 
-        std::thread th(SwitchRoom, pos, old_pos);
-        th.detach();
+        if (flag != 0) {
+          std::thread th(SwitchRoom, pos, old_pos, door);
+          th.detach();
+        }
 
       }
     }

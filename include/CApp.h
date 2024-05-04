@@ -33,4 +33,4 @@ extern CApp app;
 
 void UpdateListeners();
 
-void SwitchRoom(PosType pos, PosType old_pos);
+void SwitchRoom(PosType pos, PosType old_pos, int door);
