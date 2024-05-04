@@ -78,6 +78,9 @@ std::vector<PosType>* FindPath(PosType start, PosType end, const Room& room) {
   if (start == end) {
     return nullptr;
   }
+  if (room.field[end.y][end.x]->GetObstacleType() == ObstacleType::WALL) {
+    return nullptr;
+  }
 
   using namespace FindPathSpace;
 
