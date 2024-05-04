@@ -12,7 +12,7 @@ class Room;
 
 extern Room g_current_room;
 extern std::vector<std::vector<int>> g_dungeon;
-extern std::pair<int, int> g_current_room_1;
+extern std::pair<int, int> g_current_room_coord;
 
 
 extern IBaseEntity* g_current_executor;

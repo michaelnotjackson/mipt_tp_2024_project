@@ -62,6 +62,4 @@ PosType GetTilePos(const CTile *tile, const Room &room);
 
 void CreateDung(std::vector<std::vector<int>>& dungeon);
 
-void CheckBorder();
-
 void AddRoomToDung(const std::string& s, std::queue<std::pair<int, int>>& border, int& number, int x, int y);

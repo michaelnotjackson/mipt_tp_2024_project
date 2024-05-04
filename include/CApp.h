@@ -2,6 +2,7 @@
 
 #include "include/SDL/include/SDL.h"
 #include <fstream>
+#include "include/engine/types.h"
 
 class CApp {
  private:
@@ -32,4 +33,4 @@ extern CApp app;
 
 void UpdateListeners();
 
-void SwitchRoom();
+void SwitchRoom(PosType pos, PosType old_pos, int door);

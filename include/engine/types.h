@@ -12,7 +12,8 @@ enum class SizeType { TINY, SMALL, MEDIUM, LARGE, HUGE };
 enum class ObstacleType {
   NO_OBSTACLES = 5,
   HALF_SPEED = 10,
-  WALL = static_cast<int>(1e9)
+  WALL = static_cast<int>(1e9),
+  DOOR = 4
 };
 
 enum class CharacteristicType { STR, DEX, CON, INT, WIS, CHR };

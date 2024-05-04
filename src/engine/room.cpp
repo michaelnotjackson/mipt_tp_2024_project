@@ -55,12 +55,21 @@ void Room::SetField(int number) {
     int j = 0;
     for (const auto &elem: row) {
       tmp = static_cast<int>(elem);
-      if (tmp == 1) {
-        field[i][j] = new CTile(grass, ObstacleType::NO_OBSTACLES);
-      } else if (tmp == 2) {
-        field[i][j] = new CTile(sand, ObstacleType::NO_OBSTACLES);
-      } else {
+      if (tmp == 3) {
         field[i][j] = new CTile(wall, ObstacleType::WALL);
+      } else {
+//        if (i == 0 || i == numbers.size() - 1 || j == 0 || j == numbers[0].size() - 1) {
+//          if (tmp == 1) {
+//            field[i][j] = new CTile(grass, ObstacleType::DOOR);
+//          } else {
+//            field[i][j] = new CTile(sand, ObstacleType::DOOR);
+//          }
+        //} else
+        if (tmp == 1) {
+          field[i][j] = new CTile(grass, ObstacleType::NO_OBSTACLES);
+        } else if (tmp == 2) {
+          field[i][j] = new CTile(sand, ObstacleType::NO_OBSTACLES);
+        }
       }
       j++;
     }
@@ -95,52 +104,6 @@ AddRoomToDung(const std::string &s, std::queue<std::pair<int, int>> &border,
   g_dungeon[y][x] = variants[room_ind];
   border.push(std::pair(y, x));
   number--;
-  if (number == 0) {
-    CheckBorder();
-  }
-}
-
-void CheckBorder() {
-  using json = nlohmann::json;
-  std::ifstream in("rooms/room.json");
-  json file = json::parse(in);
-  for (int i = 0; i < g_dungeon.size(); i++) {
-    for (int j = 0; j < g_dungeon[i].size(); j++) {
-      std::pair<int, int> curr = std::pair(j, i);
-      if (g_dungeon[i][j] == 0) {
-        continue;
-      }
-      std::string room = "room_" + std::to_string(g_dungeon[i][j]);
-
-      std::vector<int> doors = file[room]["doors"];
-      std::string s;
-      s += std::to_string(doors[0]);
-      s += std::to_string(doors[1]);
-      s += std::to_string(doors[2]);
-      s += std::to_string(doors[3]);
-      if (doors[0] == 1) {
-        if (i - 1 < 0 || g_dungeon[i - 1][j] == 0) {
-          s[0] = '0';
-        }
-      }
-      if (doors[1] == 1) {
-        if (j + 1 >= g_dungeon[0].size() || g_dungeon[i][j + 1] == 0) {
-          s[1] = '0';
-        }
-      }
-      if (doors[2] == 1) {
-        if (i + 1 >= g_dungeon.size() || g_dungeon[i + 1][j] == 0) {
-          s[2] = '0';
-        }
-      }
-      if (doors[3] == 1) {
-        if (j - 1 < 0 || g_dungeon[i][j - 1] == 0) {
-          s[3] = '0';
-        }
-      }
-      g_dungeon[i][j] = file[s][0];
-    }
-  }
 }
 
 void CreateDung(std::vector<std::vector<int>> &dungeon) {
@@ -149,7 +112,7 @@ void CreateDung(std::vector<std::vector<int>> &dungeon) {
   json file = json::parse(in);
 
   std::queue<std::pair<int, int>> border;
-  border.push(std::pair(7, 7));
+  border.emplace(7, 7);
 
   {
     std::uniform_int_distribution<> distrib(1, 15);
@@ -170,7 +133,7 @@ void CreateDung(std::vector<std::vector<int>> &dungeon) {
       return;
     }
 
-    std::pair curr = border.front();
+    std::pair<int, int> curr = border.front();
     border.pop();
 
     std::string room = "room_" + std::to_string(dungeon[curr.first][curr.second]);
@@ -220,9 +183,10 @@ void CreateDung(std::vector<std::vector<int>> &dungeon) {
       }
 
       AddRoomToDung(s, border, number, x, y);
-      if (number == 0) { return; }
+      if (number == 0) { break; }
       y++;
     }
+
 
     s = "0000";
     //чекаем направление вниз
@@ -256,9 +220,10 @@ void CreateDung(std::vector<std::vector<int>> &dungeon) {
       }
 
       AddRoomToDung(s, border, number, x, y);
-      if (number == 0) { return; }
+      if (number == 0) { break; }
       y--;
     }
+
 
     s = "0000";
     //чекаем направление вправо
@@ -281,6 +246,8 @@ void CreateDung(std::vector<std::vector<int>> &dungeon) {
         if (d[3] == 1) {
           s[1] = '1';
         }
+      } else if (x + 1 >= 0 && dungeon[y][x + 1] == 0) {
+        s[1] = '1';
       }
 
       if (y - 1 >= 0 && dungeon[y - 1][x] != 0) {
@@ -292,9 +259,10 @@ void CreateDung(std::vector<std::vector<int>> &dungeon) {
       }
 
       AddRoomToDung(s, border, number, x, y);
-      if (number == 0) { return; }
+      if (number == 0) { break; }
       x--;
     }
+
 
     s = "0000";
     //чекаем направление влево
@@ -328,8 +296,99 @@ void CreateDung(std::vector<std::vector<int>> &dungeon) {
       }
 
       AddRoomToDung(s, border, number, x, y);
-      if (number == 0) { return; }
+      if (number == 0) { break; }
       x++;
+    }
+  }
+
+
+  for (int i = 0; i < dungeon.size(); i++) {
+    for (int j = 0; j < dungeon[i].size(); j++) {
+      if (dungeon[i][j] == 0) {
+        continue;
+      }
+      std::string room = "room_" + std::to_string(dungeon[i][j]);
+
+      std::vector<int> doors = file[room]["doors"];
+      std::string s = "";
+      s += std::to_string(doors[0]);
+      s += std::to_string(doors[1]);
+      s += std::to_string(doors[2]);
+      s += std::to_string(doors[3]);
+
+      if (s[0] == '1') {
+
+        if (i - 1 < 0 || dungeon[i - 1][j] == 0) {
+          s[0] = '0';
+        }
+        if (i - 1 >= 0) {
+          if (dungeon[i - 1][j] != 0) {
+            std::string room_1 = "room_" + std::to_string(dungeon[i - 1][j]);
+            std::vector<int> doors_1 = file[room_1]["doors"];
+
+            if (doors_1[2] == 0) {
+              s[0] = '0';
+            }
+          }
+        }
+      }
+
+
+      if (s[1] == '1') {
+        if (j + 1 >= dungeon[0].size() || dungeon[i][j + 1] == 0) {
+          s[1] = '0';
+        }
+        if (j + 1 < dungeon[0].size()) {
+          if (dungeon[i][j + 1] != 0) {
+            std::string room_1 = "room_" + std::to_string(dungeon[i][j + 1]);
+            std::vector<int> doors_1 = file[room_1]["doors"];
+            if (doors_1[3] == 0) {
+              s[1] = '0';
+            }
+          }
+        }
+      }
+
+      if (s[2] == '1') {
+
+        if (i + 1 >= dungeon.size() || dungeon[i + 1][j] == 0) {
+          s[2] = '0';
+        }
+        if (i + 1 < dungeon.size()) {
+          if (dungeon[i + 1][j] != 0) {
+            std::string room_1 = "room_" + std::to_string(dungeon[i + 1][j]);
+            std::vector<int> doors_1 = file[room_1]["doors"];
+
+            if (doors_1[0] == 0) {
+              s[2] = '0';
+            }
+          }
+        }
+      }
+
+      if (s[3] == '1') {
+
+        if (j - 1 < 0 || dungeon[i][j - 1] == 0) {
+          s[3] = '0';
+        }
+        if (j - 1 >= 0) {
+          if (dungeon[i][j - 1] != 0) {
+            std::string room_1 = "room_" + std::to_string(dungeon[i][j - 1]);
+            std::vector<int> doors_1 = file[room_1]["doors"];
+
+            if (doors_1[1] == 0) {
+              s[3] = '0';
+            }
+          }
+        }
+      }
+
+      if (s != "0000") {
+        dungeon[i][j] = file[s][0];
+      } else {
+        dungeon[i][j] = 0;
+      }
+
     }
   }
 }
