@@ -19,6 +19,8 @@ using json = nlohmann::json;
 std::ifstream in("rooms/room.json");
 json file = json::parse(in);
 
+std::vector<std::vector<int>> coord_after_switch = file["coord_after_switch"];
+
 CApp::CApp() : is_running(true), window(nullptr), renderer(nullptr) {}
 
 Room room(SCREEN_WIDTH, SCREEN_HEIGHT);  // NOLINT
@@ -65,8 +67,7 @@ bool CApp::OnInit() {
   }
   room.SetField(g_dungeon[x][y]);
   g_current_room = room;
-  g_current_room_coord.first = x;
-  g_current_room_coord.second = y;
+  g_current_room_coord = std::pair(x, y);
 
   CTile *tile = room.GetField()[0][0];
   int width = tile->GetTexture().frame.w * tile->GetTexture().scale;   // NOLINT
@@ -126,8 +127,6 @@ void SwitchRoom(PosType pos, PosType old_pos, int door) {
       g_current_executor;
   *g_current_executor->GetPos() = pos;
   room.SetField(g_dungeon[g_current_room_coord.first][g_current_room_coord.second]);
-
-  std::vector<std::vector<int>> coord_after_switch = file["coord_after_switch"];
 
   int j = 0;
 
@@ -404,6 +403,23 @@ int CApp::OnExecute() {
 
   g_turnmanager.ShiftTurn();
   g_turnmanager.ResetTurns();
+
+  int j = 0;
+
+  for (auto &ent: entity_list) {
+    if (typeid(*ent) == typeid(CBasePlayer)) {
+
+      g_current_room.field[ent->GetPos()->y][ent->GetPos()->x]->entity_on =
+          nullptr;
+      g_current_room.field[coord_after_switch[4][2 * j]][coord_after_switch[4][2 * j + 1]]->entity_on =
+          ent;
+
+      PosType new_pos(coord_after_switch[4][2 * j + 1], coord_after_switch[4][2 * j]);
+      *ent->GetPos() = new_pos;
+
+      j++;
+    }
+  }
 
   while (is_running) {
     while (SDL_PollEvent(&event)) {
