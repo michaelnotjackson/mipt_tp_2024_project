@@ -32,6 +32,8 @@ class CEntityList {
 
   IBaseEntity* GetByPos(const SDL_Rect& pos);
 
+  int GetIndByPos(const SDL_Rect& pos);
+
   CEntityNode* GetHead();
 
   ~CEntityList();

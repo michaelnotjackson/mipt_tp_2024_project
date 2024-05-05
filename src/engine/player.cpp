@@ -31,4 +31,5 @@ CBasePlayer::CBasePlayer(CBaseAnimation& animation, ClassType player_class,
       10 + characteristics[(int)(GetPropValue<CharacteristicType>(
                props, "c_health_lvl_modifier"))];
   SDL_Log("%s %i", "Health is set to", GetPropValue<int>(props, "i_health"));
+  props["i_max_health"] = GetPropValue<int>(props, "i_health");
 }

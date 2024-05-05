@@ -23,7 +23,7 @@ std::vector<std::vector<int>> coord_after_switch = file["coord_after_switch"];
 
 CApp::CApp() : is_running(true), window(nullptr), renderer(nullptr) {}
 
-Room room(SCREEN_WIDTH, SCREEN_HEIGHT);  // NOLINT
+Room room(SCREEN_WIDTH, SCREEN_HEIGHT); // NOLINT
 
 bool CApp::OnInit() {
   if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
@@ -36,7 +36,7 @@ bool CApp::OnInit() {
 
   window =
       SDL_CreateWindow("Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                       SCREEN_WIDTH, SCREEN_HEIGHT, 0);
+                       SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE);
 
   if (window == nullptr) {
     return false;
@@ -70,8 +70,8 @@ bool CApp::OnInit() {
   g_current_room_coord = std::pair(x, y);
 
   CTile *tile = room.GetField()[0][0];
-  int width = tile->GetTexture().frame.w * tile->GetTexture().scale;   // NOLINT
-  int height = tile->GetTexture().frame.h * tile->GetTexture().scale;  // NOLINT
+  int width = tile->GetTexture().frame.w * tile->GetTexture().scale;  // NOLINT
+  int height = tile->GetTexture().frame.h * tile->GetTexture().scale; // NOLINT
   SDL_Rect rect;
   rect.w = width;
   rect.h = height;
@@ -98,8 +98,8 @@ bool CheckRect(const SDL_Rect &rect, int x, int y) {
 
 void UpdateListeners() {
   CTile *tile = room.GetField()[1][1];
-  int width = tile->GetTexture().frame.w * tile->GetTexture().scale;   // NOLINT
-  int height = tile->GetTexture().frame.h * tile->GetTexture().scale;  // NOLINT
+  int width = tile->GetTexture().frame.w * tile->GetTexture().scale;  // NOLINT
+  int height = tile->GetTexture().frame.h * tile->GetTexture().scale; // NOLINT
   SDL_Rect rect;
   rect.w = width;
   rect.h = height;
@@ -114,47 +114,53 @@ void UpdateListeners() {
           new CTileClickEventListener(rect, g_current_room.GetField()[i][j]));
     }
   }
-  event_manager.current_hover = event_manager.GetTileHoverListeners().GetHead()->event_listener;
+  event_manager.current_hover =
+      event_manager.GetTileHoverListeners().GetHead()->event_listener;
 }
 
 void SwitchRoom(PosType pos, PosType old_pos, int door) {
   while (g_move_in_process) {
   }
 
-  g_current_room.field[old_pos.y][old_pos.x]->entity_on =
-      nullptr;
-  g_current_room.field[pos.y][pos.x]->entity_on =
-      g_current_executor;
+  g_current_room.field[old_pos.y][old_pos.x]->entity_on = nullptr;
+  g_current_room.field[pos.y][pos.x]->entity_on = g_current_executor;
   *g_current_executor->GetPos() = pos;
-  room.SetField(g_dungeon[g_current_room_coord.first][g_current_room_coord.second]);
+  room.SetField(
+      g_dungeon[g_current_room_coord.first][g_current_room_coord.second]);
 
   int j = 0;
 
-  for (auto &ent: entity_list) {
+  for (auto &ent : entity_list) {
     if (typeid(*ent) == typeid(CBasePlayer)) {
       g_current_room.field[ent->GetPos()->y][ent->GetPos()->x]->entity_on =
           nullptr;
-      g_current_room.field[coord_after_switch[door][2 * j]][coord_after_switch[door][2 * j + 1]]->entity_on =
-          ent;
+      g_current_room
+          .field[coord_after_switch[door][2 * j]]
+                [coord_after_switch[door][2 * j + 1]]
+          ->entity_on = ent;
 
-      PosType new_pos(coord_after_switch[door][2 * j + 1], coord_after_switch[door][2 * j]);
+      PosType new_pos(coord_after_switch[door][2 * j + 1],
+                      coord_after_switch[door][2 * j]);
       *ent->GetPos() = new_pos;
 
       j++;
     }
   }
 
-//  for (int i = 0; i < entity_list.ent_count; i++) {
-//    if (typeid(entity_list.GetByIndex(i)) == typeid(CBasePlayer)) {
-//      g_current_room.field[entity_list.GetByIndex(i)->GetPos()->y][entity_list.GetByIndex(i)->GetPos()->x]->entity_on =
-//          nullptr;
-//      g_current_room.field[coord_after_switch[door][2 * i]][coord_after_switch[door][2 * i + 1]]->entity_on =
-//          entity_list.GetByIndex(i);
-//      PosType new_pos(coord_after_switch[door][2 * i], coord_after_switch[door][2 * i + 1]);
-//      *entity_list.GetByIndex(i)->GetPos() = new_pos;
-//    }
-//    j++;
-//  }
+  //  for (int i = 0; i < entity_list.ent_count; i++) {
+  //    if (typeid(entity_list.GetByIndex(i)) == typeid(CBasePlayer)) {
+  //      g_current_room.field[entity_list.GetByIndex(i)->GetPos()->y][entity_list.GetByIndex(i)->GetPos()->x]->entity_on
+  //      =
+  //          nullptr;
+  //      g_current_room.field[coord_after_switch[door][2 *
+  //      i]][coord_after_switch[door][2 * i + 1]]->entity_on =
+  //          entity_list.GetByIndex(i);
+  //      PosType new_pos(coord_after_switch[door][2 * i],
+  //      coord_after_switch[door][2 * i + 1]);
+  //      *entity_list.GetByIndex(i)->GetPos() = new_pos;
+  //    }
+  //    j++;
+  //  }
 
   for (int i = 0; i < g_current_room.field.size(); i++) {
     for (int j = 0; j < g_current_room.field[0].size(); j++) {
@@ -191,9 +197,8 @@ void CApp::OnEvent(SDL_Event *event) {
         }
       }
     }
-
   }
-   KEYDOWNEND:;
+KEYDOWNEND:;
   if (event->type == SDL_MOUSEMOTION) {
     int x = event->motion.x, y = event->motion.y;
 
@@ -227,7 +232,7 @@ void CApp::OnEvent(SDL_Event *event) {
       RecalculatePath();
     }
   }
-   MOUSEMOTIONEND:
+MOUSEMOTIONEND:
   if (event->type == SDL_MOUSEBUTTONDOWN) {
     int x = event->button.x, y = event->button.y;
     if (g_current_action == ActionType::BUSY) {
@@ -245,10 +250,12 @@ void CApp::OnEvent(SDL_Event *event) {
         cur = cur->next;
       }
 
-      auto pos = GetTilePos(event_manager.current_hover->GetTile(), g_current_room);
+      auto pos =
+          GetTilePos(event_manager.current_hover->GetTile(), g_current_room);
       auto old_pos = pos;
       int door = 0;
-      if (g_current_room.field[pos.y][pos.x]->GetObstacleType() == ObstacleType::NO_OBSTACLES) {
+      if (g_current_room.field[pos.y][pos.x]->GetObstacleType() ==
+          ObstacleType::NO_OBSTACLES) {
 
         int flag = 0;
         std::pair<int, int> tmp = g_current_room_coord;
@@ -290,12 +297,13 @@ void CApp::OnEvent(SDL_Event *event) {
           std::thread th(SwitchRoom, pos, old_pos, door);
           th.detach();
         }
-
       }
     }
     if (event->button.button == SDL_BUTTON_RIGHT) {
-      auto enemy_pos = GetTilePos(event_manager.current_hover->GetTile(), g_current_room);
-      if (g_current_room.field[enemy_pos.y][enemy_pos.x]->entity_on == nullptr) {
+      auto enemy_pos =
+          GetTilePos(event_manager.current_hover->GetTile(), g_current_room);
+      if (g_current_room.field[enemy_pos.y][enemy_pos.x]->entity_on ==
+          nullptr) {
         goto MOUSEBUTTONDOWNEND;
       }
       g_current_action = ActionType::BUSY;
@@ -303,7 +311,7 @@ void CApp::OnEvent(SDL_Event *event) {
       g_current_executor->Attack(enemy_pos);
     }
   }
-   MOUSEBUTTONDOWNEND:;
+MOUSEBUTTONDOWNEND:;
 }
 
 void CApp::OnCleanup() { SDL_Quit(); }
@@ -334,15 +342,26 @@ void DrawEntities() {
   while (cur != nullptr) {
     auto *ent_pos = new PosType(EntityPosRoomToScreen(cur->entity));
     Blit(&cur->entity->animation, ent_pos);
+    double hp_proc = static_cast<double>(GetPropValue<int>(cur->entity->props, "i_health")) /
+                     GetPropValue<int>(cur->entity->props, "i_max_health");
+    SDL_Rect hp_bar;
+    hp_bar.x = ent_pos->x + 18;
+    hp_bar.y = ent_pos->y + 8;
+    hp_bar.w = 60 * hp_proc;
+    hp_bar.h = 12;
+    SDL_SetRenderDrawColor(app.renderer, 255, 60, 60, 0);
+    SDL_RenderFillRect(app.renderer, &hp_bar);
+    SDL_SetRenderDrawColor(app.renderer, 0, 0, 0, 0);
+    SDL_RenderDrawRect(app.renderer, &hp_bar);
     cur = cur->next;
     delete ent_pos;
   }
 }
 
 void DrawRoom(const Room &room_a) {
-  int width = room_a.field[0][0]->GetTexture().frame.w *  // NOLINT
+  int width = room_a.field[0][0]->GetTexture().frame.w * // NOLINT
               room_a.field[0][0]->GetTexture().scale;
-  int height = room_a.field[0][0]->GetTexture().frame.h *  // NOLINT
+  int height = room_a.field[0][0]->GetTexture().frame.h * // NOLINT
                room_a.field[0][0]->GetTexture().scale;
   for (int i = 0; i < SCREEN_HEIGHT; i += height) {
     for (int j = 0; j < SCREEN_WIDTH; j += width) {
@@ -373,7 +392,7 @@ void DrawPath() {
     path[i + 1] = PointRoomToScreenTileCenter(g_current_path[i]);
   }
 
-  SDL_RenderDrawLines(app.renderer, path, g_current_path.size() + 1);  // NOLINT
+  SDL_RenderDrawLines(app.renderer, path, g_current_path.size() + 1); // NOLINT
 
   delete[] path;
 }
@@ -400,21 +419,25 @@ int CApp::OnExecute() {
 
   entity_list.Insert(new CBasePlayer(
       assets_manager.GetAnimation("animations/warriors/warrior_red/idle")));
+  entity_list.Insert(new CBasePlayer(
+      assets_manager.GetAnimation("animations/warriors/warrior_red/idle")));
 
   g_turnmanager.ShiftTurn();
   g_turnmanager.ResetTurns();
 
   int j = 0;
 
-  for (auto &ent: entity_list) {
+  for (auto &ent : entity_list) {
     if (typeid(*ent) == typeid(CBasePlayer)) {
 
       g_current_room.field[ent->GetPos()->y][ent->GetPos()->x]->entity_on =
           nullptr;
-      g_current_room.field[coord_after_switch[4][2 * j]][coord_after_switch[4][2 * j + 1]]->entity_on =
-          ent;
+      g_current_room
+          .field[coord_after_switch[4][2 * j]][coord_after_switch[4][2 * j + 1]]
+          ->entity_on = ent;
 
-      PosType new_pos(coord_after_switch[4][2 * j + 1], coord_after_switch[4][2 * j]);
+      PosType new_pos(coord_after_switch[4][2 * j + 1],
+                      coord_after_switch[4][2 * j]);
       *ent->GetPos() = new_pos;
 
       j++;

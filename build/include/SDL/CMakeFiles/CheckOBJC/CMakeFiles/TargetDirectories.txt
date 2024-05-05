@@ -1,2 +1,0 @@
-/Users/motorolla/proekt/tp_course_spring24_project/build/include/SDL/CMakeFiles/CheckOBJC/CMakeFiles/edit_cache.dir
-/Users/motorolla/proekt/tp_course_spring24_project/build/include/SDL/CMakeFiles/CheckOBJC/CMakeFiles/rebuild_cache.dir

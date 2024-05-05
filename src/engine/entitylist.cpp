@@ -2,6 +2,7 @@
 
 #include "include/SDL/include/SDL.h"
 
+
 CEntityNode::~CEntityNode() {
   delete entity;
   delete next;
@@ -37,7 +38,19 @@ IBaseEntity* CEntityList::GetByPos(const SDL_Rect& rect) {
   return cur->entity;
 }
 
-void CEntityList::Insert(IBaseEntity* ent) {
+int CEntityList::GetIndByPos(const SDL_Rect &rect) { 
+  CEntityNode* cur = head;
+
+  PosType pos{rect.x, rect.y};
+
+  while (cur != nullptr && (*cur->entity->GetPos()) != pos) {
+    cur = cur->next;
+  }
+
+  return cur->idx;
+}
+
+void CEntityList::Insert(IBaseEntity *ent) {
   if (!last) {
     head = last = new CEntityNode();
   } else {

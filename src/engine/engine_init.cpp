@@ -39,6 +39,10 @@ bool EngineInitTextures() {
           "textures/terrain/wall_hovered")) {
     return false;
   }
+  if (!assets_manager.LoadTexture(
+    "assets/Tiny Swords/Factions/Knights/Troops/Dead/Dead.png",
+    "textures/warriors/death"
+  ))
 
   return true;
 }
@@ -194,6 +198,22 @@ bool EngineInitAnimations() {
               assets_manager.GetTexture("textures/warriors/warrior_red"),
               SDL_Rect{0, 0, 192, 192}, 6, SDL_GetTicks64(), 100, 0.5),
           "animations/warriors/warrior_red/attack2_up")) {
+    return false;
+  }
+  if (!assets_manager.RegisterAnimation(
+    CBaseAnimation(
+      assets_manager.GetTexture("textures/warriors/death"),
+      SDL_Rect{0, 0, 128, 128}, 7, SDL_GetTicks64(), 125, 0.6),
+      "animations/warriors/death"
+  )) {
+    return false;
+  }
+  if (!assets_manager.RegisterAnimation(
+    CBaseAnimation(
+      assets_manager.GetTexture("textures/warriors/death"),
+      SDL_Rect{0, 128, 128, 128}, 7, SDL_GetTicks64(), 120, 0.6),
+      "animations/warriors/skull_disappear"
+  )) {
     return false;
   }
 
