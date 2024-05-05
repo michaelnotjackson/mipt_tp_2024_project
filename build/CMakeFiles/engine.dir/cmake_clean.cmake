@@ -1,0 +1,43 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/engine.dir/src/engine/animation.cpp.o"
+  "CMakeFiles/engine.dir/src/engine/animation.cpp.o.d"
+  "CMakeFiles/engine.dir/src/engine/assets_storage.cpp.o"
+  "CMakeFiles/engine.dir/src/engine/assets_storage.cpp.o.d"
+  "CMakeFiles/engine.dir/src/engine/dice_roller.cpp.o"
+  "CMakeFiles/engine.dir/src/engine/dice_roller.cpp.o.d"
+  "CMakeFiles/engine.dir/src/engine/engine_init.cpp.o"
+  "CMakeFiles/engine.dir/src/engine/engine_init.cpp.o.d"
+  "CMakeFiles/engine.dir/src/engine/entity.cpp.o"
+  "CMakeFiles/engine.dir/src/engine/entity.cpp.o.d"
+  "CMakeFiles/engine.dir/src/engine/entitylist.cpp.o"
+  "CMakeFiles/engine.dir/src/engine/entitylist.cpp.o.d"
+  "CMakeFiles/engine.dir/src/engine/equipment.cpp.o"
+  "CMakeFiles/engine.dir/src/engine/equipment.cpp.o.d"
+  "CMakeFiles/engine.dir/src/engine/event_storage.cpp.o"
+  "CMakeFiles/engine.dir/src/engine/event_storage.cpp.o.d"
+  "CMakeFiles/engine.dir/src/engine/globals.cpp.o"
+  "CMakeFiles/engine.dir/src/engine/globals.cpp.o.d"
+  "CMakeFiles/engine.dir/src/engine/mouse_eventlisteners.cpp.o"
+  "CMakeFiles/engine.dir/src/engine/mouse_eventlisteners.cpp.o.d"
+  "CMakeFiles/engine.dir/src/engine/playable_classes.cpp.o"
+  "CMakeFiles/engine.dir/src/engine/playable_classes.cpp.o.d"
+  "CMakeFiles/engine.dir/src/engine/playable_races.cpp.o"
+  "CMakeFiles/engine.dir/src/engine/playable_races.cpp.o.d"
+  "CMakeFiles/engine.dir/src/engine/player.cpp.o"
+  "CMakeFiles/engine.dir/src/engine/player.cpp.o.d"
+  "CMakeFiles/engine.dir/src/engine/renderer.cpp.o"
+  "CMakeFiles/engine.dir/src/engine/renderer.cpp.o.d"
+  "CMakeFiles/engine.dir/src/engine/room.cpp.o"
+  "CMakeFiles/engine.dir/src/engine/room.cpp.o.d"
+  "CMakeFiles/engine.dir/src/engine/turn_controller.cpp.o"
+  "CMakeFiles/engine.dir/src/engine/turn_controller.cpp.o.d"
+  "CMakeFiles/engine.dir/src/engine/utils.cpp.o"
+  "CMakeFiles/engine.dir/src/engine/utils.cpp.o.d"
+  "libengine.a"
+  "libengine.pdb"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/engine.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()
