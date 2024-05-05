@@ -69,7 +69,7 @@ bool CApp::OnInit() {
   g_current_room = room;
   g_current_room_coord = std::pair(x, y);
 
-  CTile *tile = room.GetField()[0][0];
+  CTile *tile = g_current_room.GetField()[0][0];
   int width = tile->GetTexture().frame.w * tile->GetTexture().scale;   // NOLINT
   int height = tile->GetTexture().frame.h * tile->GetTexture().scale;  // NOLINT
   SDL_Rect rect;
@@ -97,7 +97,7 @@ bool CheckRect(const SDL_Rect &rect, int x, int y) {
 }
 
 void UpdateListeners() {
-  CTile *tile = room.GetField()[1][1];
+  CTile *tile = g_current_room.GetField()[1][1];
   int width = tile->GetTexture().frame.w * tile->GetTexture().scale;   // NOLINT
   int height = tile->GetTexture().frame.h * tile->GetTexture().scale;  // NOLINT
   SDL_Rect rect;
@@ -117,15 +117,10 @@ void UpdateListeners() {
   event_manager.current_hover = event_manager.GetTileHoverListeners().GetHead()->event_listener;
 }
 
-void SwitchRoom(PosType pos, PosType old_pos, int door) {
+void SwitchRoom(int door) {
   while (g_move_in_process) {
   }
 
-  g_current_room.field[old_pos.y][old_pos.x]->entity_on =
-      nullptr;
-  g_current_room.field[pos.y][pos.x]->entity_on =
-      g_current_executor;
-  *g_current_executor->GetPos() = pos;
   room.SetField(g_dungeon[g_current_room_coord.first][g_current_room_coord.second]);
 
   int j = 0;
@@ -144,18 +139,6 @@ void SwitchRoom(PosType pos, PosType old_pos, int door) {
     }
   }
 
-//  for (int i = 0; i < entity_list.ent_count; i++) {
-//    if (typeid(entity_list.GetByIndex(i)) == typeid(CBasePlayer)) {
-//      g_current_room.field[entity_list.GetByIndex(i)->GetPos()->y][entity_list.GetByIndex(i)->GetPos()->x]->entity_on =
-//          nullptr;
-//      g_current_room.field[coord_after_switch[door][2 * i]][coord_after_switch[door][2 * i + 1]]->entity_on =
-//          entity_list.GetByIndex(i);
-//      PosType new_pos(coord_after_switch[door][2 * i], coord_after_switch[door][2 * i + 1]);
-//      *entity_list.GetByIndex(i)->GetPos() = new_pos;
-//    }
-//    j++;
-//  }
-
   for (int i = 0; i < g_current_room.field.size(); i++) {
     for (int j = 0; j < g_current_room.field[0].size(); j++) {
       room.field[i][j]->entity_on = g_current_room.field[i][j]->entity_on;
@@ -164,6 +147,8 @@ void SwitchRoom(PosType pos, PosType old_pos, int door) {
 
   g_current_room = room;
   UpdateListeners();
+  g_current_action = ActionType::FREE;
+  RecalculatePath();
 }
 
 void CApp::OnEvent(SDL_Event *event) {
@@ -236,6 +221,7 @@ void CApp::OnEvent(SDL_Event *event) {
 
     if (event->button.button == SDL_BUTTON_LEFT) {
 
+      g_current_action = ActionType::BUSY;
       auto *cur = event_manager.GetTileClickListeners().GetHead();
       while (cur != nullptr) {
         if (CheckRect(cur->event_listener->GetRect(), x, y)) {
@@ -246,36 +232,31 @@ void CApp::OnEvent(SDL_Event *event) {
       }
 
       auto pos = GetTilePos(event_manager.current_hover->GetTile(), g_current_room);
-      auto old_pos = pos;
       int door = 0;
       if (g_current_room.field[pos.y][pos.x]->GetObstacleType() == ObstacleType::NO_OBSTACLES) {
 
         int flag = 0;
-        std::pair<int, int> tmp = g_current_room_coord;
+        auto tmp = g_current_room_coord;
 
         if (pos.y == 0 && flag == 0) {
-          pos.y = g_current_room.field.size() - 1;
           g_current_room_coord.first--;
           flag++;
           door = 0;
         }
 
         if (pos.y == g_current_room.field.size() - 1 && flag == 0) {
-          pos.y = 0;
           g_current_room_coord.first++;
           flag++;
           door = 2;
         }
 
         if (pos.x == 0 && flag == 0) {
-          pos.x = g_current_room.field[0].size() - 1;
           g_current_room_coord.second--;
           flag++;
           door = 1;
         }
 
         if (pos.x == g_current_room.field[0].size() - 1 && flag == 0) {
-          pos.x = 0;
           g_current_room_coord.second++;
           flag++;
           door = 3;
@@ -283,13 +264,16 @@ void CApp::OnEvent(SDL_Event *event) {
 
         if (flag == 0) {
           g_current_room_coord = tmp;
+          g_current_action = ActionType::FREE;
           goto MOUSEBUTTONDOWNEND;
         }
 
         if (flag != 0) {
-          std::thread th(SwitchRoom, pos, old_pos, door);
+          std::thread th(SwitchRoom, door);
           th.detach();
         }
+
+
 
       }
     }
@@ -380,7 +364,7 @@ void DrawPath() {
 
 void CApp::OnRender() {
   SDL_RenderClear(renderer);
-  DrawRoom(room);
+  DrawRoom(g_current_room);
   DrawEntities();
   DrawPath();
   SDL_RenderPresent(renderer);
