@@ -22,22 +22,32 @@ file(COPY rooms DESTINATION ${CMAKE_BINARY_DIR})
 include_directories(include/SDL_image/include)
 include_directories(include/SDL/include)
 
-add_executable(${PROJECT_NAME}
-    src/main.cpp
-    src/entity.cpp
-    src/room.cpp
-    src/equipment.cpp
-    src/interface/CApp.cpp
-    src/interface/renderer.cpp
-    src/animation.cpp
-    include/entitylist.h
-    src/entitylist.cpp
-    src/assets_storage.cpp
-    src/globals.cpp
-    src/event_storage.cpp
-    src/mouse_eventlisteners.cpp
-    src/utils.cpp
-    src/turn_controller.cpp)
+add_library(engine STATIC
+        src/engine/room.cpp
+        src/engine/entity.cpp
+        src/engine/equipment.cpp
+        src/engine/renderer.cpp
+        src/engine/animation.cpp
+        src/engine/entitylist.cpp
+        src/engine/assets_storage.cpp
+        src/engine/globals.cpp
+        src/engine/event_storage.cpp
+        src/engine/mouse_eventlisteners.cpp
+        src/engine/utils.cpp
+        src/engine/turn_controller.cpp
+        src/engine/player.cpp
+        src/engine/playable_classes.cpp
+        src/engine/playable_races.cpp
+        src/engine/dice_roller.cpp
+        src/engine/engine_init.cpp
+)
 
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2)
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE SDL2_image)
+add_executable(client
+        src/main.cpp
+        src/CApp.cpp
+
+)
+
+target_link_libraries(engine PUBLIC SDL2)
+target_link_libraries(engine PUBLIC SDL2_image)
+target_link_libraries(client PRIVATE engine)
