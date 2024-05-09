@@ -340,6 +340,10 @@ void DrawEntities() {
   CEntityNode *cur = entity_list.GetHead();
 
   while (cur != nullptr) {
+    if (entity_list.deleted[cur->entity]) {
+      entity_list.deleted[cur->entity] = false;
+      continue;
+    }
     auto *ent_pos = new PosType(EntityPosRoomToScreen(cur->entity));
     Blit(&cur->entity->animation, ent_pos);
     double hp_proc = static_cast<double>(GetPropValue<int>(cur->entity->props, "i_health")) /

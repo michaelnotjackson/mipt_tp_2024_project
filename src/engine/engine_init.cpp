@@ -42,7 +42,9 @@ bool EngineInitTextures() {
   if (!assets_manager.LoadTexture(
     "assets/Tiny Swords/Factions/Knights/Troops/Dead/Dead.png",
     "textures/warriors/death"
-  ))
+  )) {
+    return false;
+  }
 
   return true;
 }

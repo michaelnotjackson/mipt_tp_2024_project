@@ -12,6 +12,7 @@ class CEntityNode {
   int idx;
 
  public:
+
   ~CEntityNode();
 };
 
@@ -23,6 +24,8 @@ class CEntityList {
  public:
   int highest_ent;  // Index of the last entity
   int ent_count;    // Count of existing entities
+
+  std::map<IBaseEntity*, bool> deleted;
 
  public:
   void Insert(IBaseEntity* ent);

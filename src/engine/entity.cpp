@@ -96,14 +96,17 @@ void AttackExecutor(PosType enemy_pos) {
   if (g_current_room.field[enemy_pos.y][enemy_pos.x]->entity_on != nullptr) {
     g_current_executor->PlayAnimation(assets_manager.GetAnimation(
         "animations/warriors/warrior_blue/attack2_right"));
+
     std::get<int>(g_current_room.field[enemy_pos.y][enemy_pos.x]
                       ->entity_on->props["i_health"]) -=
         5; // TODO Weapon damage
+
     if (std::get<int>(g_current_room.field[enemy_pos.y][enemy_pos.x]
                             ->entity_on->props["i_health"]) <= 0) {
         g_current_room.field[enemy_pos.y][enemy_pos.x]->entity_on->PlayAnimation(
             assets_manager.GetAnimation("animations/warriors/death"));
       SDL_Delay(10);
+
       while (
           g_current_room.field[enemy_pos.y][enemy_pos.x]->entity_on->animation !=
           g_current_room.field[enemy_pos.y][enemy_pos.x]
@@ -111,11 +114,12 @@ void AttackExecutor(PosType enemy_pos) {
       g_current_room.field[enemy_pos.y][enemy_pos.x]->entity_on->PlayAnimation(
             assets_manager.GetAnimation("animations/warriors/skull_disappear"));
       SDL_Delay(10);
+
       while (
           g_current_room.field[enemy_pos.y][enemy_pos.x]->entity_on->animation !=
           g_current_room.field[enemy_pos.y][enemy_pos.x]
               ->entity_on->default_animation) {}
-      // entity_list.RemoveByIndex(entity_list.GetIndByPos(SDL_Rect{enemy_pos.x, enemy_pos.y,0,0}));
+       entity_list.RemoveByIndex(entity_list.GetIndByPos(SDL_Rect{enemy_pos.x, enemy_pos.y,0,0}));
     }
 }
   g_current_action = ActionType::FREE;
