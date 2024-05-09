@@ -12,6 +12,7 @@ class CEntityNode {
   int idx;
 
  public:
+
   ~CEntityNode();
 };
 
@@ -24,6 +25,8 @@ class CEntityList {
   int highest_ent;  // Index of the last entity
   int ent_count;    // Count of existing entities
 
+  std::map<IBaseEntity*, bool> deleted;
+
  public:
   void Insert(IBaseEntity* ent);
   void RemoveByIndex(int idx);
@@ -31,6 +34,8 @@ class CEntityList {
   IBaseEntity* GetByIndex(int idx);
 
   IBaseEntity* GetByPos(const SDL_Rect& pos);
+
+  int GetIndByPos(const SDL_Rect& pos);
 
   CEntityNode* GetHead();
 

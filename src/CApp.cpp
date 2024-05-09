@@ -176,9 +176,8 @@ void CApp::OnEvent(SDL_Event *event) {
         }
       }
     }
-
   }
-   KEYDOWNEND:;
+KEYDOWNEND:;
   if (event->type == SDL_MOUSEMOTION) {
     int x = event->motion.x, y = event->motion.y;
 
@@ -212,7 +211,7 @@ void CApp::OnEvent(SDL_Event *event) {
       RecalculatePath();
     }
   }
-   MOUSEMOTIONEND:
+MOUSEMOTIONEND:
   if (event->type == SDL_MOUSEBUTTONDOWN) {
     int x = event->button.x, y = event->button.y;
     if (g_current_action == ActionType::BUSY) {
@@ -272,14 +271,13 @@ void CApp::OnEvent(SDL_Event *event) {
           std::thread th(SwitchRoom, door);
           th.detach();
         }
-
-
-
       }
     }
     if (event->button.button == SDL_BUTTON_RIGHT) {
-      auto enemy_pos = GetTilePos(event_manager.current_hover->GetTile(), g_current_room);
-      if (g_current_room.field[enemy_pos.y][enemy_pos.x]->entity_on == nullptr) {
+      auto enemy_pos =
+          GetTilePos(event_manager.current_hover->GetTile(), g_current_room);
+      if (g_current_room.field[enemy_pos.y][enemy_pos.x]->entity_on ==
+          nullptr) {
         goto MOUSEBUTTONDOWNEND;
       }
       g_current_action = ActionType::BUSY;
@@ -287,7 +285,7 @@ void CApp::OnEvent(SDL_Event *event) {
       g_current_executor->Attack(enemy_pos);
     }
   }
-   MOUSEBUTTONDOWNEND:;
+MOUSEBUTTONDOWNEND:;
 }
 
 void CApp::OnCleanup() { SDL_Quit(); }
@@ -316,17 +314,32 @@ void DrawEntities() {
   CEntityNode *cur = entity_list.GetHead();
 
   while (cur != nullptr) {
+    if (entity_list.deleted[cur->entity]) {
+      entity_list.deleted[cur->entity] = false;
+      continue;
+    }
     auto *ent_pos = new PosType(EntityPosRoomToScreen(cur->entity));
     Blit(&cur->entity->animation, ent_pos);
+    double hp_proc = static_cast<double>(GetPropValue<int>(cur->entity->props, "i_health")) /
+                     GetPropValue<int>(cur->entity->props, "i_max_health");
+    SDL_Rect hp_bar;
+    hp_bar.x = ent_pos->x + 18;
+    hp_bar.y = ent_pos->y + 8;
+    hp_bar.w = 60 * hp_proc;
+    hp_bar.h = 12;
+    SDL_SetRenderDrawColor(app.renderer, 255, 60, 60, 0);
+    SDL_RenderFillRect(app.renderer, &hp_bar);
+    SDL_SetRenderDrawColor(app.renderer, 0, 0, 0, 0);
+    SDL_RenderDrawRect(app.renderer, &hp_bar);
     cur = cur->next;
     delete ent_pos;
   }
 }
 
 void DrawRoom(const Room &room_a) {
-  int width = room_a.field[0][0]->GetTexture().frame.w *  // NOLINT
+  int width = room_a.field[0][0]->GetTexture().frame.w * // NOLINT
               room_a.field[0][0]->GetTexture().scale;
-  int height = room_a.field[0][0]->GetTexture().frame.h *  // NOLINT
+  int height = room_a.field[0][0]->GetTexture().frame.h * // NOLINT
                room_a.field[0][0]->GetTexture().scale;
   for (int i = 0; i < SCREEN_HEIGHT; i += height) {
     for (int j = 0; j < SCREEN_WIDTH; j += width) {
@@ -357,7 +370,7 @@ void DrawPath() {
     path[i + 1] = PointRoomToScreenTileCenter(g_current_path[i]);
   }
 
-  SDL_RenderDrawLines(app.renderer, path, g_current_path.size() + 1);  // NOLINT
+  SDL_RenderDrawLines(app.renderer, path, g_current_path.size() + 1); // NOLINT
 
   delete[] path;
 }
@@ -384,21 +397,25 @@ int CApp::OnExecute() {
 
   entity_list.Insert(new CBasePlayer(
       assets_manager.GetAnimation("animations/warriors/warrior_red/idle")));
+  entity_list.Insert(new CBasePlayer(
+      assets_manager.GetAnimation("animations/warriors/warrior_red/idle")));
 
   g_turnmanager.ShiftTurn();
   g_turnmanager.ResetTurns();
 
   int j = 0;
 
-  for (auto &ent: entity_list) {
+  for (auto &ent : entity_list) {
     if (typeid(*ent) == typeid(CBasePlayer)) {
 
       g_current_room.field[ent->GetPos()->y][ent->GetPos()->x]->entity_on =
           nullptr;
-      g_current_room.field[coord_after_switch[4][2 * j]][coord_after_switch[4][2 * j + 1]]->entity_on =
-          ent;
+      g_current_room
+          .field[coord_after_switch[4][2 * j]][coord_after_switch[4][2 * j + 1]]
+          ->entity_on = ent;
 
-      PosType new_pos(coord_after_switch[4][2 * j + 1], coord_after_switch[4][2 * j]);
+      PosType new_pos(coord_after_switch[4][2 * j + 1],
+                      coord_after_switch[4][2 * j]);
       *ent->GetPos() = new_pos;
 
       j++;

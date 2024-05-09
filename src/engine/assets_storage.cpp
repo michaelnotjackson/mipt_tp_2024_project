@@ -7,9 +7,9 @@
 
 CAssetsStorage::CAssetsStorage() : textures() {}
 
-bool CAssetsStorage::LoadTexture(const std::string& path,
-                                 const std::string& name) {
-  SDL_Texture* texture = IMG_LoadTexture(app.renderer, path.c_str());
+bool CAssetsStorage::LoadTexture(const std::string &path,
+                                 const std::string &name) {
+  SDL_Texture *texture = IMG_LoadTexture(app.renderer, path.c_str());
 
   if (texture == nullptr) {
     SDL_Log("%s", SDL_GetError());
@@ -25,12 +25,12 @@ bool CAssetsStorage::LoadTexture(const std::string& path,
   return true;
 }
 
-SDL_Texture* CAssetsStorage::GetTexture(const std::string& name) {
+SDL_Texture *CAssetsStorage::GetTexture(const std::string &name) {
   return textures[name];
 }
 
 bool CAssetsStorage::RegisterAnimation(CBaseAnimation animation,
-                                       const std::string& name) {
+                                       const std::string &name) {
   if (animations.find(name) != animations.end()) {
     SDL_LogError(1, "%s",
                  "ERROR: Trying to register animation with name that was "
@@ -43,12 +43,12 @@ bool CAssetsStorage::RegisterAnimation(CBaseAnimation animation,
   return true;
 }
 
-CBaseAnimation& CAssetsStorage::GetAnimation(const std::string& name) {
+CBaseAnimation &CAssetsStorage::GetAnimation(const std::string &name) {
   return animations[name];
 }
 
-std::string CAssetsStorage::GetAnimationName(const CBaseAnimation& animation) {
-  for (auto &[k, v]: animations) {
+std::string CAssetsStorage::GetAnimationName(const CBaseAnimation &animation) {
+  for (auto &[k, v] : animations) {
     if (v == animation) {
       return k;
     }
