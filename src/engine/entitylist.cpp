@@ -78,18 +78,22 @@ void CEntityList::RemoveByIndex(int idx) {
     return;
   }
 
+  if (cur == last) {
+    last = last->prev;
+  }
+
   if (cur == head) {
     head = head->next;
-  } else {
-    cur->prev->next = cur->next;
-
-    cur->prev = nullptr;
-    cur->next = nullptr;
   }
 
   if (cur->next) {
     cur->next->prev = cur->prev;
   }
+  if (cur->prev) {
+    cur->prev->next = cur->next;
+  }
+  cur->next = nullptr;
+  cur->prev = nullptr;
 
   PosType pos = *cur->entity->GetPos();
   g_current_room.field[pos.y][pos.x]->entity_on = nullptr;
