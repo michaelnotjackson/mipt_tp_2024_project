@@ -280,6 +280,9 @@ MOUSEMOTIONEND:
           nullptr) {
         goto MOUSEBUTTONDOWNEND;
       }
+      if (GetPropValue<int>(g_current_room.field[enemy_pos.y][enemy_pos.x]->entity_on->props, "i_health") <= 0) {
+        goto MOUSEBUTTONDOWNEND;
+      }
       g_current_action = ActionType::BUSY;
       g_current_executor->MoveBy(&g_current_path);
       g_current_executor->Attack(enemy_pos);

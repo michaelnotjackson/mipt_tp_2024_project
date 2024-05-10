@@ -9,6 +9,7 @@ IBaseEntity* CTurnController::GetExecutor() {
 }
 
 void CTurnController::ShiftTurn(int num) {
+  g_mutex.lock();
   if (executor == nullptr) {
     executor = entity_list.GetHead();
   }
@@ -19,10 +20,14 @@ void CTurnController::ShiftTurn(int num) {
     } else {
       executor = executor->next;
     }
+    if (entity_list.deleted[executor]) {
+      continue;
+    }
     num -= GetPropValue<int>(executor->entity->props, "i_team") != 0;
   }
 
   g_current_executor = executor->entity;
+  g_mutex.unlock();
 }
 
 void CTurnController::ResetTurns() { turn_num = 1; }

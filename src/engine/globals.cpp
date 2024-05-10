@@ -19,3 +19,5 @@ bool g_move_in_process = false;
 std::vector<PosType> g_current_path;
 
 std::mt19937 g_rng(std::chrono::high_resolution_clock::now().time_since_epoch().count());
+
+std::mutex g_mutex;

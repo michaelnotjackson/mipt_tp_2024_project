@@ -25,7 +25,7 @@ class CEntityList {
   int highest_ent;  // Index of the last entity
   int ent_count;    // Count of existing entities
 
-  std::map<IBaseEntity*, bool> deleted;
+  std::map<void*, bool> deleted;
 
  public:
   void Insert(IBaseEntity* ent);

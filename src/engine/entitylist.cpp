@@ -64,6 +64,7 @@ void CEntityList::Insert(IBaseEntity* ent) {
 }
 
 void CEntityList::RemoveByIndex(int idx) {
+  g_mutex.lock();
   if (idx > highest_ent) {
     return;
   }
@@ -77,6 +78,9 @@ void CEntityList::RemoveByIndex(int idx) {
   if (cur == nullptr) {
     return;
   }
+
+  deleted[cur->entity] = true;
+  deleted[cur] = true;
 
   if (cur == last) {
     last = last->prev;
@@ -98,9 +102,8 @@ void CEntityList::RemoveByIndex(int idx) {
   PosType pos = *cur->entity->GetPos();
   g_current_room.field[pos.y][pos.x]->entity_on = nullptr;
 
-  deleted[cur->entity] = true;
-
   delete cur;
+  g_mutex.unlock();
 }
 
 CEntityNode* CEntityList::GetHead() { return this->head; }

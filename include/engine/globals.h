@@ -2,6 +2,7 @@
 
 #include <chrono>
 #include <random>
+#include <mutex>
 
 #include "entity.h"
 #include "turn_controller.h"
@@ -29,3 +30,5 @@ extern bool g_move_in_process;
 extern std::vector<PosType> g_current_path;
 
 extern std::mt19937 g_rng;
+
+extern std::mutex g_mutex;
