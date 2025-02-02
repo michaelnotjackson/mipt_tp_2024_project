@@ -13,6 +13,13 @@
 #include "include/engine/player.h"
 #include "include/engine/renderer.h"
 #include "include/engine/utils.h"
+#include <iostream>
+
+using json = nlohmann::json;
+std::ifstream in("rooms/room.json");
+json file = json::parse(in);
+
+std::vector<std::vector<int>> coord_after_switch = file["coord_after_switch"];
 
 CApp::CApp() : is_running(true), window(nullptr), renderer(nullptr) {}
 
@@ -49,10 +56,20 @@ bool CApp::OnInit() {
   EngineInitAnimations();
 
   CreateDung(g_dungeon);
-  room.SetField(g_dungeon[7][7]);
+  int x, y;
+  for (int i = 0; i < g_dungeon.size(); i++) {
+    for (int j = 0; j < g_dungeon[0].size(); j++) {
+      if (g_dungeon[i][j] != 0) {
+        x = i;
+        y = j;
+      }
+    }
+  }
+  room.SetField(g_dungeon[x][y]);
   g_current_room = room;
+  g_current_room_coord = std::pair(x, y);
 
-  CTile *tile = room.GetField()[0][0];
+  CTile *tile = g_current_room.GetField()[0][0];
   int width = tile->GetTexture().frame.w * tile->GetTexture().scale;   // NOLINT
   int height = tile->GetTexture().frame.h * tile->GetTexture().scale;  // NOLINT
   SDL_Rect rect;
@@ -80,7 +97,7 @@ bool CheckRect(const SDL_Rect &rect, int x, int y) {
 }
 
 void UpdateListeners() {
-  CTile *tile = room.GetField()[1][1];
+  CTile *tile = g_current_room.GetField()[1][1];
   int width = tile->GetTexture().frame.w * tile->GetTexture().scale;   // NOLINT
   int height = tile->GetTexture().frame.h * tile->GetTexture().scale;  // NOLINT
   SDL_Rect rect;
@@ -97,18 +114,44 @@ void UpdateListeners() {
           new CTileClickEventListener(rect, g_current_room.GetField()[i][j]));
     }
   }
+  event_manager.current_hover = event_manager.GetTileHoverListeners().GetHead()->event_listener;
 }
 
-void SwitchRoom() {
-  room.SetField(g_dungeon[g_current_room_1.first][g_current_room_1.second]);
+void SwitchRoom(int door) {
+  while (g_move_in_process) {
+  }
+
+  room.SetField(g_dungeon[g_current_room_coord.first][g_current_room_coord.second]);
+
+  int j = 0;
+
+  for (auto &ent: entity_list) {
+    if (typeid(*ent) == typeid(CBasePlayer)) {
+      g_current_room.field[ent->GetPos()->y][ent->GetPos()->x]->entity_on =
+          nullptr;
+      g_current_room.field[coord_after_switch[door][2 * j]][coord_after_switch[door][2 * j + 1]]->entity_on =
+          ent;
+
+      PosType new_pos(coord_after_switch[door][2 * j + 1], coord_after_switch[door][2 * j]);
+      *ent->GetPos() = new_pos;
+
+      j++;
+    }
+  }
+
+  for (int i = 0; i < g_current_room.field.size(); i++) {
+    for (int j = 0; j < g_current_room.field[0].size(); j++) {
+      room.field[i][j]->entity_on = g_current_room.field[i][j]->entity_on;
+    }
+  }
+
   g_current_room = room;
   UpdateListeners();
+  g_current_action = ActionType::FREE;
+  RecalculatePath();
 }
 
 void CApp::OnEvent(SDL_Event *event) {
-  using json = nlohmann::json;
-  std::ifstream in("rooms/room.json");
-  json file = json::parse(in);
 
   if (event->type == SDL_QUIT) {
     is_running = false;
@@ -122,7 +165,7 @@ void CApp::OnEvent(SDL_Event *event) {
       g_turnmanager.ShiftTurn();
 
       if (g_current_action == ActionType::FREE) {
-        std::vector<PosType>* tmp_path = FindPath(
+        std::vector<PosType> *tmp_path = FindPath(
             *g_current_executor->GetPos(),
             GetTilePos(event_manager.current_hover->GetTile(), g_current_room));
 
@@ -133,42 +176,6 @@ void CApp::OnEvent(SDL_Event *event) {
         }
       }
     }
-
-    std::string room_1 = "room_" + std::to_string(g_dungeon[g_current_room_1.first][g_current_room_1.second]);
-    if (event->key.keysym.sym == SDLK_UP && file[room_1]["doors"][0] == 1 && g_current_room_1.first - 1 >= 0) {
-      if (g_current_action == ActionType::BUSY) {
-        goto MOUSEBUTTONDOWNEND;
-      }
-      g_current_room_1.first--;
-      SwitchRoom();
-    }
-
-    if (event->key.keysym.sym == SDLK_DOWN && file[room_1]["doors"][2] == 1 &&
-        g_current_room_1.first + 1 < g_dungeon.size()) {
-      if (g_current_action == ActionType::BUSY) {
-        goto MOUSEBUTTONDOWNEND;
-      }
-      g_current_room_1.first++;
-      SwitchRoom();
-    }
-
-    if (event->key.keysym.sym == SDLK_RIGHT && file[room_1]["doors"][1] == 1 &&
-        g_current_room_1.second + 1 < g_dungeon[0].size()) {
-      if (g_current_action == ActionType::BUSY) {
-        goto MOUSEBUTTONDOWNEND;
-      }
-      g_current_room_1.second++;
-      SwitchRoom();
-    }
-
-    if (event->key.keysym.sym == SDLK_LEFT && file[room_1]["doors"][3] == 1 && g_current_room_1.second - 1 >= 0) {
-      if (g_current_action == ActionType::BUSY) {
-        goto MOUSEBUTTONDOWNEND;
-      }
-      g_current_room_1.second--;
-      SwitchRoom();
-    }
-
   }
 KEYDOWNEND:;
   if (event->type == SDL_MOUSEMOTION) {
@@ -204,7 +211,7 @@ KEYDOWNEND:;
       RecalculatePath();
     }
   }
-   MOUSEMOTIONEND:
+MOUSEMOTIONEND:
   if (event->type == SDL_MOUSEBUTTONDOWN) {
     int x = event->button.x, y = event->button.y;
     if (g_current_action == ActionType::BUSY) {
@@ -212,6 +219,8 @@ KEYDOWNEND:;
     }
 
     if (event->button.button == SDL_BUTTON_LEFT) {
+
+      g_current_action = ActionType::BUSY;
       auto *cur = event_manager.GetTileClickListeners().GetHead();
       while (cur != nullptr) {
         if (CheckRect(cur->event_listener->GetRect(), x, y)) {
@@ -220,10 +229,58 @@ KEYDOWNEND:;
         }
         cur = cur->next;
       }
+
+      auto pos = GetTilePos(event_manager.current_hover->GetTile(), g_current_room);
+      int door = 0;
+      if (g_current_room.field[pos.y][pos.x]->GetObstacleType() == ObstacleType::NO_OBSTACLES) {
+
+        int flag = 0;
+        auto tmp = g_current_room_coord;
+
+        if (pos.y == 0 && flag == 0) {
+          g_current_room_coord.first--;
+          flag++;
+          door = 0;
+        }
+
+        if (pos.y == g_current_room.field.size() - 1 && flag == 0) {
+          g_current_room_coord.first++;
+          flag++;
+          door = 2;
+        }
+
+        if (pos.x == 0 && flag == 0) {
+          g_current_room_coord.second--;
+          flag++;
+          door = 1;
+        }
+
+        if (pos.x == g_current_room.field[0].size() - 1 && flag == 0) {
+          g_current_room_coord.second++;
+          flag++;
+          door = 3;
+        }
+
+        if (flag == 0) {
+          g_current_room_coord = tmp;
+          g_current_action = ActionType::FREE;
+          goto MOUSEBUTTONDOWNEND;
+        }
+
+        if (flag != 0) {
+          std::thread th(SwitchRoom, door);
+          th.detach();
+        }
+      }
     }
     if (event->button.button == SDL_BUTTON_RIGHT) {
-      auto enemy_pos = GetTilePos(event_manager.current_hover->GetTile(), g_current_room);
-      if (g_current_room.field[enemy_pos.y][enemy_pos.x]->entity_on == nullptr) {
+      auto enemy_pos =
+          GetTilePos(event_manager.current_hover->GetTile(), g_current_room);
+      if (g_current_room.field[enemy_pos.y][enemy_pos.x]->entity_on ==
+          nullptr) {
+        goto MOUSEBUTTONDOWNEND;
+      }
+      if (GetPropValue<int>(g_current_room.field[enemy_pos.y][enemy_pos.x]->entity_on->props, "i_health") <= 0) {
         goto MOUSEBUTTONDOWNEND;
       }
       g_current_action = ActionType::BUSY;
@@ -231,7 +288,7 @@ KEYDOWNEND:;
       g_current_executor->Attack(enemy_pos);
     }
   }
-   MOUSEBUTTONDOWNEND:;
+MOUSEBUTTONDOWNEND:;
 }
 
 void CApp::OnCleanup() { SDL_Quit(); }
@@ -260,17 +317,32 @@ void DrawEntities() {
   CEntityNode *cur = entity_list.GetHead();
 
   while (cur != nullptr) {
+    if (entity_list.deleted[cur->entity]) {
+      entity_list.deleted[cur->entity] = false;
+      continue;
+    }
     auto *ent_pos = new PosType(EntityPosRoomToScreen(cur->entity));
     Blit(&cur->entity->animation, ent_pos);
+    double hp_proc = static_cast<double>(GetPropValue<int>(cur->entity->props, "i_health")) /
+                     GetPropValue<int>(cur->entity->props, "i_max_health");
+    SDL_Rect hp_bar;
+    hp_bar.x = ent_pos->x + 18;
+    hp_bar.y = ent_pos->y + 8;
+    hp_bar.w = 60 * hp_proc;
+    hp_bar.h = 12;
+    SDL_SetRenderDrawColor(app.renderer, 255, 60, 60, 0);
+    SDL_RenderFillRect(app.renderer, &hp_bar);
+    SDL_SetRenderDrawColor(app.renderer, 0, 0, 0, 0);
+    SDL_RenderDrawRect(app.renderer, &hp_bar);
     cur = cur->next;
     delete ent_pos;
   }
 }
 
 void DrawRoom(const Room &room_a) {
-  int width = room_a.field[0][0]->GetTexture().frame.w *  // NOLINT
+  int width = room_a.field[0][0]->GetTexture().frame.w * // NOLINT
               room_a.field[0][0]->GetTexture().scale;
-  int height = room_a.field[0][0]->GetTexture().frame.h *  // NOLINT
+  int height = room_a.field[0][0]->GetTexture().frame.h * // NOLINT
                room_a.field[0][0]->GetTexture().scale;
   for (int i = 0; i < SCREEN_HEIGHT; i += height) {
     for (int j = 0; j < SCREEN_WIDTH; j += width) {
@@ -301,14 +373,14 @@ void DrawPath() {
     path[i + 1] = PointRoomToScreenTileCenter(g_current_path[i]);
   }
 
-  SDL_RenderDrawLines(app.renderer, path, g_current_path.size() + 1);  // NOLINT
+  SDL_RenderDrawLines(app.renderer, path, g_current_path.size() + 1); // NOLINT
 
   delete[] path;
 }
 
 void CApp::OnRender() {
   SDL_RenderClear(renderer);
-  DrawRoom(room);
+  DrawRoom(g_current_room);
   DrawEntities();
   DrawPath();
   SDL_RenderPresent(renderer);
@@ -328,9 +400,30 @@ int CApp::OnExecute() {
 
   entity_list.Insert(new CBasePlayer(
       assets_manager.GetAnimation("animations/warriors/warrior_red/idle")));
+  entity_list.Insert(new CBasePlayer(
+      assets_manager.GetAnimation("animations/warriors/warrior_red/idle")));
 
   g_turnmanager.ShiftTurn();
   g_turnmanager.ResetTurns();
+
+  int j = 0;
+
+  for (auto &ent : entity_list) {
+    if (typeid(*ent) == typeid(CBasePlayer)) {
+
+      g_current_room.field[ent->GetPos()->y][ent->GetPos()->x]->entity_on =
+          nullptr;
+      g_current_room
+          .field[coord_after_switch[4][2 * j]][coord_after_switch[4][2 * j + 1]]
+          ->entity_on = ent;
+
+      PosType new_pos(coord_after_switch[4][2 * j + 1],
+                      coord_after_switch[4][2 * j]);
+      *ent->GetPos() = new_pos;
+
+      j++;
+    }
+  }
 
   while (is_running) {
     while (SDL_PollEvent(&event)) {

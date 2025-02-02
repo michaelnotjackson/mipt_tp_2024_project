@@ -2,6 +2,7 @@
 
 #include <chrono>
 #include <random>
+#include <mutex>
 
 #include "entity.h"
 #include "turn_controller.h"
@@ -12,7 +13,7 @@ class Room;
 
 extern Room g_current_room;
 extern std::vector<std::vector<int>> g_dungeon;
-extern std::pair<int, int> g_current_room_1;
+extern std::pair<int, int> g_current_room_coord;
 
 
 extern IBaseEntity* g_current_executor;
@@ -29,3 +30,5 @@ extern bool g_move_in_process;
 extern std::vector<PosType> g_current_path;
 
 extern std::mt19937 g_rng;
+
+extern std::mutex g_mutex;

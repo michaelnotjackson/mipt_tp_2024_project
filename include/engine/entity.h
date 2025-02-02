@@ -13,9 +13,9 @@
 class IBaseEntity {
  protected:
   PosType pos; // Position on the map!
-  CBaseAnimation default_animation;
-
+  
  public:
+  CBaseAnimation default_animation;
   CBaseAnimation animation;
   CObjProperties props;
   int characteristics[6];
